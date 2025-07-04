@@ -10,9 +10,7 @@ interface AuthContextType {
   signInWithOtp: (
     phone: string,
     options?: { firstName?: string; lastName?: string }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ) => Promise<{ error: any }>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   verifyOtp: (phone: string, token: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
 }

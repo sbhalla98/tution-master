@@ -53,7 +53,6 @@ export default function RecordPaymentForm({
 
   const selectedStudentData = students.find((s) => s.id === selectedStudent);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (!selectedStudentData) return;
 

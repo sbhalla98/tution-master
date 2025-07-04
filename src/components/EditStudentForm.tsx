@@ -67,7 +67,6 @@ export default function EditStudentForm({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     if (!student) return;
 

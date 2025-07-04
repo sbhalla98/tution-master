@@ -53,7 +53,6 @@ export default function AddStudentForm({
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
     const newStudent: Omit<Student, "id"> = {
       name: data.name,
