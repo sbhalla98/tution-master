@@ -39,11 +39,11 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
     const newStudent: Omit<Student, 'id'> = {
       email: data.email,
       // Changed from subject to subjects
-grade: data.grade,
-      
-joinDate: new Date().toISOString().split('T')[0],
-      
-monthlyFee: Number(data.monthlyFee), 
+      grade: data.grade,
+
+      joinDate: new Date().toISOString().split('T')[0],
+
+      monthlyFee: Number(data.monthlyFee),
       name: data.name,
       phone: data.phone,
       status: selectedStatus,

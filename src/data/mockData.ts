@@ -4,13 +4,13 @@ export const mockStudents: Student[] = [
   {
     email: 'alice.johnson@email.com',
     // Changed to array
-grade: '10',
-    
-id: '1',
-    
-joinDate: '2024-01-15',
-    
-monthlyFee: 150, 
+    grade: '10',
+
+    id: '1',
+
+    joinDate: '2024-01-15',
+
+    monthlyFee: 150,
     name: 'Alice Johnson',
     phone: '+1 (555) 123-4567',
     status: 'active',
@@ -19,13 +19,13 @@ monthlyFee: 150,
   {
     email: 'bob.smith@email.com',
     // Changed to array
-grade: '11',
-    
-id: '2',
-    
-joinDate: '2024-02-01',
-    
-monthlyFee: 175, 
+    grade: '11',
+
+    id: '2',
+
+    joinDate: '2024-02-01',
+
+    monthlyFee: 175,
     name: 'Bob Smith',
     phone: '+1 (555) 234-5678',
     status: 'active',
@@ -34,13 +34,13 @@ monthlyFee: 175,
   {
     email: 'carol.davis@email.com',
     // Changed to array
-grade: '12',
-    
-id: '3',
-    
-joinDate: '2024-01-20',
-    
-monthlyFee: 160, 
+    grade: '12',
+
+    id: '3',
+
+    joinDate: '2024-01-20',
+
+    monthlyFee: 160,
     name: 'Carol Davis',
     phone: '+1 (555) 345-6789',
     status: 'active',
@@ -49,13 +49,13 @@ monthlyFee: 160,
   {
     email: 'david.wilson@email.com',
     // Changed to array
-grade: '9',
-    
-id: '4',
-    
-joinDate: '2024-03-10',
-    
-monthlyFee: 140, 
+    grade: '9',
+
+    id: '4',
+
+    joinDate: '2024-03-10',
+
+    monthlyFee: 140,
     name: 'David Wilson',
     phone: '+1 (555) 456-7890',
     status: 'inactive',
