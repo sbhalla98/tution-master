@@ -83,8 +83,8 @@ class ApiService {
 
     this.payments[index] = {
       ...this.payments[index],
-      status: 'paid' as const,
       paymentDate: new Date().toISOString(),
+      status: 'paid' as const,
     };
     return this.payments[index];
   }
@@ -96,8 +96,8 @@ class ApiService {
     if (!student) return null;
 
     return {
-      phone: student.phone,
       name: student.name,
+      phone: student.phone,
     };
   }
 }

@@ -58,13 +58,13 @@ export default function EditStudentForm({
 
     const updatedStudent: Student = {
       ...student,
-      name: data.name,
       email: data.email,
-      phone: data.phone,
-      subjects: selectedSubjects,
       grade: data.grade,
       monthlyFee: Number(data.monthlyFee),
+      name: data.name,
+      phone: data.phone,
       status: selectedStatus,
+      subjects: selectedSubjects,
     };
 
     onUpdateStudent(updatedStudent);
@@ -141,7 +141,7 @@ export default function EditStudentForm({
             <Input
               id="monthlyFee"
               type="number"
-              {...register('monthlyFee', { required: true, min: 0 })}
+              {...register('monthlyFee', { min: 0, required: true })}
               placeholder="Enter monthly fee"
             />
           </div>

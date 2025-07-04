@@ -87,13 +87,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     options?: { firstName?: string; lastName?: string }
   ) => {
     const { error } = await supabase.auth.signInWithOtp({
-      phone,
       options: {
         data: {
           first_name: options?.firstName,
           last_name: options?.lastName,
         },
       },
+      phone,
     });
     return { error };
   };
@@ -113,13 +113,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const value = {
-    user,
-    session,
     loading,
-    userProfile,
+    session,
     signInWithOtp,
-    verifyOtp,
     signOut,
+    user,
+    userProfile,
+    verifyOtp,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

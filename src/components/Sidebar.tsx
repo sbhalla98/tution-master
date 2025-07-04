@@ -4,10 +4,10 @@ import { Home, Users, CreditCard, BarChart3, Menu, X, GraduationCap } from 'luci
 import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: Home },
-  { name: 'Students', href: '/students', icon: Users },
-  { name: 'Payments', href: '/payments', icon: CreditCard },
-  { name: 'Reports', href: '/reports', icon: BarChart3 },
+  { href: '/', icon: Home, name: 'Dashboard' },
+  { href: '/students', icon: Users, name: 'Students' },
+  { href: '/payments', icon: CreditCard, name: 'Payments' },
+  { href: '/reports', icon: BarChart3, name: 'Reports' },
 ];
 
 export default function Sidebar() {

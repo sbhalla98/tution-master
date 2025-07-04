@@ -18,13 +18,13 @@ const UserMenu = () => {
     try {
       await signOut();
       toast({
-        title: 'Success',
         description: 'Successfully logged out',
+        title: 'Success',
       });
     } catch (error) {
       toast({
-        title: 'Error',
         description: `Failed to log out ${error}`,
+        title: 'Error',
         variant: 'destructive',
       });
     }

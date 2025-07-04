@@ -52,14 +52,14 @@ export default function RecordPaymentForm({
     if (!selectedStudentData) return;
 
     const newPayment: Omit<Payment, 'id'> = {
+      amount: Number(data.amount),
+      dueDate: data.dueDate,
+      month: selectedMonth,
+      paymentDate: selectedStatus === 'paid' ? new Date().toISOString() : undefined,
+      status: selectedStatus as 'paid' | 'pending' | 'overdue',
       studentId: selectedStudent,
       studentName: selectedStudentData.name,
-      month: selectedMonth,
       year: Number(data.year),
-      amount: Number(data.amount),
-      status: selectedStatus as 'paid' | 'pending' | 'overdue',
-      paymentDate: selectedStatus === 'paid' ? new Date().toISOString() : undefined,
-      dueDate: data.dueDate,
     };
 
     onRecordPayment(newPayment);
@@ -125,7 +125,7 @@ export default function RecordPaymentForm({
             <Input
               id="amount"
               type="number"
-              {...register('amount', { required: true, min: 0 })}
+              {...register('amount', { min: 0, required: true })}
               defaultValue={selectedStudentData?.monthlyFee || ''}
               placeholder="Enter amount"
             />

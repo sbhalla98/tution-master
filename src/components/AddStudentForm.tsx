@@ -37,14 +37,17 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
 
   const onSubmit = (data: any) => {
     const newStudent: Omit<Student, 'id'> = {
-      name: data.name,
       email: data.email,
+      // Changed from subject to subjects
+grade: data.grade,
+      
+joinDate: new Date().toISOString().split('T')[0],
+      
+monthlyFee: Number(data.monthlyFee), 
+      name: data.name,
       phone: data.phone,
-      subjects: selectedSubjects, // Changed from subject to subjects
-      grade: data.grade,
-      monthlyFee: Number(data.monthlyFee),
-      joinDate: new Date().toISOString().split('T')[0],
       status: selectedStatus,
+      subjects: selectedSubjects,
     };
 
     onAddStudent(newStudent);
@@ -130,7 +133,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             <Input
               id="monthlyFee"
               type="number"
-              {...register('monthlyFee', { required: true, min: 0 })}
+              {...register('monthlyFee', { min: 0, required: true })}
               placeholder="Enter monthly fee"
             />
           </div>

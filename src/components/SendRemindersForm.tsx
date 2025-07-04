@@ -43,8 +43,8 @@ export default function SendRemindersForm({
   const handleSendWhatsAppReminders = async () => {
     if (selectedPayments.length === 0) {
       toast({
-        title: 'No payments selected',
         description: 'Please select at least one payment to send reminders for.',
+        title: 'No payments selected',
         variant: 'destructive',
       });
       return;
@@ -79,8 +79,8 @@ export default function SendRemindersForm({
     }
 
     toast({
-      title: 'WhatsApp reminders opened!',
       description: `Opened ${successCount} WhatsApp chat(s) with reminder messages.`,
+      title: 'WhatsApp reminders opened!',
     });
 
     setSelectedPayments([]);

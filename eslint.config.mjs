@@ -12,11 +12,13 @@ const compat = new FlatCompat({
 const eslintConfig = [
   ...compat.extends('next/core-web-vitals', 'next/typescript'),
   ...compat.config({
+    plugins: ['sort-keys-fix'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
-      'react-hooks/exhaustive-deps': 'off',
       'no-console': 'off',
+      'react-hooks/exhaustive-deps': 'off',
       'react/jsx-key': 'warn',
+      'sort-keys-fix/sort-keys-fix': 'warn',
     },
   }),
 ];
