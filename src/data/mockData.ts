@@ -1,0 +1,136 @@
+import { Student, Payment } from '@/types/student';
+
+export const mockStudents: Student[] = [
+  {
+    id: '1',
+    name: 'Alice Johnson',
+    email: 'alice.johnson@email.com',
+    phone: '+1 (555) 123-4567',
+    subjects: ['Mathematics', 'Physics'], // Changed to array
+    grade: '10',
+    monthlyFee: 150,
+    joinDate: '2024-01-15',
+    status: 'active'
+  },
+  {
+    id: '2',
+    name: 'Bob Smith',
+    email: 'bob.smith@email.com',
+    phone: '+1 (555) 234-5678',
+    subjects: ['Physics', 'Chemistry'], // Changed to array
+    grade: '11',
+    monthlyFee: 175,
+    joinDate: '2024-02-01',
+    status: 'active'
+  },
+  {
+    id: '3',
+    name: 'Carol Davis',
+    email: 'carol.davis@email.com',
+    phone: '+1 (555) 345-6789',
+    subjects: ['Chemistry', 'Biology'], // Changed to array
+    grade: '12',
+    monthlyFee: 160,
+    joinDate: '2024-01-20',
+    status: 'active'
+  },
+  {
+    id: '4',
+    name: 'David Wilson',
+    email: 'david.wilson@email.com',
+    phone: '+1 (555) 456-7890',
+    subjects: ['Biology'], // Changed to array
+    grade: '9',
+    monthlyFee: 140,
+    joinDate: '2024-03-10',
+    status: 'inactive'
+  }
+];
+
+export const mockPayments: Payment[] = [
+  {
+    id: '1',
+    studentId: '1',
+    studentName: 'Alice Johnson',
+    month: 'January',
+    year: 2024,
+    amount: 150,
+    status: 'paid',
+    paymentDate: '2024-01-05',
+    dueDate: '2024-01-31'
+  },
+  {
+    id: '2',
+    studentId: '1',
+    studentName: 'Alice Johnson',
+    month: 'February',
+    year: 2024,
+    amount: 150,
+    status: 'paid',
+    paymentDate: '2024-02-03',
+    dueDate: '2024-02-29'
+  },
+  {
+    id: '3',
+    studentId: '1',
+    studentName: 'Alice Johnson',
+    month: 'March',
+    year: 2024,
+    amount: 150,
+    status: 'pending',
+    dueDate: '2024-03-31'
+  },
+  {
+    id: '4',
+    studentId: '2',
+    studentName: 'Bob Smith',
+    month: 'February',
+    year: 2024,
+    amount: 175,
+    status: 'paid',
+    paymentDate: '2024-02-10',
+    dueDate: '2024-02-29'
+  },
+  {
+    id: '5',
+    studentId: '2',
+    studentName: 'Bob Smith',
+    month: 'March',
+    year: 2024,
+    amount: 175,
+    status: 'overdue',
+    dueDate: '2024-03-31'
+  },
+  {
+    id: '6',
+    studentId: '3',
+    studentName: 'Carol Davis',
+    month: 'January',
+    year: 2024,
+    amount: 160,
+    status: 'paid',
+    paymentDate: '2024-01-15',
+    dueDate: '2024-01-31'
+  },
+  {
+    id: '7',
+    studentId: '3',
+    studentName: 'Carol Davis',
+    month: 'February',
+    year: 2024,
+    amount: 160,
+    status: 'paid',
+    paymentDate: '2024-02-12',
+    dueDate: '2024-02-29'
+  },
+  {
+    id: '8',
+    studentId: '3',
+    studentName: 'Carol Davis',
+    month: 'March',
+    year: 2024,
+    amount: 160,
+    status: 'pending',
+    dueDate: '2024-03-31'
+  }
+];
