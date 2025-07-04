@@ -1,14 +1,14 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
-import { LogOut } from "lucide-react";
+} from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
+import { LogOut } from 'lucide-react';
 
 const UserMenu = () => {
   const { user, userProfile, signOut } = useAuth();
@@ -18,14 +18,14 @@ const UserMenu = () => {
     try {
       await signOut();
       toast({
-        title: "Success",
-        description: "Successfully logged out",
+        title: 'Success',
+        description: 'Successfully logged out',
       });
     } catch (error) {
       toast({
-        title: "Error",
+        title: 'Error',
         description: `Failed to log out ${error}`,
-        variant: "destructive",
+        variant: 'destructive',
       });
     }
   };
@@ -35,12 +35,12 @@ const UserMenu = () => {
   const displayName =
     userProfile?.first_name && userProfile?.last_name
       ? `${userProfile.first_name} ${userProfile.last_name}`
-      : user.phone || "User";
+      : user.phone || 'User';
 
   const initials =
     userProfile?.first_name && userProfile?.last_name
       ? `${userProfile.first_name.charAt(0)}${userProfile.last_name.charAt(0)}`
-      : user.phone?.slice(-2) || "U";
+      : user.phone?.slice(-2) || 'U';
 
   return (
     <DropdownMenu>

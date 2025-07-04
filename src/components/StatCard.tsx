@@ -1,4 +1,3 @@
-
 import { LucideIcon } from 'lucide-react';
 
 interface StatCardProps {
@@ -9,12 +8,12 @@ interface StatCardProps {
   changeType?: 'positive' | 'negative' | 'neutral';
 }
 
-export default function StatCard({ 
-  title, 
-  value, 
-  icon: Icon, 
-  change, 
-  changeType = 'neutral' 
+export default function StatCard({
+  title,
+  value,
+  icon: Icon,
+  change,
+  changeType = 'neutral',
 }: StatCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -23,11 +22,15 @@ export default function StatCard({
           <p className="text-sm font-medium text-gray-600">{title}</p>
           <p className="text-3xl font-bold text-gray-900 mt-2">{value}</p>
           {change && (
-            <p className={`text-sm mt-1 ${
-              changeType === 'positive' ? 'text-green-600' : 
-              changeType === 'negative' ? 'text-red-600' : 
-              'text-gray-600'
-            }`}>
+            <p
+              className={`text-sm mt-1 ${
+                changeType === 'positive'
+                  ? 'text-green-600'
+                  : changeType === 'negative'
+                    ? 'text-red-600'
+                    : 'text-gray-600'
+              }`}
+            >
               {change}
             </p>
           )}

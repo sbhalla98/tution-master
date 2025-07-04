@@ -1,27 +1,22 @@
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Payment } from "@/types/student";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/components/ui/select';
+import { Payment } from '@/types/student';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface RecordPaymentFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onRecordPayment: (payment: Omit<Payment, "id">) => void;
+  onRecordPayment: (payment: Omit<Payment, 'id'>) => void;
   students: Array<{ id: string; name: string; monthlyFee: number }>;
 }
 
@@ -32,23 +27,23 @@ export default function RecordPaymentForm({
   students,
 }: RecordPaymentFormProps) {
   const { register, handleSubmit, reset } = useForm();
-  const [selectedStudent, setSelectedStudent] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("paid");
+  const [selectedStudent, setSelectedStudent] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('paid');
 
   const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
 
   const selectedStudentData = students.find((s) => s.id === selectedStudent);
@@ -56,23 +51,22 @@ export default function RecordPaymentForm({
   const onSubmit = (data: any) => {
     if (!selectedStudentData) return;
 
-    const newPayment: Omit<Payment, "id"> = {
+    const newPayment: Omit<Payment, 'id'> = {
       studentId: selectedStudent,
       studentName: selectedStudentData.name,
       month: selectedMonth,
       year: Number(data.year),
       amount: Number(data.amount),
-      status: selectedStatus as "paid" | "pending" | "overdue",
-      paymentDate:
-        selectedStatus === "paid" ? new Date().toISOString() : undefined,
+      status: selectedStatus as 'paid' | 'pending' | 'overdue',
+      paymentDate: selectedStatus === 'paid' ? new Date().toISOString() : undefined,
       dueDate: data.dueDate,
     };
 
     onRecordPayment(newPayment);
     reset();
-    setSelectedStudent("");
-    setSelectedMonth("");
-    setSelectedStatus("paid");
+    setSelectedStudent('');
+    setSelectedMonth('');
+    setSelectedStatus('paid');
     onClose();
   };
 
@@ -120,7 +114,7 @@ export default function RecordPaymentForm({
             <Input
               id="year"
               type="number"
-              {...register("year", { required: true })}
+              {...register('year', { required: true })}
               defaultValue={new Date().getFullYear()}
               placeholder="Enter year"
             />
@@ -131,19 +125,15 @@ export default function RecordPaymentForm({
             <Input
               id="amount"
               type="number"
-              {...register("amount", { required: true, min: 0 })}
-              defaultValue={selectedStudentData?.monthlyFee || ""}
+              {...register('amount', { required: true, min: 0 })}
+              defaultValue={selectedStudentData?.monthlyFee || ''}
               placeholder="Enter amount"
             />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="dueDate">Due Date</Label>
-            <Input
-              id="dueDate"
-              type="date"
-              {...register("dueDate", { required: true })}
-            />
+            <Input id="dueDate" type="date" {...register('dueDate', { required: true })} />
           </div>
 
           <div className="space-y-2">

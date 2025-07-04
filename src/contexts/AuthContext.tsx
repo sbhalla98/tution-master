@@ -1,6 +1,6 @@
-import { supabase } from "@/integrations/supabase/client";
-import { Session, User } from "@supabase/supabase-js";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from '@/integrations/supabase/client';
+import { Session, User } from '@supabase/supabase-js';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   user: User | null;
@@ -26,9 +26,7 @@ interface UserProfile {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -36,20 +34,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", userId)
-        .single();
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
 
       if (error) {
-        console.error("Error fetching user profile:", error);
+        console.error('Error fetching user profile:', error);
         return;
       }
 
       setUserProfile(data);
     } catch (error) {
-      console.error("Error fetching user profile:", error);
+      console.error('Error fetching user profile:', error);
     }
   };
 
@@ -108,7 +102,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     const { error } = await supabase.auth.verifyOtp({
       phone,
       token,
-      type: "sms",
+      type: 'sms',
     });
     return { error };
   };
@@ -134,7 +128,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

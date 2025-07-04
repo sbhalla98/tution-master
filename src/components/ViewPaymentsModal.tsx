@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Payment } from '@/types/student';
@@ -13,7 +12,13 @@ interface ViewPaymentsModalProps {
   onMarkPaid: (paymentId: string) => void;
 }
 
-export default function ViewPaymentsModal({ isOpen, onClose, studentId, studentName, onMarkPaid }: ViewPaymentsModalProps) {
+export default function ViewPaymentsModal({
+  isOpen,
+  onClose,
+  studentId,
+  studentName,
+  onMarkPaid,
+}: ViewPaymentsModalProps) {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,7 +30,7 @@ export default function ViewPaymentsModal({ isOpen, onClose, studentId, studentN
 
   const loadStudentPayments = async () => {
     if (!studentId) return;
-    
+
     setLoading(true);
     try {
       const studentPayments = await apiService.getStudentPayments(studentId);
@@ -43,7 +48,7 @@ export default function ViewPaymentsModal({ isOpen, onClose, studentId, studentN
         <DialogHeader>
           <DialogTitle>Payments for {studentName}</DialogTitle>
         </DialogHeader>
-        
+
         {loading ? (
           <div className="text-center py-8">Loading payments...</div>
         ) : payments.length === 0 ? (
@@ -51,11 +56,7 @@ export default function ViewPaymentsModal({ isOpen, onClose, studentId, studentN
         ) : (
           <div className="grid gap-4">
             {payments.map((payment) => (
-              <PaymentCard
-                key={payment.id}
-                payment={payment}
-                onMarkPaid={onMarkPaid}
-              />
+              <PaymentCard key={payment.id} payment={payment} onMarkPaid={onMarkPaid} />
             ))}
           </div>
         )}

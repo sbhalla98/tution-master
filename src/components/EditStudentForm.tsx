@@ -1,23 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Student } from "@/types/student";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+} from '@/components/ui/select';
+import { Student } from '@/types/student';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface EditStudentFormProps {
   isOpen: boolean;
@@ -26,14 +21,7 @@ interface EditStudentFormProps {
   student: Student | null;
 }
 
-const availableSubjects = [
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "English",
-  "History",
-];
+const availableSubjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History'];
 
 export default function EditStudentForm({
   isOpen,
@@ -43,17 +31,15 @@ export default function EditStudentForm({
 }: EditStudentFormProps) {
   const { register, handleSubmit, reset, setValue } = useForm();
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<"active" | "inactive">(
-    "active"
-  );
+  const [selectedStatus, setSelectedStatus] = useState<'active' | 'inactive'>('active');
 
   useEffect(() => {
     if (student) {
-      setValue("name", student.name);
-      setValue("email", student.email);
-      setValue("phone", student.phone);
-      setValue("grade", student.grade);
-      setValue("monthlyFee", student.monthlyFee);
+      setValue('name', student.name);
+      setValue('email', student.email);
+      setValue('phone', student.phone);
+      setValue('grade', student.grade);
+      setValue('monthlyFee', student.monthlyFee);
       setSelectedSubjects(student.subjects);
       setSelectedStatus(student.status);
     }
@@ -84,7 +70,7 @@ export default function EditStudentForm({
     onUpdateStudent(updatedStudent);
     reset();
     setSelectedSubjects([]);
-    setSelectedStatus("active");
+    setSelectedStatus('active');
     onClose();
   };
 
@@ -99,7 +85,7 @@ export default function EditStudentForm({
             <Label htmlFor="name">Full Name</Label>
             <Input
               id="name"
-              {...register("name", { required: true })}
+              {...register('name', { required: true })}
               placeholder="Enter student's full name"
             />
           </div>
@@ -109,7 +95,7 @@ export default function EditStudentForm({
             <Input
               id="email"
               type="email"
-              {...register("email", { required: true })}
+              {...register('email', { required: true })}
               placeholder="Enter email address"
             />
           </div>
@@ -118,7 +104,7 @@ export default function EditStudentForm({
             <Label htmlFor="phone">Phone</Label>
             <Input
               id="phone"
-              {...register("phone", { required: true })}
+              {...register('phone', { required: true })}
               placeholder="Enter phone number"
             />
           </div>
@@ -131,9 +117,7 @@ export default function EditStudentForm({
                   <Checkbox
                     id={subject}
                     checked={selectedSubjects.includes(subject)}
-                    onCheckedChange={(checked) =>
-                      handleSubjectChange(subject, checked as boolean)
-                    }
+                    onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
                   />
                   <Label htmlFor={subject} className="text-sm">
                     {subject}
@@ -147,7 +131,7 @@ export default function EditStudentForm({
             <Label htmlFor="grade">Grade</Label>
             <Input
               id="grade"
-              {...register("grade", { required: true })}
+              {...register('grade', { required: true })}
               placeholder="Enter grade"
             />
           </div>
@@ -157,7 +141,7 @@ export default function EditStudentForm({
             <Input
               id="monthlyFee"
               type="number"
-              {...register("monthlyFee", { required: true, min: 0 })}
+              {...register('monthlyFee', { required: true, min: 0 })}
               placeholder="Enter monthly fee"
             />
           </div>
@@ -166,9 +150,7 @@ export default function EditStudentForm({
             <Label htmlFor="status">Status</Label>
             <Select
               value={selectedStatus}
-              onValueChange={(value: "active" | "inactive") =>
-                setSelectedStatus(value)
-              }
+              onValueChange={(value: 'active' | 'inactive') => setSelectedStatus(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />

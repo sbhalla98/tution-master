@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -16,16 +15,20 @@ interface SendRemindersFormProps {
   overduePayments: Payment[];
 }
 
-export default function SendRemindersForm({ isOpen, onClose, overduePayments }: SendRemindersFormProps) {
+export default function SendRemindersForm({
+  isOpen,
+  onClose,
+  overduePayments,
+}: SendRemindersFormProps) {
   const [selectedPayments, setSelectedPayments] = useState<string[]>([]);
-  const [message, setMessage] = useState('Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!');
+  const [message, setMessage] = useState(
+    'Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!'
+  );
   const { toast } = useToast();
 
   const handlePaymentToggle = (paymentId: string) => {
-    setSelectedPayments(prev => 
-      prev.includes(paymentId) 
-        ? prev.filter(id => id !== paymentId)
-        : [...prev, paymentId]
+    setSelectedPayments((prev) =>
+      prev.includes(paymentId) ? prev.filter((id) => id !== paymentId) : [...prev, paymentId]
     );
   };
 
@@ -33,37 +36,37 @@ export default function SendRemindersForm({ isOpen, onClose, overduePayments }: 
     if (selectedPayments.length === overduePayments.length) {
       setSelectedPayments([]);
     } else {
-      setSelectedPayments(overduePayments.map(p => p.id));
+      setSelectedPayments(overduePayments.map((p) => p.id));
     }
   };
 
   const handleSendWhatsAppReminders = async () => {
     if (selectedPayments.length === 0) {
       toast({
-        title: "No payments selected",
-        description: "Please select at least one payment to send reminders for.",
-        variant: "destructive"
+        title: 'No payments selected',
+        description: 'Please select at least one payment to send reminders for.',
+        variant: 'destructive',
       });
       return;
     }
 
-    const selectedPaymentData = overduePayments.filter(p => selectedPayments.includes(p.id));
+    const selectedPaymentData = overduePayments.filter((p) => selectedPayments.includes(p.id));
     let successCount = 0;
-    
+
     // For each selected payment, open WhatsApp with the reminder message
     for (const payment of selectedPaymentData) {
       try {
         const student = await apiService.getStudent(payment.studentId);
-        
+
         if (student && student.phone) {
           const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${payment.studentName}\n- Month: ${payment.month} ${payment.year}\n- Amount: ₹${payment.amount}\n- Due Date: ${new Date(payment.dueDate).toLocaleDateString()}`;
-          
+
           // Clean phone number (remove all non-digits)
           const cleanPhone = student.phone.replace(/\D/g, '');
-          
+
           // Create WhatsApp deep link
           const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(formattedMessage)}`;
-          
+
           // Open WhatsApp in new tab
           window.open(whatsappUrl, '_blank');
           successCount++;
@@ -76,7 +79,7 @@ export default function SendRemindersForm({ isOpen, onClose, overduePayments }: 
     }
 
     toast({
-      title: "WhatsApp reminders opened!",
+      title: 'WhatsApp reminders opened!',
       description: `Opened ${successCount} WhatsApp chat(s) with reminder messages.`,
     });
 
@@ -93,27 +96,25 @@ export default function SendRemindersForm({ isOpen, onClose, overduePayments }: 
             Send WhatsApp Reminders
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div>
             <div className="flex items-center justify-between mb-3">
               <Label className="text-base font-medium">Overdue Payments</Label>
-              <Button 
-                type="button" 
-                variant="outline" 
-                size="sm"
-                onClick={handleSelectAll}
-              >
+              <Button type="button" variant="outline" size="sm" onClick={handleSelectAll}>
                 {selectedPayments.length === overduePayments.length ? 'Deselect All' : 'Select All'}
               </Button>
             </div>
-            
+
             <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-3">
               {overduePayments.length === 0 ? (
                 <p className="text-gray-500 text-center py-4">No overdue payments found</p>
               ) : (
                 overduePayments.map((payment) => (
-                  <div key={payment.id} className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded">
+                  <div
+                    key={payment.id}
+                    className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded"
+                  >
                     <Checkbox
                       id={payment.id}
                       checked={selectedPayments.includes(payment.id)}
@@ -123,7 +124,8 @@ export default function SendRemindersForm({ isOpen, onClose, overduePayments }: 
                       <Label htmlFor={payment.id} className="cursor-pointer">
                         <div className="font-medium">{payment.studentName}</div>
                         <div className="text-sm text-gray-600">
-                          {payment.month} {payment.year} - ₹{payment.amount} (Due: {new Date(payment.dueDate).toLocaleDateString()})
+                          {payment.month} {payment.year} - ₹{payment.amount} (Due:{' '}
+                          {new Date(payment.dueDate).toLocaleDateString()})
                         </div>
                       </Label>
                     </div>
@@ -151,7 +153,10 @@ export default function SendRemindersForm({ isOpen, onClose, overduePayments }: 
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleSendWhatsAppReminders} className="bg-green-600 hover:bg-green-700">
+            <Button
+              onClick={handleSendWhatsAppReminders}
+              className="bg-green-600 hover:bg-green-700"
+            >
               <MessageCircle className="h-4 w-4 mr-2" />
               Send via WhatsApp ({selectedPayments.length})
             </Button>

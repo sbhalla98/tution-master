@@ -10,7 +10,7 @@ export const mockStudents: Student[] = [
     grade: '10',
     monthlyFee: 150,
     joinDate: '2024-01-15',
-    status: 'active'
+    status: 'active',
   },
   {
     id: '2',
@@ -21,7 +21,7 @@ export const mockStudents: Student[] = [
     grade: '11',
     monthlyFee: 175,
     joinDate: '2024-02-01',
-    status: 'active'
+    status: 'active',
   },
   {
     id: '3',
@@ -32,7 +32,7 @@ export const mockStudents: Student[] = [
     grade: '12',
     monthlyFee: 160,
     joinDate: '2024-01-20',
-    status: 'active'
+    status: 'active',
   },
   {
     id: '4',
@@ -43,8 +43,8 @@ export const mockStudents: Student[] = [
     grade: '9',
     monthlyFee: 140,
     joinDate: '2024-03-10',
-    status: 'inactive'
-  }
+    status: 'inactive',
+  },
 ];
 
 export const mockPayments: Payment[] = [
@@ -57,7 +57,7 @@ export const mockPayments: Payment[] = [
     amount: 150,
     status: 'paid',
     paymentDate: '2024-01-05',
-    dueDate: '2024-01-31'
+    dueDate: '2024-01-31',
   },
   {
     id: '2',
@@ -68,7 +68,7 @@ export const mockPayments: Payment[] = [
     amount: 150,
     status: 'paid',
     paymentDate: '2024-02-03',
-    dueDate: '2024-02-29'
+    dueDate: '2024-02-29',
   },
   {
     id: '3',
@@ -78,7 +78,7 @@ export const mockPayments: Payment[] = [
     year: 2024,
     amount: 150,
     status: 'pending',
-    dueDate: '2024-03-31'
+    dueDate: '2024-03-31',
   },
   {
     id: '4',
@@ -89,7 +89,7 @@ export const mockPayments: Payment[] = [
     amount: 175,
     status: 'paid',
     paymentDate: '2024-02-10',
-    dueDate: '2024-02-29'
+    dueDate: '2024-02-29',
   },
   {
     id: '5',
@@ -99,7 +99,7 @@ export const mockPayments: Payment[] = [
     year: 2024,
     amount: 175,
     status: 'overdue',
-    dueDate: '2024-03-31'
+    dueDate: '2024-03-31',
   },
   {
     id: '6',
@@ -110,7 +110,7 @@ export const mockPayments: Payment[] = [
     amount: 160,
     status: 'paid',
     paymentDate: '2024-01-15',
-    dueDate: '2024-01-31'
+    dueDate: '2024-01-31',
   },
   {
     id: '7',
@@ -121,7 +121,7 @@ export const mockPayments: Payment[] = [
     amount: 160,
     status: 'paid',
     paymentDate: '2024-02-12',
-    dueDate: '2024-02-29'
+    dueDate: '2024-02-29',
   },
   {
     id: '8',
@@ -131,6 +131,6 @@ export const mockPayments: Payment[] = [
     year: 2024,
     amount: 160,
     status: 'pending',
-    dueDate: '2024-03-31'
-  }
+    dueDate: '2024-03-31',
+  },
 ];
