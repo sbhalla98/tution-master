@@ -1,34 +1,50 @@
-import { mockPayments } from '@/data/mockData';
+import { requireUser } from '@/lib/server/auth';
+import { findPaymentById, getPaymentCollection } from '@/lib/server/db/payments';
+import { errorResponse, paymentNotFoundResponse } from '@/lib/server/utils/response';
 import { Payment } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  const payment = mockPayments.find((s) => s.id === params.id);
-  if (!payment) {
-    return NextResponse.json({ message: 'Payment not found' }, { status: 404 });
-  }
+type ParamsType = {
+  params: { id: string };
+};
 
-  return NextResponse.json(payment);
+// ----------------- GET -----------------
+export async function GET(request: NextRequest, { params }: ParamsType) {
+  try {
+    const { userId } = await requireUser();
+    const student = await findPaymentById(params.id, userId);
+
+    if (!student) return paymentNotFoundResponse(params.id, userId);
+
+    return NextResponse.json(student);
+  } catch (error) {
+    return errorResponse(`Error fetching payment ${params.id}`, error);
+  }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  const payment = mockPayments.find((s) => s.id === params.id);
-  if (!payment) {
-    return NextResponse.json({ message: 'Payment not found' }, { status: 404 });
-  }
-
+// ----------------- PUT -----------------
+export async function PUT(request: NextRequest, { params }: ParamsType) {
   try {
-    const body: Partial<Omit<Payment, 'id'>> = await request.json();
+    const { userId } = await requireUser();
+    const collection = await getPaymentCollection();
+    const student = await findPaymentById(params.id, userId);
 
-    const newPayment: Payment = {
-      ...payment,
+    if (!student) return paymentNotFoundResponse(params.id, userId);
+
+    const body: Partial<Omit<Payment, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>> =
+      await request.json();
+
+    const updatedPayment: Partial<
+      Omit<Payment, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>
+    > = {
       ...body,
+      updatedAt: Date.now(),
     };
 
-    return NextResponse.json(newPayment, { status: 201 });
+    const result = await collection.updateOne({ id: params.id, userId }, { $set: updatedPayment });
+
+    return NextResponse.json(result);
   } catch (error) {
-    return NextResponse.json({ err: error, message: 'Invalid JSON' }, { status: 400 });
+    return errorResponse(`Error updating payment ${params.id}`, error);
   }
 }
