@@ -2,7 +2,6 @@ import { Student } from '@/types/student';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
-// POST /api/student
 export async function POST(req: NextRequest) {
   try {
     const body: Omit<Student, 'id'> = await req.json();

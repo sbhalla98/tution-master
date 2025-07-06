@@ -2,7 +2,6 @@ import { mockStudents } from '@/data/mockData';
 import { Student } from '@/types/student';
 import { NextRequest, NextResponse } from 'next/server';
 
-// GET /api/get-student/[id]
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   await new Promise((resolve) => setTimeout(resolve, 100));
   const student = mockStudents.find((s) => s.id === params.id);
@@ -13,7 +12,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   return NextResponse.json(student);
 }
 
-// PUT /api/update-student/[id]
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   await new Promise((resolve) => setTimeout(resolve, 100));
   const student = mockStudents.find((s) => s.id === params.id);
@@ -35,7 +33,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-// DELETE /api/delete-student/[id]
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   await new Promise((resolve) => setTimeout(resolve, 100));
   const student = mockStudents.find((s) => s.id === params.id);

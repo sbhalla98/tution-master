@@ -11,15 +11,6 @@ class ApiService {
     return this.payments.filter((p) => p.studentId === studentId);
   }
 
-  async updatePayment(id: string, paymentData: Partial<Payment>): Promise<Payment | null> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    const index = this.payments.findIndex((p) => p.id === id);
-    if (index === -1) return null;
-
-    this.payments[index] = { ...this.payments[index], ...paymentData };
-    return this.payments[index];
-  }
-
   async markPaymentAsPaid(id: string): Promise<Payment | null> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     const index = this.payments.findIndex((p) => p.id === id);

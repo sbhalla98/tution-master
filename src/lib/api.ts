@@ -33,3 +33,10 @@ export async function getPayments() {
 export async function createPayment(payment: Omit<Payment, 'id'>): Promise<Payment | null> {
   return await axios.post('/api/payment', payment);
 }
+
+export async function updatePayment(
+  id: string,
+  payment: Omit<Payment, 'id'>
+): Promise<Payment | null> {
+  return await axios.put(`/api/payment/${id}`, payment);
+}
