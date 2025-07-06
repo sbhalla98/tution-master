@@ -10,8 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { STUDENT_STATUS } from '@/constants';
-import { Student, StudentStatusType } from '@/types';
+import { AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
+import { Student, StudentStatusType, StudentSubjectType } from '@/types';
 import { UpdateStudentRequest } from '@/types/api';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -23,8 +23,6 @@ interface EditStudentFormProps {
   student: Student | null;
 }
 
-const availableSubjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History'];
-
 export default function EditStudentForm({
   isOpen,
   onClose,
@@ -32,7 +30,9 @@ export default function EditStudentForm({
   student,
 }: EditStudentFormProps) {
   const { register, handleSubmit, reset, setValue } = useForm();
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
+  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[] | null | undefined>(
+    []
+  );
   const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
 
   useEffect(() => {
@@ -47,11 +47,11 @@ export default function EditStudentForm({
     }
   }, [student, setValue]);
 
-  const handleSubjectChange = (subject: string, checked: boolean) => {
+  const handleSubjectChange = (subject: StudentSubjectType, checked: boolean) => {
     if (checked) {
-      setSelectedSubjects((prev) => [...prev, subject]);
+      setSelectedSubjects((prev) => [...(prev ?? []), subject]);
     } else {
-      setSelectedSubjects((prev) => prev.filter((s) => s !== subject));
+      setSelectedSubjects((prev) => (prev ?? []).filter((s) => s !== subject));
     }
   };
 
@@ -114,11 +114,11 @@ export default function EditStudentForm({
           <div className="space-y-2">
             <Label>Subjects</Label>
             <div className="grid grid-cols-2 gap-2">
-              {availableSubjects.map((subject) => (
+              {Object.values(AVAILABLE_SUBJECTS).map((subject) => (
                 <div key={subject} className="flex items-center space-x-2">
                   <Checkbox
                     id={subject}
-                    checked={selectedSubjects.includes(subject)}
+                    checked={(selectedSubjects ?? []).includes(subject)}
                     onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
                   />
                   <Label htmlFor={subject} className="text-sm">

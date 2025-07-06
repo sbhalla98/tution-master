@@ -1,6 +1,7 @@
-import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
+import { AVAILABLE_SUBJECTS, PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 
 export type StudentStatusType = (typeof STUDENT_STATUS)[keyof typeof STUDENT_STATUS];
+export type StudentSubjectType = (typeof AVAILABLE_SUBJECTS)[keyof typeof AVAILABLE_SUBJECTS];
 
 export type Student = {
   userId: string;
@@ -8,7 +9,7 @@ export type Student = {
   name: string;
   email: string;
   phone: string;
-  subjects: string[];
+  subjects?: StudentSubjectType[] | null;
   grade: string;
   monthlyFee: number;
   joinDate: string;

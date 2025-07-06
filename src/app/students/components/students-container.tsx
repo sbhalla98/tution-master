@@ -89,7 +89,9 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     const matchesSearch =
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.subjects.some((subject) => subject.toLowerCase().includes(searchTerm.toLowerCase()));
+      (student.subjects ?? []).some((subject) =>
+        subject.toLowerCase().includes(searchTerm.toLowerCase())
+      );
 
     const matchesFilter = filter === STUDENT_STATUS_FILTER.ALL || student.status === filter;
 

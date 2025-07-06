@@ -42,7 +42,7 @@ export default function StudentCard({ student, onEdit, onViewPayments }: Student
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <BookOpen className="h-4 w-4 mr-2" />
-          {student.subjects.join(', ')} - Grade {student.grade}
+          {(student.subjects ?? []).join(', ')} - Grade {student.grade}
         </div>
         <div className="flex items-center text-sm text-gray-600">
           <Calendar className="h-4 w-4 mr-2" />

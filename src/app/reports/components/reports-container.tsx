@@ -41,7 +41,7 @@ export default function Reports({ students, payments }: ReportsContiainerProps) 
   // Subject distribution - handle subjects as array
   const subjectData = (students ?? []).reduce(
     (acc, student) => {
-      student.subjects.forEach((subject) => {
+      (student.subjects ?? []).forEach((subject) => {
         acc[subject] = (acc[subject] || 0) + 1;
       });
       return acc;
