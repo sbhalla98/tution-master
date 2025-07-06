@@ -17,3 +17,13 @@ export const AVAILABLE_SUBJECTS = {
   ENGLISH: 'English',
   HISTORY: 'History',
 } as const;
+
+export const AVAILABLE_GRADES = {
+  SIXTH: '6',
+  SEVENTH: '7',
+  EIGHTH: '8',
+  NINTH: '9',
+  TENTH: '10',
+  ELEVENTH: '11',
+  TWELFTH: '12',
+} as const;

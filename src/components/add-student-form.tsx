@@ -10,9 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
-import { StudentStatusType, StudentSubjectType } from '@/types';
+import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
+import { CreateStudentFormData, createStudentSchema } from '@/schemas/student.schema';
+import { StudentGradeType, StudentStatusType, StudentSubjectType } from '@/types';
 import { CreateStudentRequest } from '@/types/api';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -23,31 +25,33 @@ interface AddStudentFormProps {
 }
 
 export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStudentFormProps) {
-  const { register, handleSubmit, reset } = useForm();
-  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[] | null | undefined>(
-    []
-  );
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<CreateStudentFormData>({
+    resolver: zodResolver(createStudentSchema),
+  });
+
+  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
 
   const handleSubjectChange = (subject: StudentSubjectType, checked: boolean) => {
     if (checked) {
-      setSelectedSubjects((prev) => [...(prev ?? []), subject]);
+      setSelectedSubjects((prev) => [...prev, subject]);
     } else {
-      setSelectedSubjects((prev) => (prev ?? []).filter((s) => s !== subject));
+      setSelectedSubjects((prev) => prev.filter((s) => s !== subject));
     }
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: CreateStudentFormData) => {
     const newStudent: CreateStudentRequest = {
-      email: data.email,
-      // Changed from subject to subjects
-      grade: data.grade,
-
-      joinDate: new Date().toISOString().split('T')[0],
-
+      ...data,
+      name: data.name.trim(),
       monthlyFee: Number(data.monthlyFee),
-      name: data.name,
-      phone: data.phone,
+      joinDate: Date.now(),
       status: selectedStatus,
       subjects: selectedSubjects,
     };
@@ -68,30 +72,20 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              {...register('name', { required: true })}
-              placeholder="Enter student's full name"
-            />
+            <Input id="name" {...register('name')} placeholder="Enter student's full name" />
+            {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email', { required: true })}
-              placeholder="Enter email address"
-            />
+            <Input id="email" type="email" {...register('email')} placeholder="Enter email" />
+            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              {...register('phone', { required: true })}
-              placeholder="Enter phone number"
-            />
+            <Input id="phone" {...register('phone')} placeholder="Enter phone number" />
+            {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -101,8 +95,8 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
                 <div key={subject} className="flex items-center space-x-2">
                   <Checkbox
                     id={subject}
-                    checked={(selectedSubjects ?? []).includes(subject)}
-                    onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
+                    checked={selectedSubjects.includes(subject)}
+                    onCheckedChange={(checked: boolean) => handleSubjectChange(subject, checked)}
                   />
                   <Label htmlFor={subject} className="text-sm">
                     {subject}
@@ -114,20 +108,19 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
 
           <div className="space-y-2">
             <Label htmlFor="grade">Grade</Label>
-            <Select onValueChange={(value) => register('grade').onChange({ target: { value } })}>
+            <Select onValueChange={(value: StudentGradeType) => setValue('grade', value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select grade" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="6">Grade 6</SelectItem>
-                <SelectItem value="7">Grade 7</SelectItem>
-                <SelectItem value="8">Grade 8</SelectItem>
-                <SelectItem value="9">Grade 9</SelectItem>
-                <SelectItem value="10">Grade 10</SelectItem>
-                <SelectItem value="11">Grade 11</SelectItem>
-                <SelectItem value="12">Grade 12</SelectItem>
+                {Object.keys(AVAILABLE_GRADES).map((grade) => (
+                  <SelectItem key={grade} value={grade}>
+                    Grade {grade}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+            {errors.grade && <p className="text-sm text-red-500">{errors.grade.message}</p>}
           </div>
 
           <div className="space-y-2">
@@ -135,9 +128,12 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             <Input
               id="monthlyFee"
               type="number"
-              {...register('monthlyFee', { min: 0, required: true })}
+              {...register('monthlyFee')}
               placeholder="Enter monthly fee"
             />
+            {errors.monthlyFee && (
+              <p className="text-sm text-red-500">{errors.monthlyFee.message}</p>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -150,8 +146,11 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                {Object.values(STUDENT_STATUS).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
