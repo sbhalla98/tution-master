@@ -1,3 +1,4 @@
+import { Student } from '@/types/student';
 import axios from './axios';
 
 export async function getStudents() {
@@ -6,4 +7,8 @@ export async function getStudents() {
 
 export async function getPayments() {
   return await axios.get('/api/get-payments');
+}
+
+export async function getStudent(id: string): Promise<Student | null> {
+  return await axios.get(`/api/get-student/${id}`);
 }

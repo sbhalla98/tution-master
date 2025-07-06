@@ -6,11 +6,6 @@ class ApiService {
   private students: Student[] = [...mockStudents];
   private payments: Payment[] = [...mockPayments];
 
-  async getStudent(id: string): Promise<Student | null> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return this.students.find((s) => s.id === id) || null;
-  }
-
   async createStudent(studentData: Omit<Student, 'id'>): Promise<Student> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     const newStudent: Student = {

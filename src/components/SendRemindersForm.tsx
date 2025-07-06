@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Payment } from '@/types/student';
 import { useToast } from '@/hooks/use-toast';
+import { getStudent } from '@/lib/api';
+import { Payment } from '@/types/student';
 import { MessageCircle } from 'lucide-react';
-import { apiService } from '@/services/api';
+import { useState } from 'react';
 
 interface SendRemindersFormProps {
   isOpen: boolean;
@@ -56,7 +56,7 @@ export default function SendRemindersForm({
     // For each selected payment, open WhatsApp with the reminder message
     for (const payment of selectedPaymentData) {
       try {
-        const student = await apiService.getStudent(payment.studentId);
+        const student = await getStudent(payment.studentId);
 
         if (student && student.phone) {
           const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${payment.studentName}\n- Month: ${payment.month} ${payment.year}\n- Amount: ₹${payment.amount}\n- Due Date: ${new Date(payment.dueDate).toLocaleDateString()}`;
