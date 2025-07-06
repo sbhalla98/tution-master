@@ -10,6 +10,7 @@ import { Payment, Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
+import DashboardHeader from './dashboard-header';
 
 type DashboardContainerProps = {
   students?: Student[] | null;
@@ -85,10 +86,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here is your tuition overview</p>
-      </div>
+      <DashboardHeader />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -7,7 +7,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import React, { useState } from 'react';
 
 import AppSidebar from '@/components/app-sidebar';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import './globals.css';
 
 const geistSans = Geist({
@@ -31,15 +31,12 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <Toaster />
-          <Sonner />
           <QueryClientProvider client={queryClient}>
+            <Toaster />
+            <Sonner />
             <SidebarProvider>
               <AppSidebar />
-              <main className="p-6 w-full">
-                <SidebarTrigger />
-                {children}
-              </main>
+              <main className="p-6 w-full">{children}</main>
             </SidebarProvider>
           </QueryClientProvider>
         </body>

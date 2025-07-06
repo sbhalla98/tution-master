@@ -14,6 +14,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import ReportsHeader from './reports-header';
 
 type ReportsContiainerProps = {
   students?: Student[] | null;
@@ -58,10 +59,7 @@ export default function Reports({ students, payments }: ReportsContiainerProps) 
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Reports & Analytics</h1>
-        <p className="text-gray-600 mt-2">Insights into your tuition business</p>
-      </div>
+      <ReportsHeader />
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

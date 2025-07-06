@@ -1,14 +1,22 @@
-// import UserMenu from './UserMenu';
+import { SidebarTrigger } from './ui/sidebar';
 
-const Header = () => {
-  return (
-    <header className="h-16 border-b bg-white px-4 flex items-center justify-between">
-      <div className="flex items-center">
-        <h1 className="text-xl font-semibold">Student Management System</h1>
-      </div>
-      <div className="flex items-center">{/* <UserMenu /> */}</div>
-    </header>
-  );
+type Props = {
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
 };
 
-export default Header;
+export default function Header({ title, description, children }: Props) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex items-center gap-4">
+        <SidebarTrigger />
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
+          <p className="text-gray-600 mt-1">{description}</p>
+        </div>
+      </div>
+      {children}
+    </div>
+  );
+}
