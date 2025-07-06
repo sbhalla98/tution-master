@@ -8,6 +8,7 @@ import ViewPaymentsModal from '@/components/ViewPaymentsModal';
 import { PAYMENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
 import { STUDENT_STATUS_FILTER } from '../constants';
@@ -26,6 +27,40 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
   const [isViewPaymentsOpen, setIsViewPaymentsOpen] = useState(false);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState('');
+  const queryClient = useQueryClient();
+
+  const { mutate: createStudentMutation } = useMutation({
+    mutationFn: createStudent,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      console.log('Added new student:', data);
+    },
+    onError: (error) => {
+      console.error('Error creating student:', error);
+    },
+  });
+
+  const { mutate: updateStudentMutation } = useMutation({
+    mutationFn: updateStudent,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      console.log('Updated student:', data);
+    },
+    onError: (error) => {
+      console.error('Error updating student:', error);
+    },
+  });
+
+  const { mutate: markPaymentStatusMutation } = useMutation({
+    mutationFn: markPaymentStatus,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      console.log('Payment marked as paid:', data);
+    },
+    onError: (error) => {
+      console.error('Error marking payment as paid:', error);
+    },
+  });
 
   const filteredStudents = (students ?? []).filter((student) => {
     const matchesSearch =
@@ -49,35 +84,22 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     setIsViewPaymentsOpen(true);
   };
 
-  const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
-    try {
-      const newStudent = await createStudent(newStudentData);
-      //   setStudents((prev) => [...prev, newStudent]);
-      console.log('Added new student:', newStudent);
-    } catch (error) {
-      console.error('Error adding student:', error);
-    }
+  const handleAddStudent = (newStudentData: Omit<Student, 'id'>) => {
+    createStudentMutation(newStudentData);
   };
 
-  const handleUpdateStudent = async (updatedStudent: Student) => {
-    try {
-      const updated = await updateStudent(updatedStudent.id, updatedStudent);
-      if (updated) {
-        // setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
-        console.log('Updated student:', updated);
-      }
-    } catch (error) {
-      console.error('Error updating student:', error);
-    }
+  const handleUpdateStudent = (updatedStudent: Student) => {
+    updateStudentMutation({
+      id: updatedStudent.id,
+      student: updatedStudent,
+    });
   };
 
-  const handleMarkPaid = async (paymentId: string) => {
-    try {
-      await markPaymentStatus(paymentId, PAYMENT_STATUS.PAID);
-      console.log('Payment marked as paid:', paymentId);
-    } catch (error) {
-      console.error('Error marking payment as paid:', error);
-    }
+  const handleMarkPaid = (paymentId: string) => {
+    markPaymentStatusMutation({
+      id: paymentId,
+      status: PAYMENT_STATUS.PAID,
+    });
   };
 
   return (

@@ -17,10 +17,13 @@ export async function getStudent(id: string): Promise<Student | null> {
   return res.data;
 }
 
-export async function updateStudent(
-  id: string,
-  student: Partial<Omit<Student, 'id'>>
-): Promise<Student | null> {
+export async function updateStudent({
+  id,
+  student,
+}: {
+  id: string;
+  student: Partial<Omit<Student, 'id'>>;
+}): Promise<Student | null> {
   const res = await axios.put(`/student/${id}`, student);
   return res.data;
 }
@@ -54,10 +57,13 @@ export async function updatePayment(
   return res.data;
 }
 
-export async function markPaymentStatus(
-  id: string,
-  status: PaymentStatusType
-): Promise<Payment | null> {
+export async function markPaymentStatus({
+  id,
+  status,
+}: {
+  id: string;
+  status: PaymentStatusType;
+}): Promise<Payment | null> {
   const res = await axios.put(`/payment/${id}`, { status });
   return res.data;
 }

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { PAYMENT_STATUS_FILTER } from '../constants';
@@ -22,6 +23,29 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     PAYMENT_STATUS_FILTER.ALL
   );
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate: createPaymentMutation } = useMutation({
+    mutationFn: createPayment,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      console.log('Recorded new payment:', data);
+    },
+    onError: (error) => {
+      console.error('Error recording payment:', error);
+    },
+  });
+
+  const { mutate: markPaymentStatusMutation } = useMutation({
+    mutationFn: markPaymentStatus,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      console.log('Payment marked as paid:', data);
+    },
+    onError: (error) => {
+      console.error('Error marking payment as paid:', error);
+    },
+  });
 
   const filteredPayments = (payments ?? []).filter((payment) => {
     const matchesSearch =
@@ -34,27 +58,15 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     return matchesSearch && matchesStatus;
   });
 
-  const handleMarkPaid = async (paymentId: string) => {
-    try {
-      const updatedPayment = await markPaymentStatus(paymentId, PAYMENT_STATUS.PAID);
-      if (updatedPayment) {
-        // setPayments((prev) =>
-        //   prev.map((payment) => (payment.id === paymentId ? updatedPayment : payment))
-        // );
-      }
-    } catch (error) {
-      console.error('Error marking payment as paid:', error);
-    }
+  const handleMarkPaid = (paymentId: string) => {
+    markPaymentStatusMutation({
+      id: paymentId,
+      status: PAYMENT_STATUS.PAID,
+    });
   };
 
-  const handleRecordPayment = async (newPaymentData: Omit<Payment, 'id'>) => {
-    try {
-      const newPayment = await createPayment(newPaymentData);
-      // setPayments((prev) => [...prev, newPayment]);
-      console.log('Recorded new payment:', newPayment);
-    } catch (error) {
-      console.error('Error recording payment:', error);
-    }
+  const handleRecordPayment = (newPaymentData: Omit<Payment, 'id'>) => {
+    createPaymentMutation(newPaymentData);
   };
 
   const totalPaid = (payments ?? [])

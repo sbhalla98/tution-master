@@ -6,6 +6,7 @@ import StatCard from '@/components/StatCard';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,6 +19,29 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { mutate: createStudentMutation } = useMutation({
+    mutationFn: createStudent,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      console.log('Added new student:', data);
+    },
+    onError: (error) => {
+      console.error('Error creating student:', error);
+    },
+  });
+
+  const { mutate: createPaymentMutation } = useMutation({
+    mutationFn: createPayment,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      console.log('Recorded new payment:', data);
+    },
+    onError: (error) => {
+      console.error('Error recording payment:', error);
+    },
+  });
 
   const activeStudents = (students ?? []).filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
   const totalRevenue = (payments ?? [])
@@ -37,24 +61,12 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
-  const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
-    try {
-      const newStudent = await createStudent(newStudentData);
-      //   setStudents((prev) => [...prev, newStudent]);
-      console.log('Added new student:', newStudent);
-    } catch (error) {
-      console.error('Error adding student:', error);
-    }
+  const handleAddStudent = (newStudentData: Omit<Student, 'id'>) => {
+    createStudentMutation(newStudentData);
   };
 
-  const handleRecordPayment = async (newPaymentData: Omit<Payment, 'id'>) => {
-    try {
-      const newPayment = await createPayment(newPaymentData);
-      //   setPayments((prev) => [...prev, newPayment]);
-      console.log('Recorded new payment:', newPayment);
-    } catch (error) {
-      console.error('Error recording payment:', error);
-    }
+  const handleRecordPayment = (newPaymentData: Omit<Payment, 'id'>) => {
+    createPaymentMutation(newPaymentData);
   };
 
   const studentsForPayment = (students ?? []).map((student) => ({
