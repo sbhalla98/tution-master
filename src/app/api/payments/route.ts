@@ -1,7 +1,21 @@
-import { mockPayments } from '@/data/mockData';
+import { requireUser } from '@/lib/server/auth';
+import { getPaymentCollection } from '@/lib/server/db/payments';
+import { errorResponse } from '@/lib/server/utils/response';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  await new Promise((resolve) => setTimeout(resolve, 100));
-  return NextResponse.json(mockPayments);
+  try {
+    const { userId } = await requireUser();
+
+    const collection = await getPaymentCollection();
+
+    const payments = await collection
+      .find({ userId, isDeleted: { $ne: true } }) // ignore soft-deleted
+      .sort({ createdAt: -1 }) // latest first
+      .toArray();
+
+    return NextResponse.json(payments);
+  } catch (error) {
+    return errorResponse('Failed to fetch payments', error);
+  }
 }

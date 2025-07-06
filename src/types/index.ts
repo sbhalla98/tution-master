@@ -22,6 +22,7 @@ export type Student = {
 export type PaymentStatusType = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
 export type Payment = {
+  userId: string;
   id: string;
   studentId: string;
   studentName: string;
@@ -31,4 +32,8 @@ export type Payment = {
   status: PaymentStatusType;
   paymentDate?: string;
   dueDate: string;
+  createdAt: EpochTimeStamp;
+  updatedAt: EpochTimeStamp;
+  deletedAt: EpochTimeStamp | null;
+  isDeleted: boolean;
 };
