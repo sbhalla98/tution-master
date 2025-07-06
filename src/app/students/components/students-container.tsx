@@ -5,6 +5,7 @@ import StudentCard from '@/components/StudentCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
+import { createStudent } from '@/lib/api';
 import { apiService } from '@/services/api';
 import { Student } from '@/types/student';
 import { Plus, Search, Users } from 'lucide-react';
@@ -48,7 +49,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
     try {
-      const newStudent = await apiService.createStudent(newStudentData);
+      const newStudent = await createStudent(newStudentData);
       //   setStudents((prev) => [...prev, newStudent]);
       console.log('Added new student:', newStudent);
     } catch (error) {

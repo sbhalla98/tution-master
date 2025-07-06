@@ -3,6 +3,7 @@ import AddStudentForm from '@/components/AddStudentForm';
 import RecordPaymentForm from '@/components/RecordPaymentForm';
 import SendRemindersForm from '@/components/SendRemindersForm';
 import StatCard from '@/components/StatCard';
+import { createStudent } from '@/lib/api';
 import { apiService } from '@/services/api';
 import { Payment, Student } from '@/types/student';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
@@ -34,7 +35,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
     try {
-      const newStudent = await apiService.createStudent(newStudentData);
+      const newStudent = await createStudent(newStudentData);
       //   setStudents((prev) => [...prev, newStudent]);
       console.log('Added new student:', newStudent);
     } catch (error) {

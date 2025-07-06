@@ -12,3 +12,7 @@ export async function getPayments() {
 export async function getStudent(id: string): Promise<Student | null> {
   return await axios.get(`/api/get-student/${id}`);
 }
+
+export async function createStudent(student: Omit<Student, 'id'>): Promise<Student | null> {
+  return await axios.post('/api/create-student', student);
+}
