@@ -1,8 +1,7 @@
 import PaymentCard from '@/components/PaymentCard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getStudentPayments } from '@/lib/api';
-import { Payment } from '@/types';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 interface ViewPaymentsModalProps {
   isOpen: boolean;
@@ -19,28 +18,11 @@ export default function ViewPaymentsModal({
   studentName,
   onMarkPaid,
 }: ViewPaymentsModalProps) {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (isOpen && studentId) {
-      loadStudentPayments();
-    }
-  }, [isOpen, studentId]);
-
-  const loadStudentPayments = async () => {
-    if (!studentId) return;
-
-    setLoading(true);
-    try {
-      const studentPayments = await getStudentPayments(studentId);
-      setPayments(studentPayments);
-    } catch (error) {
-      console.error('Error loading student payments:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { data: payments, isLoading } = useQuery({
+    queryKey: ['studentPayments', studentId],
+    queryFn: () => getStudentPayments(studentId!),
+    enabled: isOpen && !!studentId,
+  });
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -49,13 +31,13 @@ export default function ViewPaymentsModal({
           <DialogTitle>Payments for {studentName}</DialogTitle>
         </DialogHeader>
 
-        {loading ? (
+        {isLoading ? (
           <div className="text-center py-8">Loading payments...</div>
-        ) : payments.length === 0 ? (
+        ) : (payments ?? []).length === 0 ? (
           <div className="text-center py-8 text-gray-500">No payments found for this student</div>
         ) : (
           <div className="grid gap-4">
-            {payments.map((payment) => (
+            {(payments ?? []).map((payment) => (
               <PaymentCard key={payment.id} payment={payment} onMarkPaid={onMarkPaid} />
             ))}
           </div>

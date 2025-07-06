@@ -4,8 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { getStudent } from '@/lib/api';
-import { Payment } from '@/types';
+import { Payment, Student } from '@/types';
+import { useQueryClient } from '@tanstack/react-query';
 import { MessageCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -25,6 +25,7 @@ export default function SendRemindersForm({
     'Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!'
   );
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const handlePaymentToggle = (paymentId: string) => {
     setSelectedPayments((prev) =>
@@ -41,6 +42,8 @@ export default function SendRemindersForm({
   };
 
   const handleSendWhatsAppReminders = async () => {
+    const cachedStudents = queryClient.getQueryData<Student[]>(['students']) || [];
+
     if (selectedPayments.length === 0) {
       toast({
         description: 'Please select at least one payment to send reminders for.',
@@ -56,7 +59,7 @@ export default function SendRemindersForm({
     // For each selected payment, open WhatsApp with the reminder message
     for (const payment of selectedPaymentData) {
       try {
-        const student = await getStudent(payment.studentId);
+        const student = cachedStudents.find((s) => s.id === payment.studentId);
 
         if (student && student.phone) {
           const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${payment.studentName}\n- Month: ${payment.month} ${payment.year}\n- Amount: ₹${payment.amount}\n- Due Date: ${new Date(payment.dueDate).toLocaleDateString()}`;
