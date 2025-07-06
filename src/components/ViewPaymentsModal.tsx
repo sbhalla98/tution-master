@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Payment } from '@/types/student';
 import PaymentCard from '@/components/PaymentCard';
-import { apiService } from '@/services/api';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { getStudentPayments } from '@/lib/api';
+import { Payment } from '@/types/student';
+import { useEffect, useState } from 'react';
 
 interface ViewPaymentsModalProps {
   isOpen: boolean;
@@ -33,7 +33,7 @@ export default function ViewPaymentsModal({
 
     setLoading(true);
     try {
-      const studentPayments = await apiService.getStudentPayments(studentId);
+      const studentPayments = await getStudentPayments(studentId);
       setPayments(studentPayments);
     } catch (error) {
       console.error('Error loading student payments:', error);

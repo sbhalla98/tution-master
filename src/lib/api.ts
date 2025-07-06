@@ -30,6 +30,10 @@ export async function getPayments() {
   return await axios.get('/api/payments');
 }
 
+export async function getStudentPayments(studentId: string): Promise<Payment[]> {
+  return await axios.get(`/api/payments/${studentId}`);
+}
+
 export async function createPayment(payment: Omit<Payment, 'id'>): Promise<Payment | null> {
   return await axios.post('/api/payment', payment);
 }
