@@ -11,14 +11,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PAYMENT_STATUS } from '@/constants';
-import { Payment, PaymentStatusType } from '@/types';
+import { PaymentStatusType } from '@/types';
+import { CreatePaymentRequest } from '@/types/api';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface RecordPaymentFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onRecordPayment: (payment: Omit<Payment, 'id'>) => void;
+  onRecordPayment: (payment: CreatePaymentRequest) => void;
   students: Array<{ id: string; name: string; monthlyFee: number }>;
 }
 
@@ -53,7 +54,7 @@ export default function RecordPaymentForm({
   const onSubmit = (data: any) => {
     if (!selectedStudentData) return;
 
-    const newPayment: Omit<Payment, 'id'> = {
+    const newPayment: CreatePaymentRequest = {
       amount: Number(data.amount),
       dueDate: data.dueDate,
       month: selectedMonth,

@@ -6,6 +6,7 @@ import StatCard from '@/components/StatCard';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
+import { CreatePaymentRequest, CreateStudentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -61,11 +62,11 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
-  const handleAddStudent = (newStudentData: Omit<Student, 'id'>) => {
+  const handleAddStudent = (newStudentData: CreateStudentRequest) => {
     createStudentMutation(newStudentData);
   };
 
-  const handleRecordPayment = (newPaymentData: Omit<Payment, 'id'>) => {
+  const handleRecordPayment = (newPaymentData: CreatePaymentRequest) => {
     createPaymentMutation(newPaymentData);
   };
 

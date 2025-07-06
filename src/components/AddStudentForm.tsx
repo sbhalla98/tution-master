@@ -11,14 +11,15 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { STUDENT_STATUS } from '@/constants';
-import { Student, StudentStatusType } from '@/types';
+import { StudentStatusType } from '@/types';
+import { CreateStudentRequest } from '@/types/api';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface AddStudentFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onAddStudent: (student: Omit<Student, 'id'>) => void;
+  onAddStudent: (student: CreateStudentRequest) => void;
 }
 
 const availableSubjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'English', 'History'];
@@ -37,7 +38,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
   };
 
   const onSubmit = (data: any) => {
-    const newStudent: Omit<Student, 'id'> = {
+    const newStudent: CreateStudentRequest = {
       email: data.email,
       // Changed from subject to subjects
       grade: data.grade,

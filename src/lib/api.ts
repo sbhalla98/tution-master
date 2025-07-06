@@ -1,69 +1,85 @@
-import { Payment, PaymentStatusType, Student } from '@/types';
+import {
+  CreatePaymentRequest,
+  CreatePaymentResponse,
+  CreateStudentRequest,
+  CreateStudentResponse,
+  DeleteStudentRequest,
+  DeleteStudentResponse,
+  GetPaymentsResponse,
+  GetStudentPaymentsRequest,
+  GetStudentPaymentsResponse,
+  GetStudentRequest,
+  GetStudentResponse,
+  GetStudentsResponse,
+  MarkPaymentStatusRequest,
+  MarkPaymentStatusResponse,
+  UpdatePaymentRequest,
+  UpdatePaymentResponse,
+  UpdateStudentRequest,
+  UpdateStudentResponse,
+} from '@/types/api';
 import axios from './axios';
 
-// students API calls
-export async function getStudents(): Promise<Student[] | null> {
+// ---------- Student APIs ----------
+
+export async function getStudents(): Promise<GetStudentsResponse> {
   const res = await axios.get('/students');
   return res.data;
 }
 
-export async function createStudent(student: Omit<Student, 'id'>): Promise<Student | null> {
-  const res = await axios.post('/student', student);
-  return res.data;
-}
-
-export async function getStudent(id: string): Promise<Student | null> {
+export async function getStudent(request: GetStudentRequest): Promise<GetStudentResponse> {
+  const { id } = request;
   const res = await axios.get(`/student/${id}`);
   return res.data;
 }
 
-export async function updateStudent({
-  id,
-  updatePayload,
-}: {
-  id: string;
-  updatePayload: Partial<Omit<Student, 'id'>>;
-}): Promise<Student | null> {
+export async function createStudent(request: CreateStudentRequest): Promise<CreateStudentResponse> {
+  const res = await axios.post('/student', request);
+  return res.data;
+}
+
+export async function updateStudent(request: UpdateStudentRequest): Promise<UpdateStudentResponse> {
+  const { id, updatePayload } = request;
   const res = await axios.put(`/student/${id}`, updatePayload);
   return res.data;
 }
 
-export async function deleteStudent(id: string): Promise<Student | null> {
+export async function deleteStudent(request: DeleteStudentRequest): Promise<DeleteStudentResponse> {
+  const { id } = request;
   const res = await axios.delete(`/student/${id}`);
   return res.data;
 }
 
-// payments API calls
-export async function getPayments(): Promise<Payment[] | null> {
+// ---------- Payment APIs ----------
+
+export async function getPayments(): Promise<GetPaymentsResponse> {
   const res = await axios.get('/payments');
   return res.data;
 }
 
-export async function getStudentPayments(studentId: string): Promise<Payment[]> {
+export async function getStudentPayments(
+  request: GetStudentPaymentsRequest
+): Promise<GetStudentPaymentsResponse> {
+  const { studentId } = request;
   const res = await axios.get(`/payments/${studentId}`);
   return res.data;
 }
 
-export async function createPayment(payment: Omit<Payment, 'id'>): Promise<Payment | null> {
-  const res = await axios.post('/payment', payment);
+export async function createPayment(request: CreatePaymentRequest): Promise<CreatePaymentResponse> {
+  const res = await axios.post('/payment', request);
   return res.data;
 }
 
-export async function updatePayment(
-  id: string,
-  payment: Partial<Omit<Payment, 'id'>>
-): Promise<Payment | null> {
-  const res = await axios.put(`/payment/${id}`, payment);
+export async function updatePayment(request: UpdatePaymentRequest): Promise<UpdatePaymentResponse> {
+  const { id, updatePayload } = request;
+  const res = await axios.put(`/payment/${id}`, updatePayload);
   return res.data;
 }
 
-export async function markPaymentStatus({
-  id,
-  status,
-}: {
-  id: string;
-  status: PaymentStatusType;
-}): Promise<Payment | null> {
+export async function markPaymentStatus(
+  request: MarkPaymentStatusRequest
+): Promise<MarkPaymentStatusResponse> {
+  const { id, status } = request;
   const res = await axios.put(`/payment/${id}`, { status });
   return res.data;
 }

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types';
+import { CreatePaymentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -65,7 +66,7 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     });
   };
 
-  const handleRecordPayment = (newPaymentData: Omit<Payment, 'id'>) => {
+  const handleRecordPayment = (newPaymentData: CreatePaymentRequest) => {
     createPaymentMutation(newPaymentData);
   };
 

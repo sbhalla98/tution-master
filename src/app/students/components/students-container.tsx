@@ -8,6 +8,7 @@ import ViewPaymentsModal from '@/components/ViewPaymentsModal';
 import { PAYMENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
+import { CreateStudentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -84,7 +85,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     setIsViewPaymentsOpen(true);
   };
 
-  const handleAddStudent = (newStudentData: Omit<Student, 'id'>) => {
+  const handleAddStudent = (newStudentData: CreateStudentRequest) => {
     createStudentMutation(newStudentData);
   };
 

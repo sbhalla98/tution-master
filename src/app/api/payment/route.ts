@@ -1,7 +1,7 @@
 import { requireUser } from '@/lib/server/auth';
 import { getPaymentCollection } from '@/lib/server/db/payments';
 import { errorResponse } from '@/lib/server/utils/response';
-import { Payment } from '@/types';
+import { CreatePaymentRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -11,15 +11,12 @@ export async function POST(req: NextRequest) {
     const { userId } = await requireUser();
 
     const collection = await getPaymentCollection();
-    const body = (await req.json()) as Omit<
-      Payment,
-      'id' | 'userId' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isDeleted'
-    >;
+    const payload: CreatePaymentRequest = await req.json();
 
     const timestamp = Date.now();
 
-    const newPayment: Payment = {
-      ...body,
+    const newPayment = {
+      ...payload,
       id: uuidv4(),
       userId,
       createdAt: timestamp,

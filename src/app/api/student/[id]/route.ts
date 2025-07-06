@@ -1,7 +1,7 @@
 import { requireUser } from '@/lib/server/auth';
 import { findStudentById, getStudentCollection } from '@/lib/server/db/students';
 import { errorResponse, studentNotFoundResponse } from '@/lib/server/utils/response';
-import { Student } from '@/types';
+import { UpdateStudentRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 
 type ParamsType = {
@@ -31,13 +31,10 @@ export async function PUT(request: NextRequest, { params }: ParamsType) {
 
     if (!student) return studentNotFoundResponse(params.id, userId);
 
-    const body: Partial<Omit<Student, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>> =
-      await request.json();
+    const payload: UpdateStudentRequest = await request.json();
 
-    const updatedStudent: Partial<
-      Omit<Student, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>
-    > = {
-      ...body,
+    const updatedStudent = {
+      ...payload,
       updatedAt: Date.now(),
     };
 
@@ -58,7 +55,7 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
 
     if (!student) return studentNotFoundResponse(params.id, userId);
 
-    const updatedStudent: Pick<Student, 'isDeleted' | 'deletedAt' | 'updatedAt'> = {
+    const updatedStudent = {
       isDeleted: true,
       deletedAt: Date.now(),
       updatedAt: Date.now(),
