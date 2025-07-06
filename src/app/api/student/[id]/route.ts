@@ -31,9 +31,12 @@ export async function PUT(request: NextRequest, { params }: ParamsType) {
 
     if (!student) return studentNotFoundResponse(params.id, userId);
 
-    const body: Partial<Omit<Student, 'id'>> = await request.json();
+    const body: Partial<Omit<Student, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>> =
+      await request.json();
 
-    const updatedStudent: Partial<Omit<Student, 'id'>> = {
+    const updatedStudent: Partial<
+      Omit<Student, 'id' | 'userId' | 'createdAt' | 'deletedAt' | 'isDeleted'>
+    > = {
       ...body,
       updatedAt: Date.now(),
     };
@@ -55,7 +58,7 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
 
     if (!student) return studentNotFoundResponse(params.id, userId);
 
-    const updatedStudent: Partial<Omit<Student, 'id'>> = {
+    const updatedStudent: Pick<Student, 'isDeleted' | 'deletedAt' | 'updatedAt'> = {
       isDeleted: true,
       deletedAt: Date.now(),
       updatedAt: Date.now(),
