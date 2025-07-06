@@ -8,7 +8,6 @@ import ViewPaymentsModal from '@/components/ViewPaymentsModal';
 import { PAYMENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
-import { CreateStudentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -83,17 +82,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     setSelectedStudentId(studentId);
     setSelectedStudentName(studentName);
     setIsViewPaymentsOpen(true);
-  };
-
-  const handleAddStudent = (newStudentData: CreateStudentRequest) => {
-    createStudentMutation(newStudentData);
-  };
-
-  const handleUpdateStudent = (id: string, updatePayload: Partial<Student>) => {
-    updateStudentMutation({
-      id,
-      updatePayload,
-    });
   };
 
   const handleMarkPaid = (paymentId: string) => {
@@ -174,7 +162,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
       <AddStudentForm
         isOpen={isAddStudentOpen}
         onClose={() => setIsAddStudentOpen(false)}
-        onAddStudent={handleAddStudent}
+        onAddStudent={createStudentMutation}
       />
 
       <EditStudentForm
@@ -183,7 +171,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
           setIsEditStudentOpen(false);
           setEditingStudent(null);
         }}
-        onUpdateStudent={handleUpdateStudent}
+        onUpdateStudent={updateStudentMutation}
         student={editingStudent}
       />
 

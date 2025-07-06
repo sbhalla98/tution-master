@@ -12,13 +12,14 @@ import {
 } from '@/components/ui/select';
 import { STUDENT_STATUS } from '@/constants';
 import { Student, StudentStatusType } from '@/types';
+import { UpdateStudentRequest } from '@/types/api';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface EditStudentFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpdateStudent: (id: string, student: Partial<Student>) => void;
+  onUpdateStudent: (request: UpdateStudentRequest) => void;
   student: Student | null;
 }
 
@@ -56,8 +57,9 @@ export default function EditStudentForm({
 
   const onSubmit = (data: any) => {
     if (!student) return;
+    const { id } = student;
 
-    const updatedStudent: Partial<Student> = {
+    const payload: UpdateStudentRequest['payload'] = {
       email: data.email,
       grade: data.grade,
       monthlyFee: Number(data.monthlyFee),
@@ -67,7 +69,7 @@ export default function EditStudentForm({
       subjects: selectedSubjects,
     };
 
-    onUpdateStudent(student.id, updatedStudent);
+    onUpdateStudent({ id, payload });
     reset();
     setSelectedSubjects([]);
     setSelectedStatus(STUDENT_STATUS.ACTIVE);

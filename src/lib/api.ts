@@ -39,8 +39,8 @@ export async function createStudent(request: CreateStudentRequest): Promise<Crea
 }
 
 export async function updateStudent(request: UpdateStudentRequest): Promise<UpdateStudentResponse> {
-  const { id, updatePayload } = request;
-  const res = await axios.put(`/student/${id}`, updatePayload);
+  const { id, payload } = request;
+  const res = await axios.put(`/student/${id}`, payload);
   return res.data;
 }
 
@@ -71,8 +71,8 @@ export async function createPayment(request: CreatePaymentRequest): Promise<Crea
 }
 
 export async function updatePayment(request: UpdatePaymentRequest): Promise<UpdatePaymentResponse> {
-  const { id, updatePayload } = request;
-  const res = await axios.put(`/payment/${id}`, updatePayload);
+  const { id, payload } = request;
+  const res = await axios.put(`/payment/${id}`, payload);
   return res.data;
 }
 

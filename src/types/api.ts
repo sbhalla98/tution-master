@@ -23,7 +23,7 @@ export type CreateStudentResponse = Student | null | undefined;
 // Request to update an existing student
 export type UpdateStudentRequest = {
   id: string;
-  updatePayload: Partial<
+  payload: Partial<
     Omit<Student, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isDeleted'>
   >;
 };
@@ -56,7 +56,7 @@ export type CreatePaymentResponse = Payment | null | undefined;
 // Request to update a new payment
 export type UpdatePaymentRequest = {
   id: string;
-  updatePayload: Partial<
+  payload: Partial<
     Omit<Payment, 'id' | 'userId' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isDeleted'>
   >;
 };
