@@ -1,4 +1,6 @@
 'use client';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { Toaster } from '@/components/ui/toaster';
 import {
   ClerkProvider,
   SignInButton,
@@ -11,6 +13,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React, { useState } from 'react';
 
+import Sidebar from '@/components/app-sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import './globals.css';
 
 const geistSans = Geist({
@@ -34,6 +38,8 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <Toaster />
+          <Sonner />
           <header className="flex justify-end items-center p-4 gap-4 h-16">
             <SignedOut>
               <SignInButton />
@@ -47,7 +53,15 @@ export default function RootLayout({
               <UserButton />
             </SignedIn>
           </header>
-          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+          <QueryClientProvider client={queryClient}>
+            <SidebarProvider>
+              <Sidebar />
+              <main className="p-6">
+                <SidebarTrigger />
+                {children}
+              </main>
+            </SidebarProvider>
+          </QueryClientProvider>
         </body>
       </html>
     </ClerkProvider>

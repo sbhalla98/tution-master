@@ -1,5 +1,4 @@
-import React from 'react';
-import UserMenu from './UserMenu';
+// import UserMenu from './UserMenu';
 
 const Header = () => {
   return (
@@ -7,9 +6,7 @@ const Header = () => {
       <div className="flex items-center">
         <h1 className="text-xl font-semibold">Student Management System</h1>
       </div>
-      <div className="flex items-center">
-        <UserMenu />
-      </div>
+      <div className="flex items-center">{/* <UserMenu /> */}</div>
     </header>
   );
 };
