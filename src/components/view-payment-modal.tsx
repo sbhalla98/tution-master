@@ -1,4 +1,4 @@
-import PaymentCard from '@/components/PaymentCard';
+import PaymentCard from '@/components/payment-card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getStudentPayments } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';

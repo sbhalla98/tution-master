@@ -1,10 +1,10 @@
 'use client';
-import AddStudentForm from '@/components/AddStudentForm';
-import EditStudentForm from '@/components/EditStudentForm';
-import StudentCard from '@/components/StudentCard';
+import AddStudentForm from '@/components/add-student-form';
+import EditStudentForm from '@/components/edit-student-form';
+import StudentCard from '@/components/student-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import ViewPaymentsModal from '@/components/ViewPaymentsModal';
+import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';

@@ -1,7 +1,7 @@
 'use client';
 
-import PaymentCard from '@/components/PaymentCard';
-import RecordPaymentForm from '@/components/RecordPaymentForm';
+import PaymentCard from '@/components/payment-card';
+import RecordPaymentForm from '@/components/record-payment-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
