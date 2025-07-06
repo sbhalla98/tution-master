@@ -1,17 +1,10 @@
-import { Student, Payment } from '@/types/student';
-import { mockStudents, mockPayments } from '@/data/mockData';
+import { mockPayments, mockStudents } from '@/data/mockData';
+import { Payment, Student } from '@/types/student';
 
 // API service layer - currently using mock data but structured for real API calls
 class ApiService {
   private students: Student[] = [...mockStudents];
   private payments: Payment[] = [...mockPayments];
-
-  // Student APIs
-  async getStudents(): Promise<Student[]> {
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return [...this.students];
-  }
 
   async getStudent(id: string): Promise<Student | null> {
     await new Promise((resolve) => setTimeout(resolve, 100));
@@ -44,12 +37,6 @@ class ApiService {
 
     this.students.splice(index, 1);
     return true;
-  }
-
-  // Payment APIs
-  async getPayments(): Promise<Payment[]> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    return [...this.payments];
   }
 
   async getStudentPayments(studentId: string): Promise<Payment[]> {

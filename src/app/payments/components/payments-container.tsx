@@ -7,36 +7,19 @@ import { Input } from '@/components/ui/input';
 import { apiService } from '@/services/api';
 import { Payment, Student } from '@/types/student';
 import { Filter, Plus, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 type PaymentsContainerProps = {
   payments?: Payment[];
+  students?: Student[];
 };
-export default function PaymentsContainer({ payments = [] }: PaymentsContainerProps) {
-  const [students, setStudents] = useState<Student[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function PaymentsContainer({
+  payments = [],
+  students = [],
+}: PaymentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'paid' | 'pending' | 'overdue'>('all');
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  const loadData = async () => {
-    try {
-      const [paymentsData, studentsData] = await Promise.all([
-        apiService.getPayments(),
-        apiService.getStudents(),
-      ]);
-      // setPayments(paymentsData);
-      setStudents(studentsData);
-    } catch (error) {
-      console.error('Error loading payments data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredPayments = payments.filter((payment) => {
     const matchesSearch =
@@ -86,10 +69,6 @@ export default function PaymentsContainer({ payments = [] }: PaymentsContainerPr
     name: student.name,
     monthlyFee: student.monthlyFee,
   }));
-
-  if (loading) {
-    return <div className="text-center py-8">Loading payments...</div>;
-  }
 
   return (
     <div className="space-y-6">
