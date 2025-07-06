@@ -3,12 +3,10 @@ import { getPaymentCollection } from '@/lib/server/db/payments';
 import { errorResponse } from '@/lib/server/utils/response';
 import { NextRequest, NextResponse } from 'next/server';
 
-type ParamsType = {
-  params: { 'student-id': string };
-};
+type ContextType = { params: Promise<{ 'student-id': string }> };
 
-export async function GET(request: NextRequest, { params }: ParamsType) {
-  const studentId = params['student-id'];
+export async function GET(request: NextRequest, context: ContextType) {
+  const { 'student-id': studentId } = await context.params;
   try {
     const { userId } = await requireUser();
 

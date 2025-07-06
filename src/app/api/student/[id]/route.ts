@@ -4,32 +4,32 @@ import { errorResponse, studentNotFoundResponse } from '@/lib/server/utils/respo
 import { UpdateStudentRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 
-type ParamsType = {
-  params: { id: string };
-};
+type ContextType = { params: Promise<{ id: string }> };
 
 // ----------------- GET -----------------
-export async function GET(request: NextRequest, { params }: ParamsType) {
+export async function GET(request: NextRequest, context: ContextType) {
+  const { id } = await context.params;
   try {
     const { userId } = await requireUser();
-    const student = await findStudentById(params.id, userId);
+    const student = await findStudentById(id, userId);
 
-    if (!student) return studentNotFoundResponse(params.id, userId);
+    if (!student) return studentNotFoundResponse(id, userId);
 
     return NextResponse.json(student);
   } catch (error) {
-    return errorResponse(`Error fetching student ${params.id}`, error);
+    return errorResponse(`Error fetching student ${id}`, error);
   }
 }
 
 // ----------------- PUT -----------------
-export async function PUT(request: NextRequest, { params }: ParamsType) {
+export async function PUT(request: NextRequest, context: ContextType) {
+  const { id } = await context.params;
   try {
     const { userId } = await requireUser();
     const collection = await getStudentCollection();
-    const student = await findStudentById(params.id, userId);
+    const student = await findStudentById(id, userId);
 
-    if (!student) return studentNotFoundResponse(params.id, userId);
+    if (!student) return studentNotFoundResponse(id, userId);
 
     const payload: UpdateStudentRequest = await request.json();
 
@@ -38,22 +38,23 @@ export async function PUT(request: NextRequest, { params }: ParamsType) {
       updatedAt: Date.now(),
     };
 
-    const result = await collection.updateOne({ id: params.id, userId }, { $set: updatedStudent });
+    const result = await collection.updateOne({ id, userId }, { $set: updatedStudent });
 
     return NextResponse.json(result);
   } catch (error) {
-    return errorResponse(`Error updating student ${params.id}`, error);
+    return errorResponse(`Error updating student ${id}`, error);
   }
 }
 
 // ----------------- DELETE -----------------
-export async function DELETE(request: NextRequest, { params }: ParamsType) {
+export async function DELETE(request: NextRequest, context: ContextType) {
+  const { id } = await context.params;
   try {
     const { userId } = await requireUser();
     const collection = await getStudentCollection();
-    const student = await findStudentById(params.id, userId);
+    const student = await findStudentById(id, userId);
 
-    if (!student) return studentNotFoundResponse(params.id, userId);
+    if (!student) return studentNotFoundResponse(id, userId);
 
     const updatedStudent = {
       isDeleted: true,
@@ -61,10 +62,10 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
       updatedAt: Date.now(),
     };
 
-    const result = await collection.updateOne({ id: params.id, userId }, { $set: updatedStudent });
+    const result = await collection.updateOne({ id, userId }, { $set: updatedStudent });
 
     return NextResponse.json(result);
   } catch (error) {
-    return errorResponse(`Error deleting student ${params.id}`, error);
+    return errorResponse(`Error deleting student ${id}`, error);
   }
 }
