@@ -16,3 +16,10 @@ export async function getStudent(id: string): Promise<Student | null> {
 export async function createStudent(student: Omit<Student, 'id'>): Promise<Student | null> {
   return await axios.post('/api/create-student', student);
 }
+
+export async function updateStudent(
+  id: string,
+  student: Omit<Student, 'id'>
+): Promise<Student | null> {
+  return await axios.post(`/api/update-student/${id}`, student);
+}

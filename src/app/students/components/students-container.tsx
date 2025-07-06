@@ -5,7 +5,7 @@ import StudentCard from '@/components/StudentCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
-import { createStudent } from '@/lib/api';
+import { createStudent, updateStudent } from '@/lib/api';
 import { apiService } from '@/services/api';
 import { Student } from '@/types/student';
 import { Plus, Search, Users } from 'lucide-react';
@@ -59,7 +59,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   const handleUpdateStudent = async (updatedStudent: Student) => {
     try {
-      const updated = await apiService.updateStudent(updatedStudent.id, updatedStudent);
+      const updated = await updateStudent(updatedStudent.id, updatedStudent);
       if (updated) {
         // setStudents((prev) => prev.map((s) => (s.id === updated.id ? updated : s)));
         console.log('Updated student:', updated);

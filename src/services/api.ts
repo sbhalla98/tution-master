@@ -6,15 +6,6 @@ class ApiService {
   private students: Student[] = [...mockStudents];
   private payments: Payment[] = [...mockPayments];
 
-  async updateStudent(id: string, studentData: Partial<Student>): Promise<Student | null> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    const index = this.students.findIndex((s) => s.id === id);
-    if (index === -1) return null;
-
-    this.students[index] = { ...this.students[index], ...studentData };
-    return this.students[index];
-  }
-
   async deleteStudent(id: string): Promise<boolean> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     const index = this.students.findIndex((s) => s.id === id);
