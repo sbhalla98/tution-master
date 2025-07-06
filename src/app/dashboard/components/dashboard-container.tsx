@@ -4,6 +4,7 @@ import RecordPaymentForm from '@/components/RecordPaymentForm';
 import SendRemindersForm from '@/components/SendRemindersForm';
 import StatCard from '@/components/StatCard';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
+import { useToast } from '@/hooks/use-toast';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { CreatePaymentRequest, CreateStudentRequest } from '@/types/api';
@@ -21,26 +22,41 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
-      console.log('Added new student:', data);
+      toast({
+        description: 'Student added successfully',
+        title: 'Added new student',
+      });
     },
-    onError: (error) => {
-      console.error('Error creating student:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to add student. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
-      console.log('Recorded new payment:', data);
+      toast({
+        description: 'Payment recorded successfully',
+        title: 'Payment Recorded',
+      });
     },
-    onError: (error) => {
-      console.error('Error recording payment:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to record payment. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 

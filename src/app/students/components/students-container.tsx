@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
 import { PAYMENT_STATUS } from '@/constants';
+import { useToast } from '@/hooks/use-toast';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,15 +29,23 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState('');
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
-      console.log('Added new student:', data);
+      toast({
+        description: 'Student added successfully',
+        title: 'Added new student',
+      });
     },
-    onError: (error) => {
-      console.error('Error creating student:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to add student. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 
@@ -44,21 +53,35 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     mutationFn: updateStudent,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
-      console.log('Updated student:', data);
+      toast({
+        description: 'Student updated successfully',
+        title: 'Updated!!',
+      });
     },
-    onError: (error) => {
-      console.error('Error updating student:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to updated student. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
-      console.log('Payment marked as paid:', data);
+      toast({
+        description: 'Payment marked as paid successfully',
+        title: 'Payment Updated',
+      });
     },
-    onError: (error) => {
-      console.error('Error marking payment as paid:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to mark payment as paid. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 

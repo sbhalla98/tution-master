@@ -5,6 +5,7 @@ import RecordPaymentForm from '@/components/RecordPaymentForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
+import { useToast } from '@/hooks/use-toast';
 import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { CreatePaymentRequest } from '@/types/api';
@@ -25,15 +26,23 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
   );
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
-      console.log('Recorded new payment:', data);
+      toast({
+        description: 'Payment recorded successfully',
+        title: 'Payment Recorded',
+      });
     },
-    onError: (error) => {
-      console.error('Error recording payment:', error);
+    onError: () => {
+      toast({
+        description: 'Failed to record payment. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 
@@ -41,10 +50,17 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     mutationFn: markPaymentStatus,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
-      console.log('Payment marked as paid:', data);
+      toast({
+        description: 'Payment marked as paid successfully',
+        title: 'Payment Updated',
+      });
     },
     onError: (error) => {
-      console.error('Error marking payment as paid:', error);
+      toast({
+        description: 'Failed to mark payment as paid. Please try again.',
+        title: 'Error',
+        variant: 'destructive',
+      });
     },
   });
 
