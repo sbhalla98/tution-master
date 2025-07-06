@@ -18,7 +18,7 @@ import { useForm } from 'react-hook-form';
 interface EditStudentFormProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpdateStudent: (student: Student) => void;
+  onUpdateStudent: (id: string, student: Partial<Student>) => void;
   student: Student | null;
 }
 
@@ -57,8 +57,7 @@ export default function EditStudentForm({
   const onSubmit = (data: any) => {
     if (!student) return;
 
-    const updatedStudent: Student = {
-      ...student,
+    const updatedStudent: Partial<Student> = {
       email: data.email,
       grade: data.grade,
       monthlyFee: Number(data.monthlyFee),
@@ -68,7 +67,7 @@ export default function EditStudentForm({
       subjects: selectedSubjects,
     };
 
-    onUpdateStudent(updatedStudent);
+    onUpdateStudent(student.id, updatedStudent);
     reset();
     setSelectedSubjects([]);
     setSelectedStatus(STUDENT_STATUS.ACTIVE);

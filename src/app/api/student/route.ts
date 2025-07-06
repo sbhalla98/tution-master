@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     const response = await collection.insertOne(newStudent);
 
-    return NextResponse.json(response, { status: 201 });
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error, message: 'Invalid JSON' }, { status: 400 });
   }

@@ -19,12 +19,12 @@ export async function getStudent(id: string): Promise<Student | null> {
 
 export async function updateStudent({
   id,
-  student,
+  updatePayload,
 }: {
   id: string;
-  student: Partial<Omit<Student, 'id'>>;
+  updatePayload: Partial<Omit<Student, 'id'>>;
 }): Promise<Student | null> {
-  const res = await axios.put(`/student/${id}`, student);
+  const res = await axios.put(`/student/${id}`, updatePayload);
   return res.data;
 }
 

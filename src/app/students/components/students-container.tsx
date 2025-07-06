@@ -88,10 +88,10 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     createStudentMutation(newStudentData);
   };
 
-  const handleUpdateStudent = (updatedStudent: Student) => {
+  const handleUpdateStudent = (id: string, updatePayload: Partial<Student>) => {
     updateStudentMutation({
-      id: updatedStudent.id,
-      student: updatedStudent,
+      id,
+      updatePayload,
     });
   };
 
