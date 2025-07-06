@@ -13,20 +13,17 @@ import { PAYMENT_STATUS_FILTER } from '../constants';
 import { PaymentStatusFilterType } from '../types';
 
 type PaymentsContainerProps = {
-  payments?: Payment[];
-  students?: Student[];
+  payments?: Payment[] | null;
+  students?: Student[] | null;
 };
-export default function PaymentsContainer({
-  payments = [],
-  students = [],
-}: PaymentsContainerProps) {
+export default function PaymentsContainer({ payments, students }: PaymentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<PaymentStatusFilterType>(
     PAYMENT_STATUS_FILTER.ALL
   );
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
-  const filteredPayments = payments.filter((payment) => {
+  const filteredPayments = (payments ?? []).filter((payment) => {
     const matchesSearch =
       payment.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       payment.month.toLowerCase().includes(searchTerm.toLowerCase());
@@ -60,17 +57,17 @@ export default function PaymentsContainer({
     }
   };
 
-  const totalPaid = payments
+  const totalPaid = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);
-  const totalPending = payments
+  const totalPending = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PENDING)
     .reduce((sum, p) => sum + p.amount, 0);
-  const totalOverdue = payments
+  const totalOverdue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.OVERDUE)
     .reduce((sum, p) => sum + p.amount, 0);
 
-  const studentsForPayment = students.map((student) => ({
+  const studentsForPayment = (students ?? []).map((student) => ({
     id: student.id,
     monthlyFee: student.monthlyFee,
     name: student.name,

@@ -14,7 +14,7 @@ import { STUDENT_STATUS_FILTER } from '../constants';
 import { StudentStatusFilterType } from '../types';
 
 type StudentsContainerProps = {
-  students: Student[];
+  students?: Student[] | null;
 };
 
 export default function StudentsContainer({ students }: StudentsContainerProps) {
@@ -27,7 +27,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [selectedStudentName, setSelectedStudentName] = useState('');
 
-  const filteredStudents = students.filter((student) => {
+  const filteredStudents = (students ?? []).filter((student) => {
     const matchesSearch =
       student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -16,13 +16,13 @@ import {
 } from 'recharts';
 
 type ReportsContiainerProps = {
-  students?: Student[];
-  payments?: Payment[];
+  students?: Student[] | null;
+  payments?: Payment[] | null;
 };
 
-export default function Reports({ students = [], payments = [] }: ReportsContiainerProps) {
+export default function Reports({ students, payments }: ReportsContiainerProps) {
   // Monthly revenue data
-  const monthlyRevenue = payments
+  const monthlyRevenue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce(
       (acc, payment) => {
@@ -39,7 +39,7 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
   }));
 
   // Subject distribution - handle subjects as array
-  const subjectData = students.reduce(
+  const subjectData = (students ?? []).reduce(
     (acc, student) => {
       student.subjects.forEach((subject) => {
         acc[subject] = (acc[subject] || 0) + 1;
@@ -72,7 +72,7 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Total Students</p>
-              <p className="text-2xl font-bold text-gray-900">{students.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{(students ?? []).length}</p>
             </div>
           </div>
         </div>
@@ -86,7 +86,7 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
               <p className="text-sm font-medium text-gray-600">Total Revenue</p>
               <p className="text-2xl font-bold text-gray-900">
                 ₹
-                {payments
+                {(payments ?? [])
                   .filter((p) => p.status === PAYMENT_STATUS.PAID)
                   .reduce((sum, p) => sum + p.amount, 0)
                   .toLocaleString()}
@@ -103,7 +103,11 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
             <div className="ml-4">
               <p className="text-sm font-medium text-gray-600">Average Fee</p>
               <p className="text-2xl font-bold text-gray-900">
-                ₹{Math.round(students.reduce((sum, s) => sum + s.monthlyFee, 0) / students.length)}
+                ₹
+                {Math.round(
+                  (students ?? []).reduce((sum, s) => sum + s.monthlyFee, 0) /
+                    (students ?? []).length
+                )}
               </p>
             </div>
           </div>
@@ -118,8 +122,8 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
               <p className="text-sm font-medium text-gray-600">Payment Rate</p>
               <p className="text-2xl font-bold text-gray-900">
                 {Math.round(
-                  (payments.filter((p) => p.status === PAYMENT_STATUS.PAID).length /
-                    payments.length) *
+                  ((payments ?? []).filter((p) => p.status === PAYMENT_STATUS.PAID).length /
+                    (payments ?? []).length) *
                     100
                 )}
                 %

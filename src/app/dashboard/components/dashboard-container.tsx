@@ -10,8 +10,8 @@ import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-
 import { useState } from 'react';
 
 type DashboardContainerProps = {
-  students: Student[];
-  payments: Payment[];
+  students?: Student[] | null;
+  payments?: Payment[] | null;
 };
 
 export default function DashboardContainer({ students, payments }: DashboardContainerProps) {
@@ -19,19 +19,23 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
-  const activeStudents = students.filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
-  const totalRevenue = payments
+  const activeStudents = (students ?? []).filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
+  const totalRevenue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);
-  const pendingPayments = payments.filter((p) => p.status === PAYMENT_STATUS.PENDING).length;
-  const overduePayments = payments.filter((p) => p.status === PAYMENT_STATUS.OVERDUE).length;
+  const pendingPayments = (payments ?? []).filter(
+    (p) => p.status === PAYMENT_STATUS.PENDING
+  ).length;
+  const overduePayments = (payments ?? []).filter(
+    (p) => p.status === PAYMENT_STATUS.OVERDUE
+  ).length;
 
-  const recentPayments = payments
+  const recentPayments = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .sort((a, b) => new Date(b.paymentDate!).getTime() - new Date(a.paymentDate!).getTime())
     .slice(0, 5);
 
-  const overduePaymentsList = payments.filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
+  const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
     try {
@@ -53,7 +57,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
     }
   };
 
-  const studentsForPayment = students.map((student) => ({
+  const studentsForPayment = (students ?? []).map((student) => ({
     id: student.id,
     monthlyFee: student.monthlyFee,
     name: student.name,
