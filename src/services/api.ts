@@ -6,15 +6,6 @@ class ApiService {
   private students: Student[] = [...mockStudents];
   private payments: Payment[] = [...mockPayments];
 
-  async deleteStudent(id: string): Promise<boolean> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    const index = this.students.findIndex((s) => s.id === id);
-    if (index === -1) return false;
-
-    this.students.splice(index, 1);
-    return true;
-  }
-
   async getStudentPayments(studentId: string): Promise<Payment[]> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     return this.payments.filter((p) => p.studentId === studentId);
