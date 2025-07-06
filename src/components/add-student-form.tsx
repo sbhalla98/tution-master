@@ -113,7 +113,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
                 <SelectValue placeholder="Select grade" />
               </SelectTrigger>
               <SelectContent>
-                {Object.keys(AVAILABLE_GRADES).map((grade) => (
+                {Object.values(AVAILABLE_GRADES).map((grade) => (
                   <SelectItem key={grade} value={grade}>
                     Grade {grade}
                   </SelectItem>

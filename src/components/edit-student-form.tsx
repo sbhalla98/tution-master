@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -10,9 +12,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
-import { Student, StudentStatusType, StudentSubjectType } from '@/types';
+import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
+import { CreateStudentFormData, createStudentSchema } from '@/schemas/student.schema';
+import { Student, StudentGradeType, StudentStatusType, StudentSubjectType } from '@/types';
 import { UpdateStudentRequest } from '@/types/api';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -29,47 +33,50 @@ export default function EditStudentForm({
   onUpdateStudent,
   student,
 }: EditStudentFormProps) {
-  const { register, handleSubmit, reset, setValue } = useForm();
-  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[] | null | undefined>(
-    []
-  );
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<CreateStudentFormData>({
+    resolver: zodResolver(createStudentSchema),
+  });
+
+  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
 
   useEffect(() => {
     if (student) {
-      setValue('name', student.name);
-      setValue('email', student.email);
-      setValue('phone', student.phone);
-      setValue('grade', student.grade);
-      setValue('monthlyFee', student.monthlyFee);
-      setSelectedSubjects(student.subjects);
+      reset({
+        name: student.name,
+        email: student.email,
+        phone: student.phone,
+        grade: student.grade,
+        monthlyFee: student.monthlyFee,
+      });
+      setSelectedSubjects(student.subjects || []);
       setSelectedStatus(student.status);
     }
-  }, [student, setValue]);
+  }, [student, reset]);
 
   const handleSubjectChange = (subject: StudentSubjectType, checked: boolean) => {
-    if (checked) {
-      setSelectedSubjects((prev) => [...(prev ?? []), subject]);
-    } else {
-      setSelectedSubjects((prev) => (prev ?? []).filter((s) => s !== subject));
-    }
+    setSelectedSubjects((prev) =>
+      checked ? [...prev, subject] : prev.filter((s) => s !== subject)
+    );
   };
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: CreateStudentFormData) => {
     if (!student) return;
-    const { id } = student;
 
     const payload: UpdateStudentRequest['payload'] = {
-      email: data.email,
-      grade: data.grade,
+      ...data,
       monthlyFee: Number(data.monthlyFee),
-      name: data.name,
-      phone: data.phone,
-      status: selectedStatus,
       subjects: selectedSubjects,
+      status: selectedStatus,
     };
 
-    onUpdateStudent({ id, payload });
+    onUpdateStudent({ id: student.id, payload });
     reset();
     setSelectedSubjects([]);
     setSelectedStatus(STUDENT_STATUS.ACTIVE);
@@ -83,34 +90,28 @@ export default function EditStudentForm({
           <DialogTitle>Edit Student</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Name */}
           <div className="space-y-2">
             <Label htmlFor="name">Full Name</Label>
-            <Input
-              id="name"
-              {...register('name', { required: true })}
-              placeholder="Enter student's full name"
-            />
+            <Input id="name" {...register('name')} placeholder="Enter student's full name" />
+            {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
           </div>
 
+          {/* Email */}
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              {...register('email', { required: true })}
-              placeholder="Enter email address"
-            />
+            <Input id="email" type="email" {...register('email')} placeholder="Enter email" />
+            {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
           </div>
 
+          {/* Phone */}
           <div className="space-y-2">
             <Label htmlFor="phone">Phone</Label>
-            <Input
-              id="phone"
-              {...register('phone', { required: true })}
-              placeholder="Enter phone number"
-            />
+            <Input id="phone" {...register('phone')} placeholder="Enter phone number" />
+            {errors.phone && <p className="text-sm text-red-500">{errors.phone.message}</p>}
           </div>
 
+          {/* Subjects */}
           <div className="space-y-2">
             <Label>Subjects</Label>
             <div className="grid grid-cols-2 gap-2">
@@ -118,8 +119,8 @@ export default function EditStudentForm({
                 <div key={subject} className="flex items-center space-x-2">
                   <Checkbox
                     id={subject}
-                    checked={(selectedSubjects ?? []).includes(subject)}
-                    onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
+                    checked={selectedSubjects.includes(subject)}
+                    onCheckedChange={(checked: boolean) => handleSubjectChange(subject, checked)}
                   />
                   <Label htmlFor={subject} className="text-sm">
                     {subject}
@@ -129,25 +130,39 @@ export default function EditStudentForm({
             </div>
           </div>
 
+          {/* Grade */}
           <div className="space-y-2">
             <Label htmlFor="grade">Grade</Label>
-            <Input
-              id="grade"
-              {...register('grade', { required: true })}
-              placeholder="Enter grade"
-            />
+            <Select onValueChange={(value: StudentGradeType) => setValue('grade', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select grade" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(AVAILABLE_GRADES).map((grade) => (
+                  <SelectItem key={grade} value={grade}>
+                    Grade {grade}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors.grade && <p className="text-sm text-red-500">{errors.grade.message}</p>}
           </div>
 
+          {/* Monthly Fee */}
           <div className="space-y-2">
             <Label htmlFor="monthlyFee">Monthly Fee (₹)</Label>
             <Input
               id="monthlyFee"
               type="number"
-              {...register('monthlyFee', { min: 0, required: true })}
+              {...register('monthlyFee')}
               placeholder="Enter monthly fee"
             />
+            {errors.monthlyFee && (
+              <p className="text-sm text-red-500">{errors.monthlyFee.message}</p>
+            )}
           </div>
 
+          {/* Status */}
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
             <Select
@@ -158,12 +173,16 @@ export default function EditStudentForm({
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="active">Active</SelectItem>
-                <SelectItem value="inactive">Inactive</SelectItem>
+                {Object.values(STUDENT_STATUS).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
+          {/* Actions */}
           <div className="flex justify-end space-x-2 pt-4">
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
