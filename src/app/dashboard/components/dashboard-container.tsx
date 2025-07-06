@@ -8,12 +8,12 @@ import { Payment, Student } from '@/types/student';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
 
-type DashboardProps = {
+type DashboardContainerProps = {
   students: Student[];
   payments: Payment[];
 };
 
-export default function DashboardContainer({ students, payments }: DashboardProps) {
+export default function DashboardContainer({ students, payments }: DashboardContainerProps) {
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
