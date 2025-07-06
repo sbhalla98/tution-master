@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -11,9 +12,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PAYMENT_STATUS } from '@/constants';
-import { PaymentStatusType } from '@/types';
+import { RecordPaymentFormData, recordPaymentSchema } from '@/schemas/payment.schema';
 import { CreatePaymentRequest } from '@/types/api';
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
 interface RecordPaymentFormProps {
@@ -23,53 +24,59 @@ interface RecordPaymentFormProps {
   students: Array<{ id: string; name: string; monthlyFee: number }>;
 }
 
+const months = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
 export default function RecordPaymentForm({
   isOpen,
   onClose,
   onRecordPayment,
   students,
 }: RecordPaymentFormProps) {
-  const { register, handleSubmit, reset } = useForm();
-  const [selectedStudent, setSelectedStudent] = useState('');
-  const [selectedMonth, setSelectedMonth] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('paid');
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm<RecordPaymentFormData>({
+    resolver: zodResolver(recordPaymentSchema),
+    defaultValues: {
+      year: new Date().getFullYear(),
+      status: PAYMENT_STATUS.PAID,
+    },
+  });
 
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  const selectedStudentId = watch('studentId');
+  const selectedStudent = students.find((s) => s.id === selectedStudentId);
 
-  const selectedStudentData = students.find((s) => s.id === selectedStudent);
-
-  const onSubmit = (data: any) => {
-    if (!selectedStudentData) return;
-
+  const onSubmit = (data: RecordPaymentFormData) => {
     const newPayment: CreatePaymentRequest = {
       amount: Number(data.amount),
       dueDate: data.dueDate,
-      month: selectedMonth,
-      paymentDate: selectedStatus === PAYMENT_STATUS.PAID ? new Date().toISOString() : undefined,
-      status: selectedStatus as PaymentStatusType,
-      studentId: selectedStudent,
-      studentName: selectedStudentData.name,
+      month: data.month,
+      paymentDate: data.status === PAYMENT_STATUS.PAID ? new Date().toISOString() : undefined,
+      status: data.status,
+      studentId: data.studentId,
+      studentName: selectedStudent?.name || '',
       year: Number(data.year),
     };
 
     onRecordPayment(newPayment);
     reset();
-    setSelectedStudent('');
-    setSelectedMonth('');
-    setSelectedStatus('paid');
     onClose();
   };
 
@@ -80,9 +87,10 @@ export default function RecordPaymentForm({
           <DialogTitle>Record Payment</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Student */}
           <div className="space-y-2">
-            <Label htmlFor="student">Student</Label>
-            <Select value={selectedStudent} onValueChange={setSelectedStudent}>
+            <Label htmlFor="studentId">Student</Label>
+            <Select onValueChange={(val) => setValue('studentId', val)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select student" />
               </SelectTrigger>
@@ -94,11 +102,13 @@ export default function RecordPaymentForm({
                 ))}
               </SelectContent>
             </Select>
+            {errors.studentId && <p className="text-sm text-red-500">{errors.studentId.message}</p>}
           </div>
 
+          {/* Month */}
           <div className="space-y-2">
             <Label htmlFor="month">Month</Label>
-            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+            <Select onValueChange={(val) => setValue('month', val)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select month" />
               </SelectTrigger>
@@ -110,47 +120,51 @@ export default function RecordPaymentForm({
                 ))}
               </SelectContent>
             </Select>
+            {errors.month && <p className="text-sm text-red-500">{errors.month.message}</p>}
           </div>
 
+          {/* Year */}
           <div className="space-y-2">
             <Label htmlFor="year">Year</Label>
-            <Input
-              id="year"
-              type="number"
-              {...register('year', { required: true })}
-              defaultValue={new Date().getFullYear()}
-              placeholder="Enter year"
-            />
+            <Input id="year" type="number" {...register('year')} />
+            {errors.year && <p className="text-sm text-red-500">{errors.year.message}</p>}
           </div>
 
+          {/* Amount */}
           <div className="space-y-2">
             <Label htmlFor="amount">Amount (₹)</Label>
             <Input
               id="amount"
               type="number"
-              {...register('amount', { min: 0, required: true })}
-              defaultValue={selectedStudentData?.monthlyFee || ''}
-              placeholder="Enter amount"
+              {...register('amount')}
+              defaultValue={selectedStudent?.monthlyFee || ''}
             />
+            {errors.amount && <p className="text-sm text-red-500">{errors.amount.message}</p>}
           </div>
 
+          {/* Due Date */}
           <div className="space-y-2">
             <Label htmlFor="dueDate">Due Date</Label>
-            <Input id="dueDate" type="date" {...register('dueDate', { required: true })} />
+            <Input id="dueDate" type="date" {...register('dueDate')} />
+            {errors.dueDate && <p className="text-sm text-red-500">{errors.dueDate.message}</p>}
           </div>
 
+          {/* Status */}
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <Select onValueChange={(val) => setValue('status', val as any)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="paid">Paid</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="overdue">Overdue</SelectItem>
+                {Object.values(PAYMENT_STATUS).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
+            {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">

@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { PAYMENT_STATUS } from '@/constants';
-import { Payment } from '@/types';
+import { Payment, PaymentStatusType } from '@/types';
 import { Calendar, IndianRupee } from 'lucide-react';
 
 interface PaymentCardProps {
@@ -9,13 +9,13 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
-  const getStatusColor = (status: string) => {
+  const getStatusColor = (status: PaymentStatusType) => {
     switch (status) {
-      case 'paid':
+      case PAYMENT_STATUS.PAID:
         return 'bg-green-100 text-green-800';
-      case 'pending':
+      case PAYMENT_STATUS.PENDING:
         return 'bg-yellow-100 text-yellow-800';
-      case 'overdue':
+      case PAYMENT_STATUS.OVERDUE:
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
