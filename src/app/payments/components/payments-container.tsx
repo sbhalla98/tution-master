@@ -2,18 +2,17 @@
 
 import PaymentCard from '@/components/payment-card';
 import RecordPaymentForm from '@/components/record-payment-form';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types';
-import { CreatePaymentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Filter, Plus, Search } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { useState } from 'react';
 import { PAYMENT_STATUS_FILTER } from '../constants';
 import { PaymentStatusFilterType } from '../types';
+import PaymentsHeader from './payments-header';
+import PaymentSearchFilter from './payments-search-filter';
 
 type PaymentsContainerProps = {
   payments?: Payment[] | null;
@@ -48,14 +47,14 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast({
         description: 'Payment marked as paid successfully',
         title: 'Payment Updated',
       });
     },
-    onError: (error) => {
+    onError: () => {
       toast({
         description: 'Failed to mark payment as paid. Please try again.',
         title: 'Error',
@@ -75,17 +74,6 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     return matchesSearch && matchesStatus;
   });
 
-  const handleMarkPaid = (paymentId: string) => {
-    markPaymentStatusMutation({
-      id: paymentId,
-      status: PAYMENT_STATUS.PAID,
-    });
-  };
-
-  const handleRecordPayment = (newPaymentData: CreatePaymentRequest) => {
-    createPaymentMutation(newPaymentData);
-  };
-
   const totalPaid = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);
@@ -102,18 +90,16 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     name: student.name,
   }));
 
+  const handleMarkPaid = (paymentId: string) => {
+    markPaymentStatusMutation({
+      id: paymentId,
+      status: PAYMENT_STATUS.PAID,
+    });
+  };
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Payments</h1>
-          <p className="text-gray-600 mt-1">Track and manage student payments</p>
-        </div>
-        <Button className="flex items-center gap-2" onClick={() => setIsRecordPaymentOpen(true)}>
-          <Plus className="h-4 w-4" />
-          Record Payment
-        </Button>
-      </div>
+      <PaymentsHeader onRecordPayment={() => setIsRecordPaymentOpen(true)} />
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -131,48 +117,12 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
         </div>
       </div>
 
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search payments..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={statusFilter === PAYMENT_STATUS_FILTER.ALL ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.ALL)}
-            size="sm"
-          >
-            All
-          </Button>
-          <Button
-            variant={statusFilter === PAYMENT_STATUS_FILTER.PAID ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.PAID)}
-            size="sm"
-          >
-            Paid
-          </Button>
-          <Button
-            variant={statusFilter === PAYMENT_STATUS_FILTER.PENDING ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.PENDING)}
-            size="sm"
-          >
-            Pending
-          </Button>
-          <Button
-            variant={statusFilter === PAYMENT_STATUS_FILTER.OVERDUE ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.OVERDUE)}
-            size="sm"
-          >
-            Overdue
-          </Button>
-        </div>
-      </div>
+      <PaymentSearchFilter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        filter={statusFilter}
+        onFilterChange={setStatusFilter}
+      />
 
       {/* Payments Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -191,7 +141,7 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
       <RecordPaymentForm
         isOpen={isRecordPaymentOpen}
         onClose={() => setIsRecordPaymentOpen(false)}
-        onRecordPayment={handleRecordPayment}
+        onRecordPayment={createPaymentMutation}
         students={studentsForPayment}
       />
     </div>

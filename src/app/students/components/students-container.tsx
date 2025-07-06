@@ -2,18 +2,18 @@
 import AddStudentForm from '@/components/add-student-form';
 import EditStudentForm from '@/components/edit-student-form';
 import StudentCard from '@/components/student-card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Search, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { useState } from 'react';
 import { STUDENT_STATUS_FILTER } from '../constants';
 import { StudentStatusFilterType } from '../types';
+import StudentsHeader from './students-header';
+import StudentsSearchFilter from './students-search-filter';
 
 type StudentsContainerProps = {
   students?: Student[] | null;
@@ -51,7 +51,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   const { mutate: updateStudentMutation } = useMutation({
     mutationFn: updateStudent,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
       toast({
         description: 'Student updated successfully',
@@ -118,52 +118,13 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Students</h1>
-          <p className="text-gray-600 mt-1">Manage your student records</p>
-        </div>
-        <Button className="flex items-center gap-2" onClick={() => setIsAddStudentOpen(true)}>
-          <Plus className="h-4 w-4" />
-          Add Student
-        </Button>
-      </div>
-
-      {/* Search and Filter */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search students..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant={filter === STUDENT_STATUS_FILTER.ALL ? 'default' : 'outline'}
-            onClick={() => setFilter(STUDENT_STATUS_FILTER.ALL)}
-            size="sm"
-          >
-            All
-          </Button>
-          <Button
-            variant={filter === STUDENT_STATUS_FILTER.ACTIVE ? 'default' : 'outline'}
-            onClick={() => setFilter(STUDENT_STATUS_FILTER.ACTIVE)}
-            size="sm"
-          >
-            Active
-          </Button>
-          <Button
-            variant={filter === STUDENT_STATUS_FILTER.INACTIVE ? 'default' : 'outline'}
-            onClick={() => setFilter(STUDENT_STATUS_FILTER.INACTIVE)}
-            size="sm"
-          >
-            Inactive
-          </Button>
-        </div>
-      </div>
+      <StudentsHeader onAdd={() => setIsAddStudentOpen(true)} />
+      <StudentsSearchFilter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+        filter={filter}
+        onFilterChange={setFilter}
+      />
 
       {/* Students Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

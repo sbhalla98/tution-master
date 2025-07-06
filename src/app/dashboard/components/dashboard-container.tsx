@@ -7,7 +7,6 @@ import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
-import { CreatePaymentRequest, CreateStudentRequest } from '@/types/api';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -26,7 +25,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
       toast({
         description: 'Student added successfully',
@@ -77,14 +76,6 @@ export default function DashboardContainer({ students, payments }: DashboardCont
     .slice(0, 5);
 
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
-
-  const handleAddStudent = (newStudentData: CreateStudentRequest) => {
-    createStudentMutation(newStudentData);
-  };
-
-  const handleRecordPayment = (newPaymentData: CreatePaymentRequest) => {
-    createPaymentMutation(newPaymentData);
-  };
 
   const studentsForPayment = (students ?? []).map((student) => ({
     id: student.id,
@@ -212,13 +203,13 @@ export default function DashboardContainer({ students, payments }: DashboardCont
       <AddStudentForm
         isOpen={isAddStudentOpen}
         onClose={() => setIsAddStudentOpen(false)}
-        onAddStudent={handleAddStudent}
+        onAddStudent={createStudentMutation}
       />
 
       <RecordPaymentForm
         isOpen={isRecordPaymentOpen}
         onClose={() => setIsRecordPaymentOpen(false)}
-        onRecordPayment={handleRecordPayment}
+        onRecordPayment={createPaymentMutation}
         students={studentsForPayment}
       />
     </div>
