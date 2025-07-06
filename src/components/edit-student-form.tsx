@@ -12,12 +12,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+
 import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
 import { CreateStudentFormData, createStudentSchema } from '@/schemas/student.schema';
 import { Student, StudentGradeType, StudentStatusType, StudentSubjectType } from '@/types';
 import { UpdateStudentRequest } from '@/types/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 interface EditStudentFormProps {
@@ -36,15 +37,21 @@ export default function EditStudentForm({
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
+    reset,
+    watch,
     formState: { errors },
   } = useForm<CreateStudentFormData>({
     resolver: zodResolver(createStudentSchema),
+    defaultValues: {
+      subjects: [],
+      status: STUDENT_STATUS.ACTIVE,
+    },
   });
 
-  const [selectedSubjects, setSelectedSubjects] = useState<StudentSubjectType[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
+  const subjects = watch('subjects');
+  const status = watch('status');
+  const grade = watch('grade');
 
   useEffect(() => {
     if (student) {
@@ -54,16 +61,16 @@ export default function EditStudentForm({
         phone: student.phone,
         grade: student.grade,
         monthlyFee: student.monthlyFee,
+        subjects: student.subjects,
+        status: student.status,
       });
-      setSelectedSubjects(student.subjects || []);
-      setSelectedStatus(student.status);
     }
   }, [student, reset]);
 
   const handleSubjectChange = (subject: StudentSubjectType, checked: boolean) => {
-    setSelectedSubjects((prev) =>
-      checked ? [...prev, subject] : prev.filter((s) => s !== subject)
-    );
+    const current = subjects ?? [];
+    const updated = checked ? [...current, subject] : current.filter((s) => s !== subject);
+    setValue('subjects', updated, { shouldValidate: true });
   };
 
   const onSubmit = (data: CreateStudentFormData) => {
@@ -72,14 +79,10 @@ export default function EditStudentForm({
     const payload: UpdateStudentRequest['payload'] = {
       ...data,
       monthlyFee: Number(data.monthlyFee),
-      subjects: selectedSubjects,
-      status: selectedStatus,
     };
 
     onUpdateStudent({ id: student.id, payload });
     reset();
-    setSelectedSubjects([]);
-    setSelectedStatus(STUDENT_STATUS.ACTIVE);
     onClose();
   };
 
@@ -119,8 +122,8 @@ export default function EditStudentForm({
                 <div key={subject} className="flex items-center space-x-2">
                   <Checkbox
                     id={subject}
-                    checked={selectedSubjects.includes(subject)}
-                    onCheckedChange={(checked: boolean) => handleSubjectChange(subject, checked)}
+                    checked={subjects?.includes(subject)}
+                    onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
                   />
                   <Label htmlFor={subject} className="text-sm">
                     {subject}
@@ -128,12 +131,18 @@ export default function EditStudentForm({
                 </div>
               ))}
             </div>
+            {errors.subjects && <p className="text-sm text-red-500">{errors.subjects.message}</p>}
           </div>
 
           {/* Grade */}
           <div className="space-y-2">
             <Label htmlFor="grade">Grade</Label>
-            <Select onValueChange={(value: StudentGradeType) => setValue('grade', value)}>
+            <Select
+              value={grade || ''}
+              onValueChange={(value: StudentGradeType) =>
+                setValue('grade', value, { shouldValidate: true })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select grade" />
               </SelectTrigger>
@@ -166,8 +175,10 @@ export default function EditStudentForm({
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
             <Select
-              value={selectedStatus}
-              onValueChange={(value: StudentStatusType) => setSelectedStatus(value)}
+              value={status}
+              onValueChange={(value: StudentStatusType) =>
+                setValue('status', value, { shouldValidate: true })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />
@@ -175,11 +186,12 @@ export default function EditStudentForm({
               <SelectContent>
                 {Object.values(STUDENT_STATUS).map((status) => (
                   <SelectItem key={status} value={status}>
-                    {status.charAt(0).toUpperCase() + status.slice(1)}
+                    {status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+            {errors.status && <p className="text-sm text-red-500">{errors.status.message}</p>}
           </div>
 
           {/* Actions */}
