@@ -11,19 +11,6 @@ class ApiService {
     return this.payments.filter((p) => p.studentId === studentId);
   }
 
-  async markPaymentAsPaid(id: string): Promise<Payment | null> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    const index = this.payments.findIndex((p) => p.id === id);
-    if (index === -1) return null;
-
-    this.payments[index] = {
-      ...this.payments[index],
-      paymentDate: new Date().toISOString(),
-      status: 'paid' as const,
-    };
-    return this.payments[index];
-  }
-
   // Get student details with phone number for WhatsApp reminders
   async getStudentForReminder(id: string): Promise<{ phone: string; name: string } | null> {
     await new Promise((resolve) => setTimeout(resolve, 100));

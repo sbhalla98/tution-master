@@ -4,8 +4,8 @@ import PaymentCard from '@/components/PaymentCard';
 import RecordPaymentForm from '@/components/RecordPaymentForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { createPayment } from '@/lib/api';
-import { apiService } from '@/services/api';
+import { PAYMENT_STATUS } from '@/constants';
+import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types/student';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ export default function PaymentsContainer({
 
   const handleMarkPaid = async (paymentId: string) => {
     try {
-      const updatedPayment = await apiService.markPaymentAsPaid(paymentId);
+      const updatedPayment = await markPaymentStatus(paymentId, PAYMENT_STATUS.PAID);
       if (updatedPayment) {
         // setPayments((prev) =>
         //   prev.map((payment) => (payment.id === paymentId ? updatedPayment : payment))

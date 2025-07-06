@@ -1,4 +1,4 @@
-import { Payment, Student } from '@/types/student';
+import { Payment, PaymentStatusType, Student } from '@/types/student';
 import axios from './axios';
 
 // students API calls
@@ -16,7 +16,7 @@ export async function getStudent(id: string): Promise<Student | null> {
 
 export async function updateStudent(
   id: string,
-  student: Omit<Student, 'id'>
+  student: Partial<Omit<Student, 'id'>>
 ): Promise<Student | null> {
   return await axios.put(`/api/student/${id}`, student);
 }
@@ -36,7 +36,14 @@ export async function createPayment(payment: Omit<Payment, 'id'>): Promise<Payme
 
 export async function updatePayment(
   id: string,
-  payment: Omit<Payment, 'id'>
+  payment: Partial<Omit<Payment, 'id'>>
 ): Promise<Payment | null> {
   return await axios.put(`/api/payment/${id}`, payment);
+}
+
+export async function markPaymentStatus(
+  id: string,
+  status: PaymentStatusType
+): Promise<Payment | null> {
+  return await axios.put(`/api/payment/${id}`, { status });
 }

@@ -5,8 +5,8 @@ import StudentCard from '@/components/StudentCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
-import { createStudent, updateStudent } from '@/lib/api';
-import { apiService } from '@/services/api';
+import { PAYMENT_STATUS } from '@/constants';
+import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types/student';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
@@ -71,7 +71,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   const handleMarkPaid = async (paymentId: string) => {
     try {
-      await apiService.markPaymentAsPaid(paymentId);
+      await markPaymentStatus(paymentId, PAYMENT_STATUS.PAID);
       console.log('Payment marked as paid:', paymentId);
     } catch (error) {
       console.error('Error marking payment as paid:', error);

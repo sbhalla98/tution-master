@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 
   try {
-    const body: Omit<Payment, 'id'> = await request.json();
+    const body: Partial<Omit<Payment, 'id'>> = await request.json();
 
     const newPayment: Payment = {
       ...payment,
