@@ -4,6 +4,7 @@ import PaymentCard from '@/components/PaymentCard';
 import RecordPaymentForm from '@/components/RecordPaymentForm';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { createPayment } from '@/lib/api';
 import { apiService } from '@/services/api';
 import { Payment, Student } from '@/types/student';
 import { Filter, Plus, Search } from 'lucide-react';
@@ -46,7 +47,7 @@ export default function PaymentsContainer({
 
   const handleRecordPayment = async (newPaymentData: Omit<Payment, 'id'>) => {
     try {
-      const newPayment = await apiService.createPayment(newPaymentData);
+      const newPayment = await createPayment(newPaymentData);
       // setPayments((prev) => [...prev, newPayment]);
       console.log('Recorded new payment:', newPayment);
     } catch (error) {

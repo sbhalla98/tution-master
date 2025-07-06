@@ -11,16 +11,6 @@ class ApiService {
     return this.payments.filter((p) => p.studentId === studentId);
   }
 
-  async createPayment(paymentData: Omit<Payment, 'id'>): Promise<Payment> {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    const newPayment: Payment = {
-      ...paymentData,
-      id: (this.payments.length + 1).toString(),
-    };
-    this.payments.push(newPayment);
-    return newPayment;
-  }
-
   async updatePayment(id: string, paymentData: Partial<Payment>): Promise<Payment | null> {
     await new Promise((resolve) => setTimeout(resolve, 100));
     const index = this.payments.findIndex((p) => p.id === id);
