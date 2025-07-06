@@ -3,6 +3,7 @@ import AddStudentForm from '@/components/AddStudentForm';
 import RecordPaymentForm from '@/components/RecordPaymentForm';
 import SendRemindersForm from '@/components/SendRemindersForm';
 import StatCard from '@/components/StatCard';
+import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types/student';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
@@ -18,19 +19,19 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
-  const activeStudents = students.filter((s) => s.status === 'active').length;
+  const activeStudents = students.filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
   const totalRevenue = payments
-    .filter((p) => p.status === 'paid')
+    .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);
-  const pendingPayments = payments.filter((p) => p.status === 'pending').length;
-  const overduePayments = payments.filter((p) => p.status === 'overdue').length;
+  const pendingPayments = payments.filter((p) => p.status === PAYMENT_STATUS.PENDING).length;
+  const overduePayments = payments.filter((p) => p.status === PAYMENT_STATUS.OVERDUE).length;
 
   const recentPayments = payments
-    .filter((p) => p.status === 'paid')
+    .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .sort((a, b) => new Date(b.paymentDate!).getTime() - new Date(a.paymentDate!).getTime())
     .slice(0, 5);
 
-  const overduePaymentsList = payments.filter((p) => p.status === 'overdue');
+  const overduePaymentsList = payments.filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
   const handleAddStudent = async (newStudentData: Omit<Student, 'id'>) => {
     try {
@@ -54,15 +55,15 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   const studentsForPayment = students.map((student) => ({
     id: student.id,
-    name: student.name,
     monthlyFee: student.monthlyFee,
+    name: student.name,
   }));
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome back! Here's your tuition overview</p>
+        <p className="text-gray-600 mt-2">Welcome back! Here is your tuition overview</p>
       </div>
 
       {/* Stats Grid */}

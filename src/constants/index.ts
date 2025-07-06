@@ -1,7 +1,7 @@
 export const PAYMENT_STATUS = {
-  PENDING: 'PENDING',
-  PAID: 'PAID',
   OVERDUE: 'OVERDUE',
+  PAID: 'PAID',
+  PENDING: 'PENDING',
 } as const;
 
 export const STUDENT_STATUS = {

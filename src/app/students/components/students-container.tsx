@@ -5,9 +5,9 @@ import StudentCard from '@/components/StudentCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
-import { PAYMENT_STATUS } from '@/constants';
+import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
-import { Student } from '@/types/student';
+import { Student, StudentStatusType } from '@/types/student';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
 
@@ -17,7 +17,7 @@ type StudentsContainerProps = {
 
 export default function StudentsContainer({ students }: StudentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
+  const [filter, setFilter] = useState<'all' | StudentStatusType>('all');
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isEditStudentOpen, setIsEditStudentOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -111,15 +111,15 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
             All
           </Button>
           <Button
-            variant={filter === 'active' ? 'default' : 'outline'}
-            onClick={() => setFilter('active')}
+            variant={filter === STUDENT_STATUS.ACTIVE ? 'default' : 'outline'}
+            onClick={() => setFilter(STUDENT_STATUS.ACTIVE)}
             size="sm"
           >
             Active
           </Button>
           <Button
-            variant={filter === 'inactive' ? 'default' : 'outline'}
-            onClick={() => setFilter('inactive')}
+            variant={filter === STUDENT_STATUS.INACTIVE ? 'default' : 'outline'}
+            onClick={() => setFilter(STUDENT_STATUS.INACTIVE)}
             size="sm"
           >
             Inactive

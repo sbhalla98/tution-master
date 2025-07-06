@@ -1,6 +1,7 @@
+import { Button } from '@/components/ui/button';
+import { PAYMENT_STATUS } from '@/constants';
 import { Payment } from '@/types/student';
 import { Calendar, IndianRupee } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 interface PaymentCardProps {
   payment: Payment;
@@ -54,7 +55,7 @@ export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
         )}
       </div>
 
-      {payment.status !== 'paid' && (
+      {payment.status !== PAYMENT_STATUS.PAID && (
         <Button size="sm" onClick={() => onMarkPaid(payment.id)} className="w-full">
           Mark as Paid
         </Button>

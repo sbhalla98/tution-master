@@ -1,6 +1,7 @@
-import { Student } from '@/types/student';
-import { Mail, Phone, BookOpen, Calendar } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { STUDENT_STATUS } from '@/constants';
+import { Student } from '@/types/student';
+import { BookOpen, Calendar, Mail, Phone } from 'lucide-react';
 
 interface StudentCardProps {
   student: Student;
@@ -16,7 +17,7 @@ export default function StudentCard({ student, onEdit, onViewPayments }: Student
           <h3 className="text-lg font-semibold text-gray-900">{student.name}</h3>
           <span
             className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-              student.status === 'active'
+              student.status === STUDENT_STATUS.ACTIVE
                 ? 'bg-green-100 text-green-800'
                 : 'bg-red-100 text-red-800'
             }`}

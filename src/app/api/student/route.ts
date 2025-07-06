@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     };
 
     return NextResponse.json(newStudent, { status: 201 });
-  } catch (err) {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ error, message: 'Invalid JSON' }, { status: 400 });
   }
 }

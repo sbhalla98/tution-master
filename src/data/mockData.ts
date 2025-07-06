@@ -1,4 +1,5 @@
-import { Student, Payment } from '@/types/student';
+import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
+import { Payment, Student } from '@/types/student';
 
 export const mockStudents: Student[] = [
   {
@@ -13,7 +14,7 @@ export const mockStudents: Student[] = [
     monthlyFee: 150,
     name: 'Alice Johnson',
     phone: '+1 (555) 123-4567',
-    status: 'active',
+    status: STUDENT_STATUS.ACTIVE,
     subjects: ['Mathematics', 'Physics'],
   },
   {
@@ -28,7 +29,7 @@ export const mockStudents: Student[] = [
     monthlyFee: 175,
     name: 'Bob Smith',
     phone: '+1 (555) 234-5678',
-    status: 'active',
+    status: STUDENT_STATUS.ACTIVE,
     subjects: ['Physics', 'Chemistry'],
   },
   {
@@ -43,7 +44,7 @@ export const mockStudents: Student[] = [
     monthlyFee: 160,
     name: 'Carol Davis',
     phone: '+1 (555) 345-6789',
-    status: 'active',
+    status: STUDENT_STATUS.ACTIVE,
     subjects: ['Chemistry', 'Biology'],
   },
   {
@@ -58,7 +59,7 @@ export const mockStudents: Student[] = [
     monthlyFee: 140,
     name: 'David Wilson',
     phone: '+1 (555) 456-7890',
-    status: 'inactive',
+    status: STUDENT_STATUS.INACTIVE,
     subjects: ['Biology'],
   },
 ];
@@ -70,7 +71,7 @@ export const mockPayments: Payment[] = [
     id: '1',
     month: 'January',
     paymentDate: '2024-01-05',
-    status: 'paid',
+    status: PAYMENT_STATUS.PAID,
     studentId: '1',
     studentName: 'Alice Johnson',
     year: 2024,
@@ -81,7 +82,7 @@ export const mockPayments: Payment[] = [
     id: '2',
     month: 'February',
     paymentDate: '2024-02-03',
-    status: 'paid',
+    status: PAYMENT_STATUS.PAID,
     studentId: '1',
     studentName: 'Alice Johnson',
     year: 2024,
@@ -91,7 +92,7 @@ export const mockPayments: Payment[] = [
     dueDate: '2024-03-31',
     id: '3',
     month: 'March',
-    status: 'pending',
+    status: PAYMENT_STATUS.PENDING,
     studentId: '1',
     studentName: 'Alice Johnson',
     year: 2024,
@@ -102,7 +103,7 @@ export const mockPayments: Payment[] = [
     id: '4',
     month: 'February',
     paymentDate: '2024-02-10',
-    status: 'paid',
+    status: PAYMENT_STATUS.PAID,
     studentId: '2',
     studentName: 'Bob Smith',
     year: 2024,
@@ -112,7 +113,7 @@ export const mockPayments: Payment[] = [
     dueDate: '2024-03-31',
     id: '5',
     month: 'March',
-    status: 'overdue',
+    status: PAYMENT_STATUS.OVERDUE,
     studentId: '2',
     studentName: 'Bob Smith',
     year: 2024,
@@ -123,7 +124,7 @@ export const mockPayments: Payment[] = [
     id: '6',
     month: 'January',
     paymentDate: '2024-01-15',
-    status: 'paid',
+    status: PAYMENT_STATUS.PAID,
     studentId: '3',
     studentName: 'Carol Davis',
     year: 2024,
@@ -134,7 +135,7 @@ export const mockPayments: Payment[] = [
     id: '7',
     month: 'February',
     paymentDate: '2024-02-12',
-    status: 'paid',
+    status: PAYMENT_STATUS.PAID,
     studentId: '3',
     studentName: 'Carol Davis',
     year: 2024,
@@ -144,7 +145,7 @@ export const mockPayments: Payment[] = [
     dueDate: '2024-03-31',
     id: '8',
     month: 'March',
-    status: 'pending',
+    status: PAYMENT_STATUS.PENDING,
     studentId: '3',
     studentName: 'Carol Davis',
     year: 2024,

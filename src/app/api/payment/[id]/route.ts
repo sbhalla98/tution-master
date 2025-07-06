@@ -28,7 +28,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     };
 
     return NextResponse.json(newPayment, { status: 201 });
-  } catch (err) {
-    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  } catch (error) {
+    return NextResponse.json({ err: error, message: 'Invalid JSON' }, { status: 400 });
   }
 }

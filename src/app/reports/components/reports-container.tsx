@@ -1,4 +1,5 @@
 'use client';
+import { PAYMENT_STATUS } from '@/constants';
 import { Payment, Student } from '@/types/student';
 import { BarChart3, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import {
@@ -22,7 +23,7 @@ type ReportsContiainerProps = {
 export default function Reports({ students = [], payments = [] }: ReportsContiainerProps) {
   // Monthly revenue data
   const monthlyRevenue = payments
-    .filter((p) => p.status === 'paid')
+    .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce(
       (acc, payment) => {
         const key = `${payment.month} ${payment.year}`;
@@ -86,7 +87,7 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
               <p className="text-2xl font-bold text-gray-900">
                 ₹
                 {payments
-                  .filter((p) => p.status === 'paid')
+                  .filter((p) => p.status === PAYMENT_STATUS.PAID)
                   .reduce((sum, p) => sum + p.amount, 0)
                   .toLocaleString()}
               </p>
@@ -117,7 +118,9 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
               <p className="text-sm font-medium text-gray-600">Payment Rate</p>
               <p className="text-2xl font-bold text-gray-900">
                 {Math.round(
-                  (payments.filter((p) => p.status === 'paid').length / payments.length) * 100
+                  (payments.filter((p) => p.status === PAYMENT_STATUS.PAID).length /
+                    payments.length) *
+                    100
                 )}
                 %
               </p>
@@ -175,7 +178,7 @@ export default function Reports({ students = [], payments = [] }: ReportsContiai
               {Object.entries(monthlyRevenue)
                 .sort(([, a], [, b]) => b - a)
                 .slice(0, 3)
-                .map(([month, revenue], index) => (
+                .map(([month, revenue]) => (
                   <div
                     key={month}
                     className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"

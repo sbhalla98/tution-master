@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Student } from '@/types/student';
+import { STUDENT_STATUS } from '@/constants';
+import { Student, StudentStatusType } from '@/types/student';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -31,7 +32,7 @@ export default function EditStudentForm({
 }: EditStudentFormProps) {
   const { register, handleSubmit, reset, setValue } = useForm();
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<'active' | 'inactive'>('active');
+  const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
 
   useEffect(() => {
     if (student) {
@@ -70,7 +71,7 @@ export default function EditStudentForm({
     onUpdateStudent(updatedStudent);
     reset();
     setSelectedSubjects([]);
-    setSelectedStatus('active');
+    setSelectedStatus(STUDENT_STATUS.ACTIVE);
     onClose();
   };
 
@@ -150,7 +151,7 @@ export default function EditStudentForm({
             <Label htmlFor="status">Status</Label>
             <Select
               value={selectedStatus}
-              onValueChange={(value: 'active' | 'inactive') => setSelectedStatus(value)}
+              onValueChange={(value: StudentStatusType) => setSelectedStatus(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />

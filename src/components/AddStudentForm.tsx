@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Student } from '@/types/student';
+import { STUDENT_STATUS } from '@/constants';
+import { Student, StudentStatusType } from '@/types/student';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -25,7 +26,7 @@ const availableSubjects = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'En
 export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStudentFormProps) {
   const { register, handleSubmit, reset } = useForm();
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState<'active' | 'inactive'>('active');
+  const [selectedStatus, setSelectedStatus] = useState<StudentStatusType>(STUDENT_STATUS.ACTIVE);
 
   const handleSubjectChange = (subject: string, checked: boolean) => {
     if (checked) {
@@ -53,7 +54,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
     onAddStudent(newStudent);
     reset();
     setSelectedSubjects([]);
-    setSelectedStatus('active');
+    setSelectedStatus(STUDENT_STATUS.ACTIVE);
     onClose();
   };
 
@@ -142,7 +143,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             <Label htmlFor="status">Status</Label>
             <Select
               value={selectedStatus}
-              onValueChange={(value: 'active' | 'inactive') => setSelectedStatus(value)}
+              onValueChange={(value: StudentStatusType) => setSelectedStatus(value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select status" />

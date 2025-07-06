@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { createPayment, markPaymentStatus } from '@/lib/api';
-import { Payment, Student } from '@/types/student';
+import { Payment, PaymentStatusType, Student } from '@/types/student';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 
@@ -19,7 +19,7 @@ export default function PaymentsContainer({
   students = [],
 }: PaymentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'paid' | 'pending' | 'overdue'>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | PaymentStatusType>('all');
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
   const filteredPayments = payments.filter((payment) => {
@@ -56,19 +56,19 @@ export default function PaymentsContainer({
   };
 
   const totalPaid = payments
-    .filter((p) => p.status === 'paid')
+    .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);
   const totalPending = payments
-    .filter((p) => p.status === 'pending')
+    .filter((p) => p.status === PAYMENT_STATUS.PENDING)
     .reduce((sum, p) => sum + p.amount, 0);
   const totalOverdue = payments
-    .filter((p) => p.status === 'overdue')
+    .filter((p) => p.status === PAYMENT_STATUS.OVERDUE)
     .reduce((sum, p) => sum + p.amount, 0);
 
   const studentsForPayment = students.map((student) => ({
     id: student.id,
-    name: student.name,
     monthlyFee: student.monthlyFee,
+    name: student.name,
   }));
 
   return (
@@ -120,22 +120,22 @@ export default function PaymentsContainer({
             All
           </Button>
           <Button
-            variant={statusFilter === 'paid' ? 'default' : 'outline'}
-            onClick={() => setStatusFilter('paid')}
+            variant={statusFilter === PAYMENT_STATUS.PAID ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS.PAID)}
             size="sm"
           >
             Paid
           </Button>
           <Button
-            variant={statusFilter === 'pending' ? 'default' : 'outline'}
-            onClick={() => setStatusFilter('pending')}
+            variant={statusFilter === PAYMENT_STATUS.PENDING ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS.PENDING)}
             size="sm"
           >
             Pending
           </Button>
           <Button
-            variant={statusFilter === 'overdue' ? 'default' : 'outline'}
-            onClick={() => setStatusFilter('overdue')}
+            variant={statusFilter === PAYMENT_STATUS.OVERDUE ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS.OVERDUE)}
             size="sm"
           >
             Overdue

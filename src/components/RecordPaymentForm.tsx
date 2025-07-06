@@ -10,7 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Payment } from '@/types/student';
+import { PAYMENT_STATUS } from '@/constants';
+import { Payment, PaymentStatusType } from '@/types/student';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -56,8 +57,8 @@ export default function RecordPaymentForm({
       amount: Number(data.amount),
       dueDate: data.dueDate,
       month: selectedMonth,
-      paymentDate: selectedStatus === 'paid' ? new Date().toISOString() : undefined,
-      status: selectedStatus as 'paid' | 'pending' | 'overdue',
+      paymentDate: selectedStatus === PAYMENT_STATUS.PAID ? new Date().toISOString() : undefined,
+      status: selectedStatus as PaymentStatusType,
       studentId: selectedStudent,
       studentName: selectedStudentData.name,
       year: Number(data.year),
