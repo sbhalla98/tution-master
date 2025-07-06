@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { createPayment, markPaymentStatus } from '@/lib/api';
-import { Payment, PaymentStatusType, Student } from '@/types/student';
+import { Payment, Student } from '@/types/student';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+import { PAYMENT_STATUS_FILTER } from '../constants';
+import { PaymentStatusFilterType } from '../types';
 
 type PaymentsContainerProps = {
   payments?: Payment[];
@@ -19,7 +21,9 @@ export default function PaymentsContainer({
   students = [],
 }: PaymentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | PaymentStatusType>('all');
+  const [statusFilter, setStatusFilter] = useState<PaymentStatusFilterType>(
+    PAYMENT_STATUS_FILTER.ALL
+  );
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
 
   const filteredPayments = payments.filter((payment) => {
@@ -27,7 +31,8 @@ export default function PaymentsContainer({
       payment.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       payment.month.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus = statusFilter === 'all' || payment.status === statusFilter;
+    const matchesStatus =
+      statusFilter === PAYMENT_STATUS_FILTER.ALL || payment.status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -113,29 +118,29 @@ export default function PaymentsContainer({
         </div>
         <div className="flex gap-2">
           <Button
-            variant={statusFilter === 'all' ? 'default' : 'outline'}
-            onClick={() => setStatusFilter('all')}
+            variant={statusFilter === PAYMENT_STATUS_FILTER.ALL ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.ALL)}
             size="sm"
           >
             All
           </Button>
           <Button
-            variant={statusFilter === PAYMENT_STATUS.PAID ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS.PAID)}
+            variant={statusFilter === PAYMENT_STATUS_FILTER.PAID ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.PAID)}
             size="sm"
           >
             Paid
           </Button>
           <Button
-            variant={statusFilter === PAYMENT_STATUS.PENDING ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS.PENDING)}
+            variant={statusFilter === PAYMENT_STATUS_FILTER.PENDING ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.PENDING)}
             size="sm"
           >
             Pending
           </Button>
           <Button
-            variant={statusFilter === PAYMENT_STATUS.OVERDUE ? 'default' : 'outline'}
-            onClick={() => setStatusFilter(PAYMENT_STATUS.OVERDUE)}
+            variant={statusFilter === PAYMENT_STATUS_FILTER.OVERDUE ? 'default' : 'outline'}
+            onClick={() => setStatusFilter(PAYMENT_STATUS_FILTER.OVERDUE)}
             size="sm"
           >
             Overdue

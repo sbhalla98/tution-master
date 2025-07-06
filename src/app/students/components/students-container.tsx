@@ -5,11 +5,13 @@ import StudentCard from '@/components/StudentCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
-import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
+import { PAYMENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
-import { Student, StudentStatusType } from '@/types/student';
+import { Student } from '@/types/student';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
+import { STUDENT_STATUS_FILTER } from '../constants';
+import { StudentStatusFilterType } from '../types';
 
 type StudentsContainerProps = {
   students: Student[];
@@ -17,7 +19,7 @@ type StudentsContainerProps = {
 
 export default function StudentsContainer({ students }: StudentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filter, setFilter] = useState<'all' | StudentStatusType>('all');
+  const [filter, setFilter] = useState<StudentStatusFilterType>(STUDENT_STATUS_FILTER.ALL);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isEditStudentOpen, setIsEditStudentOpen] = useState(false);
   const [editingStudent, setEditingStudent] = useState<Student | null>(null);
@@ -31,7 +33,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
       student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.subjects.some((subject) => subject.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const matchesFilter = filter === 'all' || student.status === filter;
+    const matchesFilter = filter === STUDENT_STATUS_FILTER.ALL || student.status === filter;
 
     return matchesSearch && matchesFilter;
   });
@@ -104,22 +106,22 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
         </div>
         <div className="flex gap-2">
           <Button
-            variant={filter === 'all' ? 'default' : 'outline'}
-            onClick={() => setFilter('all')}
+            variant={filter === STUDENT_STATUS_FILTER.ALL ? 'default' : 'outline'}
+            onClick={() => setFilter(STUDENT_STATUS_FILTER.ALL)}
             size="sm"
           >
             All
           </Button>
           <Button
-            variant={filter === STUDENT_STATUS.ACTIVE ? 'default' : 'outline'}
-            onClick={() => setFilter(STUDENT_STATUS.ACTIVE)}
+            variant={filter === STUDENT_STATUS_FILTER.ACTIVE ? 'default' : 'outline'}
+            onClick={() => setFilter(STUDENT_STATUS_FILTER.ACTIVE)}
             size="sm"
           >
             Active
           </Button>
           <Button
-            variant={filter === STUDENT_STATUS.INACTIVE ? 'default' : 'outline'}
-            onClick={() => setFilter(STUDENT_STATUS.INACTIVE)}
+            variant={filter === STUDENT_STATUS_FILTER.INACTIVE ? 'default' : 'outline'}
+            onClick={() => setFilter(STUDENT_STATUS_FILTER.INACTIVE)}
             size="sm"
           >
             Inactive
