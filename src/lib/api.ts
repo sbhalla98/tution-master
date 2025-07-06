@@ -9,17 +9,21 @@ export async function getPayments() {
   return await axios.get('/api/get-payments');
 }
 
-export async function getStudent(id: string): Promise<Student | null> {
-  return await axios.get(`/api/get-student/${id}`);
-}
-
 export async function createStudent(student: Omit<Student, 'id'>): Promise<Student | null> {
   return await axios.post('/api/create-student', student);
+}
+
+export async function getStudent(id: string): Promise<Student | null> {
+  return await axios.get(`/api/student/${id}`);
 }
 
 export async function updateStudent(
   id: string,
   student: Omit<Student, 'id'>
 ): Promise<Student | null> {
-  return await axios.post(`/api/update-student/${id}`, student);
+  return await axios.put(`/api/student/${id}`, student);
+}
+
+export async function deleteStudent(id: string): Promise<Student | null> {
+  return await axios.delete(`/api/student/${id}`);
 }
