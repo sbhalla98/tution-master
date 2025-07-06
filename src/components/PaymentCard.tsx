@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { PAYMENT_STATUS } from '@/constants';
-import { Payment } from '@/types/student';
+import { Payment } from '@/types';
 import { Calendar, IndianRupee } from 'lucide-react';
 
 interface PaymentCardProps {

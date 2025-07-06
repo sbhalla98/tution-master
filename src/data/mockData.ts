@@ -1,5 +1,5 @@
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
-import { Payment, Student } from '@/types/student';
+import { Payment, Student } from '@/types';
 
 export const mockStudents: Student[] = [
   {

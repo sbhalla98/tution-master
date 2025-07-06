@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { STUDENT_STATUS } from '@/constants';
-import { Student, StudentStatusType } from '@/types/student';
+import { Student, StudentStatusType } from '@/types';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 

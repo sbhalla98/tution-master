@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { STUDENT_STATUS } from '@/constants';
-import { Student } from '@/types/student';
+import { Student } from '@/types';
 import { BookOpen, Calendar, Mail, Phone } from 'lucide-react';
 
 interface StudentCardProps {

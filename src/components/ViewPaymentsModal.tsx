@@ -1,7 +1,7 @@
 import PaymentCard from '@/components/PaymentCard';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getStudentPayments } from '@/lib/api';
-import { Payment } from '@/types/student';
+import { Payment } from '@/types';
 import { useEffect, useState } from 'react';
 
 interface ViewPaymentsModalProps {

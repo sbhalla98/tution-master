@@ -5,7 +5,7 @@ import SendRemindersForm from '@/components/SendRemindersForm';
 import StatCard from '@/components/StatCard';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { createPayment, createStudent } from '@/lib/api';
-import { Payment, Student } from '@/types/student';
+import { Payment, Student } from '@/types';
 import { AlertCircle, DollarSign, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useState } from 'react';
 

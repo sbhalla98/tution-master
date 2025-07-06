@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { PAYMENT_STATUS } from '@/constants';
 import { createPayment, markPaymentStatus } from '@/lib/api';
-import { Payment, Student } from '@/types/student';
+import { Payment, Student } from '@/types';
 import { Filter, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { PAYMENT_STATUS_FILTER } from '../constants';

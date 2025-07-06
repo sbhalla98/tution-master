@@ -1,5 +1,5 @@
 import { mockStudents } from '@/data/mockData';
-import { Student } from '@/types/student';
+import { Student } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {

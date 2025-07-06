@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import ViewPaymentsModal from '@/components/ViewPaymentsModal';
 import { PAYMENT_STATUS } from '@/constants';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
-import { Student } from '@/types/student';
+import { Student } from '@/types';
 import { Plus, Search, Users } from 'lucide-react';
 import { useState } from 'react';
 import { STUDENT_STATUS_FILTER } from '../constants';

@@ -1,6 +1,6 @@
 'use client';
 import { PAYMENT_STATUS } from '@/constants';
-import { Payment, Student } from '@/types/student';
+import { Payment, Student } from '@/types';
 import { BarChart3, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import {
   Bar,

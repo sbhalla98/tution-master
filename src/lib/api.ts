@@ -1,4 +1,4 @@
-import { Payment, PaymentStatusType, Student } from '@/types/student';
+import { Payment, PaymentStatusType, Student } from '@/types';
 import axios from './axios';
 
 // students API calls

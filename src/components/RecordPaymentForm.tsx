@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { PAYMENT_STATUS } from '@/constants';
-import { Payment, PaymentStatusType } from '@/types/student';
+import { Payment, PaymentStatusType } from '@/types';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
