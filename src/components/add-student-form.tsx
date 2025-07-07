@@ -66,7 +66,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-screen overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add New Student</DialogTitle>
         </DialogHeader>
