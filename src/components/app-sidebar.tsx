@@ -9,43 +9,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import { NAVIGATION_ITEMS } from '@/constants/navigation';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import { Calendar, Home, Inbox, Search } from 'lucide-react';
 import Link from 'next/link';
-
-// [TODO] Update the icons to use the new ones from lucide-react
-const items = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: Home,
-  },
-  {
-    title: 'Students',
-    url: '/students',
-    icon: Inbox,
-  },
-  {
-    title: 'Payments',
-    url: '/payments',
-    icon: Calendar,
-  },
-  {
-    title: 'Reports',
-    url: '/reports',
-    icon: Search,
-  },
-];
 
 export default function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="hidden sm:block">
       <SidebarHeader>Tution Master</SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {NAVIGATION_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url} className="flex items-center gap-2">

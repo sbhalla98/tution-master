@@ -1,13 +1,13 @@
 'use client';
+import AppBottomBar from '@/components/app-bottom-bar';
+import AppSidebar from '@/components/app-sidebar';
+import { SidebarProvider } from '@/components/ui/sidebar';
 import { Toaster as Sonner } from '@/components/ui/sonner';
 import { Toaster } from '@/components/ui/toaster';
 import { ClerkProvider } from '@clerk/nextjs';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React, { useState } from 'react';
-
-import AppSidebar from '@/components/app-sidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
 import './globals.css';
 
 const geistSans = Geist({
@@ -36,7 +36,8 @@ export default function RootLayout({
             <Sonner />
             <SidebarProvider>
               <AppSidebar />
-              <main className="p-6 w-full">{children}</main>
+              <main className="p-6 w-full pb-20">{children}</main>
+              <AppBottomBar />
             </SidebarProvider>
           </QueryClientProvider>
         </body>
