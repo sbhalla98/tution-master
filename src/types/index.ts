@@ -39,3 +39,16 @@ export type Payment = {
   deletedAt: EpochTimeStamp | null;
   isDeleted: boolean;
 };
+
+export type User = {
+  id: string;
+  fistName?: string;
+  lastName?: string;
+  email?: string;
+  phone: string;
+  role?: 'admin' | 'user';
+  createdAt: EpochTimeStamp;
+  updatedAt: EpochTimeStamp;
+  deletedAt: EpochTimeStamp | null;
+  isDeleted: boolean;
+};

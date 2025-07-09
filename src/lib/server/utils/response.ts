@@ -10,6 +10,11 @@ export function paymentNotFoundResponse(id: string, userId: string) {
   return NextResponse.json({ message, error: message }, { status: 404 });
 }
 
+export function userNotFoundResponse(id: string) {
+  const message = `User with ID ${id} not found`;
+  return NextResponse.json({ message, error: message }, { status: 404 });
+}
+
 export function errorResponse(message: string, error: unknown, status = 500) {
   console.error(message, error);
   return NextResponse.json({ message, error }, { status });
