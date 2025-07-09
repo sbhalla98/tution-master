@@ -81,3 +81,10 @@ export type CreateUserRequest = Omit<
 >;
 
 export type CreateUserResponse = User | null | undefined;
+
+// Request to update a user
+export type UpdateUserRequest = Partial<
+  Omit<User, 'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isDeleted'>
+>;
+
+export type UpdateUserResponse = User | null | undefined;

@@ -46,7 +46,7 @@ export type User = {
   lastName?: string;
   email?: string;
   phone: string;
-  role?: 'admin' | 'user';
+  // role?: 'admin' | 'user';
   createdAt: EpochTimeStamp;
   updatedAt: EpochTimeStamp;
   deletedAt: EpochTimeStamp | null;

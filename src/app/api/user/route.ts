@@ -1,7 +1,7 @@
 import { requireUser } from '@/lib/server/auth';
 import { findUserById, getUserCollection } from '@/lib/server/db/user';
 import { errorResponse, userNotFoundResponse } from '@/lib/server/utils/response';
-import { CreateUserRequest } from '@/types/api';
+import { CreateUserRequest, UpdateUserRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET() {
@@ -40,5 +40,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     return errorResponse('Error creating user', error);
+  }
+}
+
+export async function PUT(req: NextRequest) {
+  try {
+    const { userId } = await requireUser();
+    const collection = await getUserCollection();
+
+    const payload: UpdateUserRequest = await req.json();
+
+    const updatedUser = {
+      ...payload,
+      updatedAt: Date.now(),
+    };
+
+    const response = await collection.updateOne({ id: userId }, { $set: updatedUser });
+
+    return NextResponse.json(response, { status: 200 });
+  } catch (error) {
+    return errorResponse('Error updateing user', error);
   }
 }
