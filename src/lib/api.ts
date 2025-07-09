@@ -6,6 +6,7 @@ import {
   DeleteStudentRequest,
   DeleteStudentResponse,
   GetPaymentsResponse,
+  GetSettingsResponse,
   GetStudentPaymentsRequest,
   GetStudentPaymentsResponse,
   GetStudentRequest,
@@ -15,6 +16,8 @@ import {
   MarkPaymentStatusResponse,
   UpdatePaymentRequest,
   UpdatePaymentResponse,
+  UpdateSettingsRequest,
+  UpdateSettingsResponse,
   UpdateStudentRequest,
   UpdateStudentResponse,
 } from '@/types/api';
@@ -81,5 +84,19 @@ export async function markPaymentStatus(
 ): Promise<MarkPaymentStatusResponse> {
   const { id, status } = request;
   const res = await axios.put(`/payment/${id}`, { status });
+  return res.data;
+}
+
+// ---------- Settings APIs ----------
+
+export async function getSettings(): Promise<GetSettingsResponse> {
+  const res = await axios.get('/settings');
+  return res.data;
+}
+
+export async function updateSettings(
+  request: UpdateSettingsRequest
+): Promise<UpdateSettingsResponse> {
+  const res = await axios.put('/settings', request);
   return res.data;
 }
