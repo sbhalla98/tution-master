@@ -6,7 +6,7 @@ type SettingsContainerProps = {
   settings?: SETTINGS | null;
 };
 
-export default function SettingsContainer({ settings }: SettingsContainerProps) {
+export default function SettingsContainer({}: SettingsContainerProps) {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-2xl font-bold mb-4">Settings</h1>
