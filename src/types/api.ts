@@ -1,6 +1,6 @@
 // types/api.ts
 
-import { Payment, PaymentStatusType, Student } from './index';
+import { Payment, PaymentStatusType, Student, User } from './index';
 
 // ---------- Student APIs ----------
 
@@ -68,3 +68,16 @@ export type MarkPaymentStatusRequest = {
   status: PaymentStatusType;
 };
 export type MarkPaymentStatusResponse = Payment | null | undefined;
+
+// ---------- User APIs ----------
+
+// Request to get user details
+export type GetUserResponse = User | null | undefined;
+
+// Request to create a user
+export type CreateUserRequest = Omit<
+  User,
+  'id' | 'createdAt' | 'updatedAt' | 'deletedAt' | 'isDeleted'
+>;
+
+export type CreateUserResponse = User | null | undefined;
