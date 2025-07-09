@@ -1,10 +1,11 @@
-import { Calendar, Home, Inbox, Search } from 'lucide-react';
+import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
 
 export const ROUTES = {
   DASHBOARD: '/dashboard',
   STUDENTS: '/students',
   PAYMENTS: '/payments',
   REPORTS: '/reports',
+  SETTINGS: '/settings',
 } as const;
 
 // [TODO] - Fix the icons
@@ -28,5 +29,10 @@ export const NAVIGATION_ITEMS = [
     title: 'Reports',
     url: ROUTES.REPORTS,
     icon: Search,
+  },
+  {
+    title: 'Settings',
+    url: ROUTES.SETTINGS,
+    icon: Settings,
   },
 ] as const;

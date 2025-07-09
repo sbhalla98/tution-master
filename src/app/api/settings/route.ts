@@ -3,11 +3,12 @@ import { findSettings, getSettingsCollection } from '@/lib/server/db/settings';
 import { errorResponse, settingsNotFoundResponse } from '@/lib/server/utils/response';
 import { UpdateSettingsRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
+import { getOrCreateSettings } from './helper';
 
 export async function GET() {
   try {
     const { userId } = await requireUser();
-    const settings = await findSettings(userId);
+    const settings = await getOrCreateSettings(userId);
 
     if (!settings) return settingsNotFoundResponse(userId);
 
