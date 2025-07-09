@@ -1,5 +1,6 @@
 import AppLayout from '@/components/app-layout';
 import { ClerkProvider } from '@clerk/nextjs';
+import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
 import { Geist, Geist_Mono } from 'next/font/google';
 import React from 'react';
@@ -26,7 +27,9 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang={locale}>
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <AppLayout>{children}</AppLayout>
+          <NextIntlClientProvider>
+            <AppLayout>{children}</AppLayout>
+          </NextIntlClientProvider>
         </body>
       </html>
     </ClerkProvider>

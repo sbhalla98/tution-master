@@ -9,6 +9,7 @@ import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import DashboardHeader from './dashboard-header';
 import QuickActionsWidget from './quick-actions-widget';
@@ -25,6 +26,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const t = useTranslations('dashboard');
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
