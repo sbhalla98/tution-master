@@ -1,6 +1,6 @@
 // types/api.ts
 
-import { Payment, PaymentStatusType, Student, User } from './index';
+import { Payment, PaymentStatusType, SETTINGS, Student, User } from './index';
 
 // ---------- Student APIs ----------
 
@@ -88,3 +88,13 @@ export type UpdateUserRequest = Partial<
 >;
 
 export type UpdateUserResponse = User | null | undefined;
+
+// ---------- Setting APIs ----------
+
+// Request to get settings details
+export type GetSettingsResponse = SETTINGS | null | undefined;
+
+// Request to update settings
+export type UpdateSettingsRequest = Partial<Omit<SETTINGS, 'userId' | 'createdAt' | 'updatedAt'>>;
+
+export type UpdateSettingsResponse = SETTINGS | null | undefined;

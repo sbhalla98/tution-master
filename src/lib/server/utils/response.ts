@@ -15,6 +15,11 @@ export function userNotFoundResponse(id: string) {
   return NextResponse.json({ message, error: message }, { status: 404 });
 }
 
+export function settingsNotFoundResponse(id: string) {
+  const message = `Settings for user with ID ${id} not found`;
+  return NextResponse.json({ message, error: message }, { status: 404 });
+}
+
 export function errorResponse(message: string, error: unknown, status = 500) {
   console.error(message, error);
   return NextResponse.json({ message, error }, { status });

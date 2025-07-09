@@ -52,3 +52,15 @@ export type User = {
   deletedAt: EpochTimeStamp | null;
   isDeleted: boolean;
 };
+
+export type SETTINGS = {
+  userId: string;
+  businessName?: string;
+  businessAddress?: string;
+  businessPhone?: string;
+  businessEmail?: string;
+  businessLogo?: string | null;
+  subjects?: StudentSubjectType[] | null;
+  createdAt: EpochTimeStamp;
+  updatedAt: EpochTimeStamp;
+};
