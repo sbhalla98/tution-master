@@ -1,8 +1,8 @@
 'use client';
+import StatCard from '@/components/cards/stat-card';
 import AddStudentForm from '@/components/forms/add-student-form';
 import RecordPaymentForm from '@/components/forms/record-payment-form';
 import SendRemindersForm from '@/components/forms/send-reminder-form';
-import StatCard from '@/components/stat-card';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, createStudent } from '@/lib/api';

@@ -1,5 +1,15 @@
+'use client';
+
 import SendRemindersForm from '@/components/forms/send-reminder-form';
 import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { PAYMENT_STATUS } from '@/constants';
 import { Payment, PaymentStatusType } from '@/types';
 import { Calendar, IndianRupee } from 'lucide-react';
@@ -12,68 +22,72 @@ interface PaymentCardProps {
 
 export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
+
   const getStatusColor = (status: PaymentStatusType) => {
     switch (status) {
       case PAYMENT_STATUS.PAID:
-        return 'bg-green-100 text-green-800';
+        return 'bg-green-100 text-green-800 dark:bg-green-200/20 dark:text-green-400';
       case PAYMENT_STATUS.PENDING:
-        return 'bg-yellow-100 text-yellow-800';
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-200/20 dark:text-yellow-400';
       case PAYMENT_STATUS.OVERDUE:
-        return 'bg-red-100 text-red-800';
+        return 'bg-red-100 text-red-800 dark:bg-red-200/20 dark:text-red-400';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-200/10 dark:text-gray-300';
     }
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between mb-4">
+    <Card>
+      <CardHeader className="flex flex-row items-start justify-between space-y-0">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">{payment.studentName}</h3>
-          <p className="text-sm text-gray-600">
+          <CardTitle className="text-lg">{payment.studentName}</CardTitle>
+          <CardDescription>
             {payment.month} {payment.year}
-          </p>
+          </CardDescription>
         </div>
         <span
-          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(payment.status)}`}
+          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(
+            payment.status
+          )}`}
         >
           {payment.status}
         </span>
-      </div>
+      </CardHeader>
 
-      <div className="space-y-2 mb-4">
-        <div className="flex items-center text-sm text-gray-600">
+      <CardContent className="space-y-2 text-sm text-muted-foreground">
+        <div className="flex items-center">
           <IndianRupee className="h-4 w-4 mr-2" />
           Amount: ₹{payment.amount}
         </div>
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center">
           <Calendar className="h-4 w-4 mr-2" />
           Due: {new Date(payment.dueDate).toLocaleDateString()}
         </div>
         {payment.paymentDate && (
-          <div className="flex items-center text-sm text-gray-600">
+          <div className="flex items-center">
             <Calendar className="h-4 w-4 mr-2" />
             Paid: {new Date(payment.paymentDate).toLocaleDateString()}
           </div>
         )}
-      </div>
+      </CardContent>
 
       {payment.status !== PAYMENT_STATUS.PAID && (
-        <>
-          <Button size="sm" onClick={() => setIsRemindersOpen(true)} className="w-full">
+        <CardFooter className="flex justify-end gap-2">
+          <Button size="sm" variant="outline" onClick={() => setIsRemindersOpen(true)}>
             Remind
           </Button>
-          <Button size="sm" onClick={() => onMarkPaid(payment.id)} className="w-full">
+          <Button size="sm" onClick={() => onMarkPaid(payment.id)}>
             Mark as Paid
           </Button>
-        </>
+        </CardFooter>
       )}
+
       <SendRemindersForm
         isOpen={isRemindersOpen}
         onClose={() => setIsRemindersOpen(false)}
         payments={[payment]}
         allowSelection={false}
       />
-    </div>
+    </Card>
   );
 }

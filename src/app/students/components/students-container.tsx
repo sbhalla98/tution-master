@@ -1,7 +1,7 @@
 'use client';
+import StudentCard from '@/components/cards/student-card';
 import AddStudentForm from '@/components/forms/add-student-form';
 import EditStudentForm from '@/components/forms/edit-student-form';
-import StudentCard from '@/components/student-card';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';

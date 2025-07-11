@@ -129,7 +129,6 @@ export default function ReminderDialog({
           <FormInput
             name="message"
             label={t('message.label')}
-            placeholder={t('monthlyFee.placeholder')}
             type="textarea"
             control={form.control}
             className="min-h-[200px]"

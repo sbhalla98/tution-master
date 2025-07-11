@@ -1,7 +1,7 @@
 'use client';
 
+import PaymentCard from '@/components/cards/payment-card';
 import RecordPaymentForm from '@/components/forms/record-payment-form';
-import PaymentCard from '@/components/payment-card';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, markPaymentStatus } from '@/lib/api';

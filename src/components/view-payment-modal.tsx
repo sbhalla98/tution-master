@@ -1,4 +1,4 @@
-import PaymentCard from '@/components/payment-card';
+import PaymentCard from '@/components/cards/payment-card';
 import { getStudentPayments } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
