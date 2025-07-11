@@ -10,7 +10,7 @@ export async function GET() {
     const collection = await getStudentCollection();
 
     const students = await collection
-      .find({ userId, isDeleted: { $ne: true } }) // ignore soft-deleted
+      .find({ isDeleted: { $ne: true }, userId }) // ignore soft-deleted
       .sort({ createdAt: -1 }) // latest first
       .toArray();
 

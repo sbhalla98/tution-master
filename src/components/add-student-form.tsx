@@ -25,11 +25,11 @@ interface AddStudentFormProps {
 export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStudentFormProps) {
   const t = useTranslations('studentForm');
   const form = useForm<CreateStudentFormData>({
-    resolver: zodResolver(createStudentSchema),
     defaultValues: {
-      subjects: [],
       status: STUDENT_STATUS.ACTIVE,
+      subjects: [],
     },
+    resolver: zodResolver(createStudentSchema),
   });
 
   const subjects = form.watch('subjects');
@@ -43,9 +43,9 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
   const onSubmit = (data: CreateStudentFormData) => {
     const newStudent: CreateStudentRequest = {
       ...data,
-      name: data.name.trim(),
-      monthlyFee: Number(data.monthlyFee),
       joinDate: Date.now(),
+      monthlyFee: Number(data.monthlyFee),
+      name: data.name.trim(),
     };
 
     onAddStudent(newStudent);

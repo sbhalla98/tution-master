@@ -13,7 +13,7 @@ export async function GET(request: NextRequest, context: ContextType) {
     const collection = await getPaymentCollection();
 
     const payments = await collection
-      .find({ userId, studentId, isDeleted: { $ne: true } }) // ignore soft-deleted
+      .find({ isDeleted: { $ne: true }, studentId, userId }) // ignore soft-deleted
       .sort({ createdAt: -1 }) // latest first
       .toArray();
 

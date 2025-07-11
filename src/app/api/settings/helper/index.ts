@@ -9,9 +9,9 @@ export async function getOrCreateSettings(userId: string, defaults: UpdateSettin
   if (settings) return settings;
 
   const newSettings = {
-    userId,
     createdAt: Date.now(),
     updatedAt: Date.now(),
+    userId,
     ...defaults,
   };
 

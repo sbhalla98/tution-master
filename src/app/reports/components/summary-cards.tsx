@@ -13,30 +13,30 @@ type Props = {
 
 const cardConfig = [
   {
-    label: 'Total Students',
-    icon: Users,
     bg: 'bg-blue-50',
+    icon: Users,
+    label: 'Total Students',
     text: 'text-blue-600',
     value: (summary: Summary) => summary.totalStudents,
   },
   {
-    label: 'Total Revenue',
-    icon: IndianRupee,
     bg: 'bg-green-50',
+    icon: IndianRupee,
+    label: 'Total Revenue',
     text: 'text-green-600',
     value: (summary: Summary) => `₹${summary.totalRevenue.toLocaleString()}`,
   },
   {
-    label: 'Average Fee',
-    icon: TrendingUp,
     bg: 'bg-yellow-50',
+    icon: TrendingUp,
+    label: 'Average Fee',
     text: 'text-yellow-600',
     value: (summary: Summary) => `₹${summary.avgFee}`,
   },
   {
-    label: 'Payment Rate',
-    icon: BarChart3,
     bg: 'bg-purple-50',
+    icon: BarChart3,
+    label: 'Payment Rate',
     text: 'text-purple-600',
     value: (summary: Summary) => `${summary.paymentRate}%`,
   },

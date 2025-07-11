@@ -9,7 +9,6 @@ import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import DashboardHeader from './dashboard-header';
 import QuickActionsWidget from './quick-actions-widget';
@@ -26,17 +25,9 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const t = useTranslations('dashboard');
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      toast({
-        description: 'Student added successfully',
-        title: 'Added new student',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to add student. Please try again.',
@@ -44,22 +35,29 @@ export default function DashboardContainer({ students, payments }: DashboardCont
         variant: 'destructive',
       });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      toast({
+        description: 'Student added successfully',
+        title: 'Added new student',
+      });
+    },
   });
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment recorded successfully',
-        title: 'Payment Recorded',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to record payment. Please try again.',
         title: 'Error',
         variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      toast({
+        description: 'Payment recorded successfully',
+        title: 'Payment Recorded',
       });
     },
   });

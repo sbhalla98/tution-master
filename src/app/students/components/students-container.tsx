@@ -33,13 +33,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      toast({
-        description: 'Student added successfully',
-        title: 'Added new student',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to add student. Please try again.',
@@ -47,17 +40,17 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
         variant: 'destructive',
       });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      toast({
+        description: 'Student added successfully',
+        title: 'Added new student',
+      });
+    },
   });
 
   const { mutate: updateStudentMutation } = useMutation({
     mutationFn: updateStudent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      toast({
-        description: 'Student updated successfully',
-        title: 'Updated!!',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to updated student. Please try again.',
@@ -65,22 +58,29 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
         variant: 'destructive',
       });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['students'] });
+      toast({
+        description: 'Student updated successfully',
+        title: 'Updated!!',
+      });
+    },
   });
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment marked as paid successfully',
-        title: 'Payment Updated',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to mark payment as paid. Please try again.',
         title: 'Error',
         variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      toast({
+        description: 'Payment marked as paid successfully',
+        title: 'Payment Updated',
       });
     },
   });

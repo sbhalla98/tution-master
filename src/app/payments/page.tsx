@@ -10,8 +10,8 @@ export default function Payments() {
     error: studentsError,
     isLoading: studentsLoading,
   } = useQuery({
-    queryKey: ['students'],
     queryFn: getStudents,
+    queryKey: ['students'],
   });
 
   const {
@@ -19,8 +19,8 @@ export default function Payments() {
     error: paymentsError,
     isLoading: paymentsLoading,
   } = useQuery({
-    queryKey: ['payments'],
     queryFn: getPayments,
+    queryKey: ['payments'],
   });
 
   if (studentsLoading || paymentsLoading) {

@@ -33,11 +33,11 @@ export default function EditStudentForm({
   const t = useTranslations('editStudentForm');
 
   const form = useForm<CreateStudentFormData>({
-    resolver: zodResolver(createStudentSchema),
     defaultValues: {
-      subjects: [],
       status: STUDENT_STATUS.ACTIVE,
+      subjects: [],
     },
+    resolver: zodResolver(createStudentSchema),
   });
 
   const subjects = form.watch('subjects');
@@ -45,13 +45,13 @@ export default function EditStudentForm({
   useEffect(() => {
     if (student) {
       form.reset({
-        name: student.name,
         email: student.email,
-        phone: student.phone,
         grade: student.grade,
         monthlyFee: student.monthlyFee,
-        subjects: student.subjects,
+        name: student.name,
+        phone: student.phone,
         status: student.status,
+        subjects: student.subjects,
       });
     }
   }, [student, form.reset]);
@@ -69,8 +69,8 @@ export default function EditStudentForm({
       id: student.id,
       payload: {
         ...data,
-        name: data.name.trim(),
         monthlyFee: Number(data.monthlyFee),
+        name: data.name.trim(),
       },
     };
 

@@ -29,13 +29,6 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment recorded successfully',
-        title: 'Payment Recorded',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to record payment. Please try again.',
@@ -43,22 +36,29 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
         variant: 'destructive',
       });
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      toast({
+        description: 'Payment recorded successfully',
+        title: 'Payment Recorded',
+      });
+    },
   });
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment marked as paid successfully',
-        title: 'Payment Updated',
-      });
-    },
     onError: () => {
       toast({
         description: 'Failed to mark payment as paid. Please try again.',
         title: 'Error',
         variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['payments'] });
+      toast({
+        description: 'Payment marked as paid successfully',
+        title: 'Payment Updated',
       });
     },
   });

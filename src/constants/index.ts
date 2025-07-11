@@ -10,20 +10,20 @@ export const STUDENT_STATUS = {
 } as const;
 
 export const AVAILABLE_SUBJECTS = {
-  MATHEMATICS: 'Mathematics',
-  PHYSICS: 'Physics',
-  CHEMISTRY: 'Chemistry',
   BIOLOGY: 'Biology',
+  CHEMISTRY: 'Chemistry',
   ENGLISH: 'English',
   HISTORY: 'History',
+  MATHEMATICS: 'Mathematics',
+  PHYSICS: 'Physics',
 } as const;
 
 export const AVAILABLE_GRADES = {
-  SIXTH: '6',
-  SEVENTH: '7',
   EIGHTH: '8',
-  NINTH: '9',
-  TENTH: '10',
   ELEVENTH: '11',
+  NINTH: '9',
+  SEVENTH: '7',
+  SIXTH: '6',
+  TENTH: '10',
   TWELFTH: '12',
 } as const;

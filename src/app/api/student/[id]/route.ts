@@ -57,8 +57,8 @@ export async function DELETE(request: NextRequest, context: ContextType) {
     if (!student) return studentNotFoundResponse(id, userId);
 
     const updatedStudent = {
-      isDeleted: true,
       deletedAt: Date.now(),
+      isDeleted: true,
       updatedAt: Date.now(),
     };
 

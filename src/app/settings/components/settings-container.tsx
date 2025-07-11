@@ -20,10 +20,10 @@ type SettingsContainerProps = {
 };
 
 const settingsSchema = z.object({
-  businessName: z.string().optional(),
   businessAddress: z.string().optional(),
-  businessPhone: z.string().optional(),
   businessEmail: z.string().email().optional(),
+  businessName: z.string().optional(),
+  businessPhone: z.string().optional(),
 });
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
@@ -31,13 +31,13 @@ type SettingsFormValues = z.infer<typeof settingsSchema>;
 export default function SettingsContainer({ settings, onSave }: SettingsContainerProps) {
   const t = useTranslations('settings');
   const form = useForm<SettingsFormValues>({
-    resolver: zodResolver(settingsSchema),
     defaultValues: {
-      businessName: settings?.businessName || '',
       businessAddress: settings?.businessAddress || '',
-      businessPhone: settings?.businessPhone || '',
       businessEmail: settings?.businessEmail || '',
+      businessName: settings?.businessName || '',
+      businessPhone: settings?.businessPhone || '',
     },
+    resolver: zodResolver(settingsSchema),
   });
 
   const [logoPreview, setLogoPreview] = useState(settings?.businessLogo ?? '');

@@ -28,11 +28,11 @@ export async function POST(req: NextRequest) {
 
     const newUser = {
       ...payload,
-      id: userId,
       createdAt: timestamp,
-      updatedAt: timestamp,
       deletedAt: null,
+      id: userId,
       isDeleted: false,
+      updatedAt: timestamp,
     };
 
     const response = await collection.insertOne(newUser);

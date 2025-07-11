@@ -37,9 +37,9 @@ export async function PUT(req: NextRequest) {
     } else {
       const newSettings = {
         ...payload,
-        userId,
         createdAt: Date.now(),
         updatedAt: Date.now(),
+        userId,
       };
       const response = await collection.insertOne(newSettings);
       return NextResponse.json(response, { status: 201 });

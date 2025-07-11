@@ -10,8 +10,8 @@ export default function Dashboard() {
     error: studentsError,
     isLoading: studentsLoading,
   } = useQuery({
-    queryKey: ['students'],
     queryFn: getStudents,
+    queryKey: ['students'],
   });
 
   const {
@@ -19,8 +19,8 @@ export default function Dashboard() {
     error: paymentsError,
     isLoading: paymentsLoading,
   } = useQuery({
-    queryKey: ['payments'],
     queryFn: getPayments,
+    queryKey: ['payments'],
   });
 
   if (studentsLoading || paymentsLoading) {

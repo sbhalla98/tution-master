@@ -6,8 +6,8 @@ import SettingsContainer from './components/settings-container';
 
 export default function Settings() {
   const { data, error, isLoading } = useQuery({
-    queryKey: ['settings'],
     queryFn: getSettings,
+    queryKey: ['settings'],
   });
 
   if (isLoading) {

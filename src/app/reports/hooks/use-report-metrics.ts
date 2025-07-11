@@ -31,18 +31,18 @@ export default function useReportMetrics({
 
     switch (timeFilter) {
       case 'current_month':
-        range = { start: startOfMonth(now), end: endOfMonth(now) };
+        range = { end: endOfMonth(now), start: startOfMonth(now) };
         break;
       case 'last_month':
         const lastMonth = subMonths(now, 1);
-        range = { start: startOfMonth(lastMonth), end: endOfMonth(lastMonth) };
+        range = { end: endOfMonth(lastMonth), start: startOfMonth(lastMonth) };
         break;
       case 'current_year':
-        range = { start: startOfYear(now), end: endOfYear(now) };
+        range = { end: endOfYear(now), start: startOfYear(now) };
         break;
       case 'last_year':
         const lastYear = subYears(now, 1);
-        range = { start: startOfYear(lastYear), end: endOfYear(lastYear) };
+        range = { end: endOfYear(lastYear), start: startOfYear(lastYear) };
         break;
       default:
         return payments;
@@ -70,9 +70,9 @@ export default function useReportMetrics({
   const revenueData = useMemo(() => {
     return Object.entries(monthlyRevenue)
       .map(([month, revenue]) => ({
+        date: parse(month, 'MMMM yyyy', new Date()),
         month,
         revenue,
-        date: parse(month, 'MMMM yyyy', new Date()),
       }))
       .sort((a, b) => a.date.getTime() - b.date.getTime());
   }, [monthlyRevenue]);
@@ -106,10 +106,10 @@ export default function useReportMetrics({
     filteredPayments.length > 0 ? Math.round((totalPaid / filteredPayments.length) * 100) : 0;
 
   const summary = {
-    totalStudents,
-    totalRevenue,
     avgFee,
     paymentRate,
+    totalRevenue,
+    totalStudents,
   };
 
   const topMonths = useMemo(() => {
@@ -120,12 +120,12 @@ export default function useReportMetrics({
   }, [monthlyRevenue]);
 
   return {
-    timeFilter,
-    setTimeFilter,
-    summary,
-    revenueData,
     pieData,
-    topMonths,
+    revenueData,
+    setTimeFilter,
     subjectStats,
+    summary,
+    timeFilter,
+    topMonths,
   };
 }

@@ -16,7 +16,7 @@ export type ReportsProps = {
 
 export default function Reports({ students, payments }: ReportsProps) {
   const { timeFilter, setTimeFilter, summary, revenueData, pieData, topMonths, subjectStats } =
-    useReportMetrics({ students: students ?? [], payments: payments ?? [] });
+    useReportMetrics({ payments: payments ?? [], students: students ?? [] });
 
   return (
     <div className="space-y-8">

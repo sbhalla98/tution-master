@@ -2,9 +2,7 @@ import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constant
 import { z } from 'zod';
 
 export const createStudentSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
-  phone: z.string().min(10, 'Phone number is too short'),
   grade: z
     .enum([
       AVAILABLE_GRADES.SIXTH,
@@ -17,6 +15,9 @@ export const createStudentSchema = z.object({
     ])
     .nullable(),
   monthlyFee: z.coerce.number().min(0, 'Fee must be at least 0'),
+  name: z.string().min(1, 'Name is required'),
+  phone: z.string().min(10, 'Phone number is too short'),
+  status: z.enum([STUDENT_STATUS.ACTIVE, STUDENT_STATUS.INACTIVE]).default(STUDENT_STATUS.ACTIVE),
   subjects: z
     .array(
       z.enum([
@@ -30,7 +31,6 @@ export const createStudentSchema = z.object({
     )
     .min(1, 'Select at least one subject')
     .nullable(),
-  status: z.enum([STUDENT_STATUS.ACTIVE, STUDENT_STATUS.INACTIVE]).default(STUDENT_STATUS.ACTIVE),
 });
 
 export type CreateStudentFormData = z.infer<typeof createStudentSchema>;

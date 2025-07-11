@@ -53,11 +53,11 @@ export default function RecordPaymentForm({
     watch,
     formState: { errors },
   } = useForm<RecordPaymentFormData>({
-    resolver: zodResolver(recordPaymentSchema),
     defaultValues: {
-      year: new Date().getFullYear(),
       status: PAYMENT_STATUS.PAID,
+      year: new Date().getFullYear(),
     },
+    resolver: zodResolver(recordPaymentSchema),
   });
 
   const selectedStudentId = watch('studentId');

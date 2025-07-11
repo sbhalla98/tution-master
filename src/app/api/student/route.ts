@@ -17,12 +17,12 @@ export async function POST(req: NextRequest) {
 
     const newStudent = {
       ...body,
-      id: uuidv4(),
-      userId,
       createdAt: timestamp,
-      updatedAt: timestamp,
       deletedAt: null,
+      id: uuidv4(),
       isDeleted: false,
+      updatedAt: timestamp,
+      userId,
     };
 
     const response = await collection.insertOne(newStudent);

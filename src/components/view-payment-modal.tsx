@@ -19,12 +19,12 @@ export default function ViewPaymentsModal({
   onMarkPaid,
 }: ViewPaymentsModalProps) {
   const { data: payments, isLoading } = useQuery({
-    queryKey: ['studentPayments', studentId],
+    enabled: isOpen && !!studentId,
     queryFn: () =>
       getStudentPayments({
         studentId: studentId!,
       }),
-    enabled: isOpen && !!studentId,
+    queryKey: ['studentPayments', studentId],
   });
 
   return (
