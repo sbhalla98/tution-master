@@ -3,6 +3,17 @@
     "title": "Dashboard",
     "subtitle": "Welcome back! Here is your tuition overview"
   },
+  "studentCard": {
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "perMonth": "per month",
+    "grade": "Grade {grade}",
+    "joined": "Joined: {date}",
+    "edit": "Edit",
+    "viewPayments": "View Payments"
+  },
   "studentForm": {
     "title": "Add New Student",
     "name": {

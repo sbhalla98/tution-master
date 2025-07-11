@@ -33,11 +33,11 @@ export default function ReminderDialog({
   const { toast } = useToast();
 
   const form = useForm<ReminderFormValues>({
-    resolver: zodResolver(reminderSchema),
     defaultValues: {
-      selectedId: allowSelection ? undefined : payments[0]?.id,
       message: t('message.defaultValue'),
+      selectedId: allowSelection ? undefined : payments[0]?.id,
     },
+    resolver: zodResolver(reminderSchema),
   });
 
   const onSubmit = async (data: ReminderFormValues) => {
@@ -45,8 +45,8 @@ export default function ReminderDialog({
 
     if (!selectedPayment) {
       toast({
-        title: t('errors.noPayment.title'),
         description: t('errors.noPayment.description'),
+        title: t('errors.noPayment.title'),
         variant: 'destructive',
       });
       return;
@@ -61,15 +61,15 @@ export default function ReminderDialog({
       sendWhatsappMessage(phone, formattedMessage);
 
       toast({
-        title: t('success.reminderSent.title'),
         description: t('success.reminderSent.description', { name: selectedPayment.studentName }),
+        title: t('success.reminderSent.title'),
       });
 
       onClose();
     } else {
       toast({
-        title: t('errors.noPhone.title'),
         description: t('errors.noPhone.description', { name: selectedPayment.studentName }),
+        title: t('errors.noPhone.title'),
         variant: 'destructive',
       });
     }
