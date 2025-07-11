@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
 import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
@@ -11,10 +10,11 @@ import { CreateStudentRequest } from '@/types/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
+import { AppSheet } from './app-sheet';
 import { FormCheckboxGroup } from './form-checkbox-group';
 import FormInput from './form-input';
 import FormSelect from './form-select';
-import { ResponsiveModal } from './responsive-modal';
+import { Button } from './ui/button';
 
 interface AddStudentFormProps {
   isOpen: boolean;
@@ -54,7 +54,21 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
   };
 
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={onClose} title={t('title')}>
+    <AppSheet
+      open={isOpen}
+      onOpenChange={onClose}
+      title={t('title')}
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={onClose}>
+            {t('cancel')}
+          </Button>
+          <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
+            {t('submit')}
+          </Button>
+        </>
+      }
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormInput
@@ -103,14 +117,8 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             options={Object.values(STUDENT_STATUS)}
             control={form.control}
           />
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit">{t('submit')}</Button>
-          </div>
         </form>
       </Form>
-    </ResponsiveModal>
+    </AppSheet>
   );
 }
