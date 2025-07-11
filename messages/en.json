@@ -112,5 +112,14 @@
       "title": "No payments found",
       "description": "There are no payment records for this student."
     }
+  },
+  "sendReminderForm": {
+    "title": "Send WhatsApp Reminder",
+    "cancel": "Cancel",
+    "message": {
+      "label": "Reminder Message",
+      "helpText": "Payment details will be automatically appended."
+    },
+    "submit": "Send Reminder"
   }
 }

@@ -18,7 +18,7 @@ type AppSheetProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   trigger?: React.ReactNode;
-  title: string;
+  title: React.ReactNode;
   description?: string;
   children: React.ReactNode;
   footer?: React.ReactNode;
@@ -40,7 +40,7 @@ export function AppSheet({
       <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent className="flex flex-col h-full w-full sm:max-w-md sm:rounded-lg">
         <SheetHeader className="text-left">
-          <SheetTitle>{title}</SheetTitle>
+          <SheetTitle className="flex items-center gap-2">{title}</SheetTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}
         </SheetHeader>
         <div className={cn('flex-1 overflow-y-auto py-4 px-1 sm:px-2 min-h-0', containerClassName)}>

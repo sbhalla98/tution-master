@@ -134,7 +134,8 @@ export default function DashboardContainer({ students, payments }: DashboardCont
       <SendRemindersForm
         isOpen={isRemindersOpen}
         onClose={() => setIsRemindersOpen(false)}
-        overduePayments={overduePaymentsList}
+        payments={overduePaymentsList}
+        allowSelection={true}
       />
 
       <AddStudentForm

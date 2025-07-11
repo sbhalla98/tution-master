@@ -1,7 +1,9 @@
+import SendRemindersForm from '@/components/forms/send-reminder-form';
 import { Button } from '@/components/ui/button';
 import { PAYMENT_STATUS } from '@/constants';
 import { Payment, PaymentStatusType } from '@/types';
 import { Calendar, IndianRupee } from 'lucide-react';
+import { useState } from 'react';
 
 interface PaymentCardProps {
   payment: Payment;
@@ -9,6 +11,7 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
+  const [isRemindersOpen, setIsRemindersOpen] = useState(false);
   const getStatusColor = (status: PaymentStatusType) => {
     switch (status) {
       case PAYMENT_STATUS.PAID:
@@ -56,10 +59,21 @@ export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
       </div>
 
       {payment.status !== PAYMENT_STATUS.PAID && (
-        <Button size="sm" onClick={() => onMarkPaid(payment.id)} className="w-full">
-          Mark as Paid
-        </Button>
+        <>
+          <Button size="sm" onClick={() => setIsRemindersOpen(true)} className="w-full">
+            Remind
+          </Button>
+          <Button size="sm" onClick={() => onMarkPaid(payment.id)} className="w-full">
+            Mark as Paid
+          </Button>
+        </>
       )}
+      <SendRemindersForm
+        isOpen={isRemindersOpen}
+        onClose={() => setIsRemindersOpen(false)}
+        payments={[payment]}
+        allowSelection={false}
+      />
     </div>
   );
 }

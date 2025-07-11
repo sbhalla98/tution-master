@@ -1,171 +1,138 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Payment, Student } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
-import { MessageCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
+import { AppSheet } from '../app-sheet';
 
-interface SendRemindersFormProps {
+interface ReminderDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  overduePayments: Payment[];
+  payments: Payment[]; // can be 1 or more payments
+  allowSelection?: boolean; // allow choosing 1 from list
 }
 
-export default function SendRemindersForm({
+export default function ReminderDialog({
   isOpen,
   onClose,
-  overduePayments,
-}: SendRemindersFormProps) {
-  const [selectedPayments, setSelectedPayments] = useState<string[]>([]);
+  payments,
+  allowSelection = false,
+}: ReminderDialogProps) {
+  const t = useTranslations('sendReminderForm');
+  const [selectedId, setSelectedId] = useState<string | null>(
+    allowSelection ? null : payments[0]?.id
+  );
   const [message, setMessage] = useState(
     'Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!'
   );
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
-  const handlePaymentToggle = (paymentId: string) => {
-    setSelectedPayments((prev) =>
-      prev.includes(paymentId) ? prev.filter((id) => id !== paymentId) : [...prev, paymentId]
-    );
-  };
+  const selectedPayment = payments.find((p) => p.id === selectedId);
 
-  const handleSelectAll = () => {
-    if (selectedPayments.length === overduePayments.length) {
-      setSelectedPayments([]);
-    } else {
-      setSelectedPayments(overduePayments.map((p) => p.id));
-    }
-  };
-
-  const handleSendWhatsAppReminders = async () => {
-    const cachedStudents = queryClient.getQueryData<Student[]>(['students']) || [];
-
-    if (selectedPayments.length === 0) {
+  const handleSendReminder = async () => {
+    if (!selectedPayment) {
       toast({
-        description: 'Please select at least one payment to send reminders for.',
-        title: 'No payments selected',
+        title: 'No payment selected',
+        description: 'Please select a payment to send the reminder.',
         variant: 'destructive',
       });
       return;
     }
 
-    const selectedPaymentData = overduePayments.filter((p) => selectedPayments.includes(p.id));
-    let successCount = 0;
+    const cachedStudents = queryClient.getQueryData<Student[]>(['students']) || [];
+    const student = cachedStudents.find((s) => s.id === selectedPayment.studentId);
 
-    // For each selected payment, open WhatsApp with the reminder message
-    for (const payment of selectedPaymentData) {
-      try {
-        const student = cachedStudents.find((s) => s.id === payment.studentId);
+    if (student?.phone) {
+      const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${selectedPayment.studentName}\n- Month: ${selectedPayment.month} ${selectedPayment.year}\n- Amount: ₹${selectedPayment.amount}\n- Due Date: ${new Date(selectedPayment.dueDate).toLocaleDateString()}`;
+      const phone = student.phone.replace(/\D/g, '');
+      const url = `https://wa.me/${phone}?text=${encodeURIComponent(formattedMessage)}`;
 
-        if (student && student.phone) {
-          const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${payment.studentName}\n- Month: ${payment.month} ${payment.year}\n- Amount: ₹${payment.amount}\n- Due Date: ${new Date(payment.dueDate).toLocaleDateString()}`;
+      window.open(url, '_blank');
 
-          // Clean phone number (remove all non-digits)
-          const cleanPhone = student.phone.replace(/\D/g, '');
+      toast({
+        title: 'Reminder sent!',
+        description: `Opened WhatsApp for ${student.name}.`,
+      });
 
-          // Create WhatsApp deep link
-          const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(formattedMessage)}`;
-
-          // Open WhatsApp in new tab
-          window.open(whatsappUrl, '_blank');
-          successCount++;
-        } else {
-          console.error(`No phone number found for student: ${payment.studentName}`);
-        }
-      } catch (error) {
-        console.error('Error fetching student data:', error);
-      }
+      setSelectedId(null);
+      onClose();
+    } else {
+      toast({
+        title: 'Phone number not found',
+        description: `Could not send reminder to ${selectedPayment.studentName}.`,
+        variant: 'destructive',
+      });
     }
-
-    toast({
-      description: `Opened ${successCount} WhatsApp chat(s) with reminder messages.`,
-      title: 'WhatsApp reminders opened!',
-    });
-
-    setSelectedPayments([]);
-    onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-green-600" />
-            Send WhatsApp Reminders
-          </DialogTitle>
-        </DialogHeader>
-
-        <div className="space-y-4">
+    <AppSheet
+      open={isOpen}
+      onOpenChange={onClose}
+      title={
+        <>
+          <FaWhatsapp className="h-6 w-6 text-green-600" />
+          {t('title')}
+        </>
+      }
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={onClose}>
+            {t('cancel')}
+          </Button>
+          <Button
+            onClick={handleSendReminder}
+            disabled={!selectedPayment}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            <FaWhatsapp />
+            {t('submit')}
+          </Button>
+        </>
+      }
+    >
+      <div className="space-y-4">
+        {allowSelection && (
           <div>
-            <div className="flex items-center justify-between mb-3">
-              <Label className="text-base font-medium">Overdue Payments</Label>
-              <Button type="button" variant="outline" size="sm" onClick={handleSelectAll}>
-                {selectedPayments.length === overduePayments.length ? 'Deselect All' : 'Select All'}
-              </Button>
-            </div>
-
+            <Label className="text-base font-medium mb-2 block">Select a Payment</Label>
             <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-3">
-              {overduePayments.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No overdue payments found</p>
-              ) : (
-                overduePayments.map((payment) => (
-                  <div
-                    key={payment.id}
-                    className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded"
-                  >
-                    <Checkbox
-                      id={payment.id}
-                      checked={selectedPayments.includes(payment.id)}
-                      onCheckedChange={() => handlePaymentToggle(payment.id)}
-                    />
-                    <div className="flex-1">
-                      <Label htmlFor={payment.id} className="cursor-pointer">
-                        <div className="font-medium">{payment.studentName}</div>
-                        <div className="text-sm text-gray-600">
-                          {payment.month} {payment.year} - ₹{payment.amount} (Due:{' '}
-                          {new Date(payment.dueDate).toLocaleDateString()})
-                        </div>
-                      </Label>
-                    </div>
+              {payments.map((p) => (
+                <div
+                  key={p.id}
+                  className={`p-3 rounded cursor-pointer border ${
+                    selectedId === p.id ? 'bg-green-50 border-green-600' : 'hover:bg-gray-50'
+                  }`}
+                  onClick={() => setSelectedId(p.id)}
+                >
+                  <div className="font-medium">{p.studentName}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {p.month} {p.year} - ₹{p.amount} (Due:{' '}
+                    {new Date(p.dueDate).toLocaleDateString()})
                   </div>
-                ))
-              )}
+                </div>
+              ))}
             </div>
           </div>
+        )}
 
-          <div className="space-y-2">
-            <Label htmlFor="message">WhatsApp Reminder Message</Label>
-            <Textarea
-              id="message"
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Enter your reminder message..."
-              className="min-h-[120px]"
-            />
-            <p className="text-sm text-gray-500">
-              Payment details will be automatically added to each message.
-            </p>
-          </div>
-
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSendWhatsAppReminders}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              <MessageCircle className="h-4 w-4 mr-2" />
-              Send via WhatsApp ({selectedPayments.length})
-            </Button>
-          </div>
+        <div className="space-y-2">
+          <Label htmlFor="message">{t('message.label')}</Label>
+          <Textarea
+            id="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className="min-h-[200px]"
+          />
+          <p className="text-sm text-muted-foreground">{t('message.helpText')}</p>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </AppSheet>
   );
 }

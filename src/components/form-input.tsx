@@ -1,5 +1,6 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Textarea } from './ui/textarea';
 
 interface FormInputProps {
   name: string;
@@ -7,6 +8,7 @@ interface FormInputProps {
   placeholder?: string;
   type?: string;
   control: any;
+  textarea?: boolean;
 }
 
 export default function FormInput({
@@ -15,6 +17,7 @@ export default function FormInput({
   placeholder,
   type = 'text',
   control,
+  textarea = false,
 }: FormInputProps) {
   return (
     <FormField
@@ -24,7 +27,11 @@ export default function FormInput({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input {...field} type={type} placeholder={placeholder} />
+            {textarea ? (
+              <Textarea {...field} placeholder={placeholder} />
+            ) : (
+              <Input {...field} type={type} placeholder={placeholder} />
+            )}
           </FormControl>
           <FormMessage />
         </FormItem>

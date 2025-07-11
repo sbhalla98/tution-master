@@ -75,7 +75,7 @@ export default function RecordPaymentForm({
           <Button type="button" variant="outline" onClick={onClose}>
             {t('cancel')}
           </Button>
-          <Button type="submit" onSubmit={form.handleSubmit(onSubmit)}>
+          <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
             {t('submit')}
           </Button>
         </>
