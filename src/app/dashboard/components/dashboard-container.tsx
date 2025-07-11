@@ -3,14 +3,15 @@ import StatCard from '@/components/cards/stat-card';
 import AddStudentForm from '@/components/forms/add-student-form';
 import RecordPaymentForm from '@/components/forms/record-payment-form';
 import SendRemindersForm from '@/components/forms/send-reminder-form';
+import Header from '@/components/header';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import DashboardHeader from './dashboard-header';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsWidget from './recent-payments-widget';
 
@@ -20,6 +21,7 @@ type DashboardContainerProps = {
 };
 
 export default function DashboardContainer({ students, payments }: DashboardContainerProps) {
+  const t = useTranslations('dashboard');
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
@@ -88,7 +90,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
   return (
     <div className="space-y-8">
-      <DashboardHeader />
+      <Header title={t('title')} description={t('subtitle')} />
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

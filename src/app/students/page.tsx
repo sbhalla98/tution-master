@@ -1,5 +1,6 @@
 'use client';
 
+import StudentsContainerSkeleton from '@/components/skeleton/students-container-skeleton';
 import { getStudents } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import StudentsContainer from './components/students-container';
@@ -11,7 +12,7 @@ export default function Students() {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <StudentsContainerSkeleton />;
   }
 
   if (error) {
