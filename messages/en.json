@@ -65,6 +65,23 @@
     "cancel": "Cancel",
     "update": "Update Student"
   },
+  "paymentForm": {
+    "title": "Record Payment",
+    "student": "Student",
+    "selectStudent": "Select student",
+    "month": "Month",
+    "selectMonth": "Select month",
+    "year": "Year",
+    "enterYear": "Enter year",
+    "amount": "Amount (₹)",
+    "enterAmount": "Enter amount",
+    "dueDate": "Due Date",
+    "selectDueDate": "Select due date",
+    "status": "Status",
+    "selectStatus": "Select status",
+    "cancel": "Cancel",
+    "submit": "Record Payment"
+  },
   "settings": {
     "title": "Settings",
     "logo": {

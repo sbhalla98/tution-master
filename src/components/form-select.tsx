@@ -7,13 +7,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-interface FormSelectProps {
+interface FormSelectOption {
+  label: string;
+  value: string;
+}
+
+type FormSelectProps = {
   name: string;
   label: string;
-  options: string[];
+  options: Array<string | FormSelectOption>;
   placeholder?: string;
   control: any;
-}
+};
 
 export default function FormSelect({
   name,
@@ -22,6 +27,15 @@ export default function FormSelect({
   placeholder,
   control,
 }: FormSelectProps) {
+  const normalizedOptions: FormSelectOption[] = options.map((opt) =>
+    typeof opt === 'string'
+      ? {
+          label: opt.charAt(0).toUpperCase() + opt.slice(1).toLowerCase(),
+          value: opt,
+        }
+      : opt
+  );
+
   return (
     <FormField
       control={control}
@@ -36,9 +50,9 @@ export default function FormSelect({
               </SelectTrigger>
             </FormControl>
             <SelectContent>
-              {options.map((option) => (
-                <SelectItem key={option} value={option}>
-                  {option.charAt(0).toUpperCase() + option.slice(1).toLowerCase()}
+              {normalizedOptions.map(({ label, value }) => (
+                <SelectItem key={value} value={value}>
+                  {label}
                 </SelectItem>
               ))}
             </SelectContent>
