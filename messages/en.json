@@ -141,5 +141,18 @@
         "description": "Opened WhatsApp for {name}."
       }
     }
+  },
+  "payment": {
+    "amount": "Amount: ₹{amount}",
+    "dueDate": "Due: {date}",
+    "paidDate": "Paid: {date}",
+    "remind": "Remind",
+    "markAsPaid": "Mark as Paid",
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue",
+      "unknown": "Unknown"
+    }
   }
 }

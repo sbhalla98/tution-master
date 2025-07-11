@@ -13,7 +13,9 @@ import {
 import { PAYMENT_STATUS } from '@/constants';
 import { Payment, PaymentStatusType } from '@/types';
 import { Calendar, IndianRupee } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 
 interface PaymentCardProps {
   payment: Payment;
@@ -21,6 +23,7 @@ interface PaymentCardProps {
 }
 
 export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
+  const t = useTranslations('payment');
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
 
   const getStatusColor = (status: PaymentStatusType) => {
@@ -50,23 +53,23 @@ export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
             payment.status
           )}`}
         >
-          {payment.status}
+          {t(`status.${payment.status.toLowerCase()}`)}
         </span>
       </CardHeader>
 
       <CardContent className="space-y-2 text-sm text-muted-foreground">
         <div className="flex items-center">
           <IndianRupee className="h-4 w-4 mr-2" />
-          Amount: ₹{payment.amount}
+          {t('amount', { amount: payment.amount })}
         </div>
         <div className="flex items-center">
           <Calendar className="h-4 w-4 mr-2" />
-          Due: {new Date(payment.dueDate).toLocaleDateString()}
+          {t('dueDate', { date: new Date(payment.dueDate).toLocaleDateString() })}
         </div>
         {payment.paymentDate && (
           <div className="flex items-center">
             <Calendar className="h-4 w-4 mr-2" />
-            Paid: {new Date(payment.paymentDate).toLocaleDateString()}
+            {t('paidDate', { date: new Date(payment.paymentDate).toLocaleDateString() })}
           </div>
         )}
       </CardContent>
@@ -74,10 +77,11 @@ export default function PaymentCard({ payment, onMarkPaid }: PaymentCardProps) {
       {payment.status !== PAYMENT_STATUS.PAID && (
         <CardFooter className="flex justify-end gap-2">
           <Button size="sm" variant="outline" onClick={() => setIsRemindersOpen(true)}>
-            Remind
+            <FaWhatsapp />
+            {t('remind')}
           </Button>
           <Button size="sm" onClick={() => onMarkPaid(payment.id)}>
-            Mark as Paid
+            {t('markAsPaid')}
           </Button>
         </CardFooter>
       )}
