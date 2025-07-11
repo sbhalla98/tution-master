@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { FaWhatsapp } from 'react-icons/fa';
 import { AppSheet } from '../app-sheet';
+import MiniPaymentCard from '../cards/mini-payment-card';
 import FormInput from '../form-input';
 
 interface ReminderDialogProps {
@@ -111,19 +112,12 @@ export default function ReminderDialog({
                   <FormLabel>{t('paymentSelection.label')}</FormLabel>
                   <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-3">
                     {payments.map((p) => (
-                      <div
+                      <MiniPaymentCard
                         key={p.id}
-                        className={`p-3 rounded cursor-pointer border ${
-                          field.value === p.id ? 'bg-green-50 border-green-600' : 'hover:bg-gray-50'
-                        }`}
-                        onClick={() => field.onChange(p.id)}
-                      >
-                        <div className="font-medium">{p.studentName}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {p.month} {p.year} - ₹{p.amount} (Due:{' '}
-                          {new Date(p.dueDate).toLocaleDateString()})
-                        </div>
-                      </div>
+                        payment={p}
+                        onClick={field.onChange}
+                        highlight={field.value === p.id}
+                      />
                     ))}
                   </div>
                   <FormMessage />
