@@ -33,5 +33,36 @@
 
     "cancel": "Cancel",
     "submit": "Add Student"
+  },
+  "editStudentForm": {
+    "title": "Edit Student",
+    "name": {
+      "label": "Full Name",
+      "placeholder": "Enter student's full name"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter email"
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "Enter phone number"
+    },
+    "subjects": {
+      "label": "Subjects"
+    },
+    "grade": {
+      "label": "Grade"
+    },
+    "monthlyFee": {
+      "label": "Monthly Fee (₹)",
+      "placeholder": "Enter monthly fee"
+    },
+    "status": {
+      "label": "Status"
+    },
+
+    "cancel": "Cancel",
+    "update": "Update Student"
   }
 }

@@ -11,12 +11,17 @@ import {
 } from '@/components/ui/sidebar';
 import { NAVIGATION_ITEMS } from '@/constants/navigation';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AppSidebar() {
+  const t = useTranslations('sidebar');
   return (
     <Sidebar className="hidden sm:block">
-      <SidebarHeader>Tution Master</SidebarHeader>
+      <SidebarHeader className="items-center">
+        <Image src="/assets/logo-name.png" alt="TutionMaster Logo" width={200} height={40} />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -36,6 +41,7 @@ export default function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        {/* [TODO] Remove this component with your own user details component */}
         <SignedOut>
           <SignInButton />
           <SignUpButton>
