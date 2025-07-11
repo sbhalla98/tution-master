@@ -10,6 +10,7 @@ import { StudentSubjectType } from '@/types';
 import { CreateStudentRequest } from '@/types/api';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { FormCheckboxGroup } from './form-checkbox-group';
 import FormInput from './form-input';
@@ -22,6 +23,7 @@ interface AddStudentFormProps {
 }
 
 export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStudentFormProps) {
+  const t = useTranslations('studentForm');
   const form = useForm<CreateStudentFormData>({
     resolver: zodResolver(createStudentSchema),
     defaultValues: {
@@ -55,33 +57,33 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px] max-h-screen overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Student</DialogTitle>
+          <DialogTitle>{t('title')}</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormInput
               name="name"
-              label="Full Name"
-              placeholder="Enter student's full name"
+              label={t('name.label')}
+              placeholder={t('name.placeholder')}
               control={form.control}
             />
             <FormInput
               name="email"
-              label="Email"
-              placeholder="Enter email"
+              label={t('email.label')}
+              placeholder={t('email.placeholder')}
               type="email"
               control={form.control}
             />
             <FormInput
               name="phone"
-              label="Phone"
-              placeholder="Enter phone number"
+              label={t('phone.label')}
+              placeholder={t('phone.placeholder')}
               control={form.control}
             />
             <FormCheckboxGroup
               name="subjects"
-              label="Subjects"
+              label={t('subjects.label')}
               options={Object.values(AVAILABLE_SUBJECTS)}
               selected={subjects}
               onChange={handleSubjectChange}
@@ -89,20 +91,20 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             />
             <FormSelect
               name="grade"
-              label="Grade"
+              label={t('grade.label')}
               options={Object.values(AVAILABLE_GRADES)}
               control={form.control}
             />
             <FormInput
               name="monthlyFee"
-              label="Monthly Fee (₹)"
-              placeholder="Enter monthly fee"
+              label={t('monthlyFee.label')}
+              placeholder={t('monthlyFee.placeholder')}
               type="number"
               control={form.control}
             />
             <FormSelect
               name="status"
-              label="Status"
+              label={t('status.label')}
               options={Object.values(STUDENT_STATUS)}
               control={form.control}
             />
@@ -110,9 +112,9 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             {/* Buttons */}
             <div className="flex justify-end space-x-2 pt-4">
               <Button type="button" variant="outline" onClick={onClose}>
-                Cancel
+                {t('cancel')}
               </Button>
-              <Button type="submit">Add Student</Button>
+              <Button type="submit">{t('submit')}</Button>
             </div>
           </form>
         </Form>
