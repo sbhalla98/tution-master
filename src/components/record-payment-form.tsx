@@ -15,7 +15,7 @@ import FormSelect from './form-select';
 
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { ResponsiveModal } from './responsive-modal';
+import { AppSheet } from './app-sheet';
 
 interface RecordPaymentFormProps {
   isOpen: boolean;
@@ -82,7 +82,21 @@ export default function RecordPaymentForm({
   }, [selectedStudent]);
 
   return (
-    <ResponsiveModal open={isOpen} onOpenChange={onClose} title={t('title')}>
+    <AppSheet
+      open={isOpen}
+      onOpenChange={onClose}
+      title={t('title')}
+      footer={
+        <>
+          <Button type="button" variant="outline" onClick={onClose}>
+            {t('cancel')}
+          </Button>
+          <Button type="submit" onSubmit={form.handleSubmit(onSubmit)}>
+            {t('submit')}
+          </Button>
+        </>
+      }
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormSelect
@@ -130,14 +144,8 @@ export default function RecordPaymentForm({
             }))}
             control={form.control}
           />
-          <div className="flex justify-end space-x-2 pt-4">
-            <Button type="button" variant="outline" onClick={onClose}>
-              {t('cancel')}
-            </Button>
-            <Button type="submit">{t('submit')}</Button>
-          </div>
         </form>
       </Form>
-    </ResponsiveModal>
+    </AppSheet>
   );
 }
