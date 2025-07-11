@@ -118,8 +118,28 @@
     "cancel": "Cancel",
     "message": {
       "label": "Reminder Message",
-      "helpText": "Payment details will be automatically appended."
+      "helpText": "Payment details will be automatically appended.",
+      "defaultValue": "Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!"
     },
-    "submit": "Send Reminder"
+    "paymentSelection": {
+      "label": "Select a Payment"
+    },
+    "submit": "Send Reminder",
+    "errors": {
+      "noPayment": {
+        "title": "No payment selected",
+        "description": "Please select a payment to send the reminder."
+      },
+      "noPhone": {
+        "title": "Phone number not found",
+        "description": "Could not send reminder to {name}."
+      }
+    },
+    "success": {
+      "reminderSent": {
+        "title": "Reminder sent!",
+        "description": "Opened WhatsApp for {name}."
+      }
+    }
   }
 }

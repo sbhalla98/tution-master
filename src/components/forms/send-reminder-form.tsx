@@ -1,21 +1,24 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { generateWhatsappReminder, sendWhatsappMessage } from '@/lib/whatsapp';
+import { ReminderFormValues, reminderSchema } from '@/schemas/reminder.schema';
 import { Payment, Student } from '@/types';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { FaWhatsapp } from 'react-icons/fa';
 import { AppSheet } from '../app-sheet';
+import FormInput from '../form-input';
 
 interface ReminderDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  payments: Payment[]; // can be 1 or more payments
-  allowSelection?: boolean; // allow choosing 1 from list
+  payments: Payment[];
+  allowSelection?: boolean;
 }
 
 export default function ReminderDialog({
@@ -25,22 +28,24 @@ export default function ReminderDialog({
   allowSelection = false,
 }: ReminderDialogProps) {
   const t = useTranslations('sendReminderForm');
-  const [selectedId, setSelectedId] = useState<string | null>(
-    allowSelection ? null : payments[0]?.id
-  );
-  const [message, setMessage] = useState(
-    'Dear Student,\n\nThis is a friendly reminder that your payment is overdue. Please make the payment at your earliest convenience.\n\nThank you!'
-  );
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  const selectedPayment = payments.find((p) => p.id === selectedId);
+  const form = useForm<ReminderFormValues>({
+    resolver: zodResolver(reminderSchema),
+    defaultValues: {
+      selectedId: allowSelection ? undefined : payments[0]?.id,
+      message: t('message.defaultValue'),
+    },
+  });
 
-  const handleSendReminder = async () => {
+  const onSubmit = async (data: ReminderFormValues) => {
+    const selectedPayment = payments.find((p) => p.id === data.selectedId);
+
     if (!selectedPayment) {
       toast({
-        title: 'No payment selected',
-        description: 'Please select a payment to send the reminder.',
+        title: t('errors.noPayment.title'),
+        description: t('errors.noPayment.description'),
         variant: 'destructive',
       });
       return;
@@ -50,23 +55,20 @@ export default function ReminderDialog({
     const student = cachedStudents.find((s) => s.id === selectedPayment.studentId);
 
     if (student?.phone) {
-      const formattedMessage = `${message}\n\nPayment Details:\n- Student: ${selectedPayment.studentName}\n- Month: ${selectedPayment.month} ${selectedPayment.year}\n- Amount: ₹${selectedPayment.amount}\n- Due Date: ${new Date(selectedPayment.dueDate).toLocaleDateString()}`;
+      const formattedMessage = generateWhatsappReminder(data.message, selectedPayment);
       const phone = student.phone.replace(/\D/g, '');
-      const url = `https://wa.me/${phone}?text=${encodeURIComponent(formattedMessage)}`;
-
-      window.open(url, '_blank');
+      sendWhatsappMessage(phone, formattedMessage);
 
       toast({
-        title: 'Reminder sent!',
-        description: `Opened WhatsApp for ${student.name}.`,
+        title: t('success.reminderSent.title'),
+        description: t('success.reminderSent.description', { name: selectedPayment.studentName }),
       });
 
-      setSelectedId(null);
       onClose();
     } else {
       toast({
-        title: 'Phone number not found',
-        description: `Could not send reminder to ${selectedPayment.studentName}.`,
+        title: t('errors.noPhone.title'),
+        description: t('errors.noPhone.description', { name: selectedPayment.studentName }),
         variant: 'destructive',
       });
     }
@@ -88,8 +90,8 @@ export default function ReminderDialog({
             {t('cancel')}
           </Button>
           <Button
-            onClick={handleSendReminder}
-            disabled={!selectedPayment}
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={allowSelection && !form.watch('selectedId')}
             className="bg-green-600 hover:bg-green-700"
           >
             <FaWhatsapp />
@@ -98,41 +100,49 @@ export default function ReminderDialog({
         </>
       }
     >
-      <div className="space-y-4">
-        {allowSelection && (
-          <div>
-            <Label className="text-base font-medium mb-2 block">Select a Payment</Label>
-            <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-3">
-              {payments.map((p) => (
-                <div
-                  key={p.id}
-                  className={`p-3 rounded cursor-pointer border ${
-                    selectedId === p.id ? 'bg-green-50 border-green-600' : 'hover:bg-gray-50'
-                  }`}
-                  onClick={() => setSelectedId(p.id)}
-                >
-                  <div className="font-medium">{p.studentName}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {p.month} {p.year} - ₹{p.amount} (Due:{' '}
-                    {new Date(p.dueDate).toLocaleDateString()})
+      <Form {...form}>
+        <form className="space-y-4">
+          {allowSelection && (
+            <FormField
+              control={form.control}
+              name="selectedId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('paymentSelection.label')}</FormLabel>
+                  <div className="max-h-48 overflow-y-auto space-y-2 border rounded-md p-3">
+                    {payments.map((p) => (
+                      <div
+                        key={p.id}
+                        className={`p-3 rounded cursor-pointer border ${
+                          field.value === p.id ? 'bg-green-50 border-green-600' : 'hover:bg-gray-50'
+                        }`}
+                        onClick={() => field.onChange(p.id)}
+                      >
+                        <div className="font-medium">{p.studentName}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {p.month} {p.year} - ₹{p.amount} (Due:{' '}
+                          {new Date(p.dueDate).toLocaleDateString()})
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
 
-        <div className="space-y-2">
-          <Label htmlFor="message">{t('message.label')}</Label>
-          <Textarea
-            id="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+          <FormInput
+            name="message"
+            label={t('message.label')}
+            placeholder={t('monthlyFee.placeholder')}
+            type="textarea"
+            control={form.control}
             className="min-h-[200px]"
           />
           <p className="text-sm text-muted-foreground">{t('message.helpText')}</p>
-        </div>
-      </div>
+        </form>
+      </Form>
     </AppSheet>
   );
 }

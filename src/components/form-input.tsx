@@ -8,7 +8,7 @@ interface FormInputProps {
   placeholder?: string;
   type?: string;
   control: any;
-  textarea?: boolean;
+  className?: string;
 }
 
 export default function FormInput({
@@ -17,7 +17,7 @@ export default function FormInput({
   placeholder,
   type = 'text',
   control,
-  textarea = false,
+  className,
 }: FormInputProps) {
   return (
     <FormField
@@ -27,10 +27,10 @@ export default function FormInput({
         <FormItem>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            {textarea ? (
-              <Textarea {...field} placeholder={placeholder} />
+            {type === 'textarea' ? (
+              <Textarea {...field} placeholder={placeholder} className={className} />
             ) : (
-              <Input {...field} type={type} placeholder={placeholder} />
+              <Input {...field} type={type} placeholder={placeholder} className={className} />
             )}
           </FormControl>
           <FormMessage />

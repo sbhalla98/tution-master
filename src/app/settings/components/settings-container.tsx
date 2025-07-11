@@ -94,7 +94,7 @@ export default function SettingsContainer({ settings, onSave }: SettingsContaine
             label={t('businessAddress.label')}
             placeholder={t('businessAddress.placeholder')}
             control={form.control}
-            textarea
+            type="textarea"
           />
           <FormInput
             name="businessPhone"
