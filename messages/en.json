@@ -105,5 +105,12 @@
     },
     "save": "Save",
     "saving": "Saving..."
+  },
+  "viewPaymentsModal": {
+    "title": "Payments for {studentName}",
+    "empty": {
+      "title": "No payments found",
+      "description": "There are no payment records for this student."
+    }
   }
 }

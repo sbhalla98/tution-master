@@ -1,7 +1,10 @@
 import PaymentCard from '@/components/payment-card';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { getStudentPayments } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+import { AppSheet } from './app-sheet';
+import { EmptyState } from './illustration/empty-state';
+import PaymentCardSkeleton from './skeleton/payment-card-skeleton';
 
 interface ViewPaymentsModalProps {
   isOpen: boolean;
@@ -18,6 +21,7 @@ export default function ViewPaymentsModal({
   studentName,
   onMarkPaid,
 }: ViewPaymentsModalProps) {
+  const t = useTranslations('viewPaymentsModal');
   const { data: payments, isLoading } = useQuery({
     enabled: isOpen && !!studentId,
     queryFn: () =>
@@ -27,25 +31,35 @@ export default function ViewPaymentsModal({
     queryKey: ['studentPayments', studentId],
   });
 
-  return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px] max-h-[80vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Payments for {studentName}</DialogTitle>
-        </DialogHeader>
+  const renderContent = () => {
+    if (isLoading)
+      return (
+        <div className="grid gap-4">
+          <PaymentCardSkeleton />
+          <PaymentCardSkeleton />
+          <PaymentCardSkeleton />
+        </div>
+      );
+    if ((payments ?? []).length === 0)
+      return (
+        <EmptyState
+          className="h-full"
+          title={t('empty.title')}
+          description={t('empty.description')}
+        />
+      );
+    return (
+      <div className="grid gap-4">
+        {(payments ?? []).map((payment) => (
+          <PaymentCard key={payment.id} payment={payment} onMarkPaid={onMarkPaid} />
+        ))}
+      </div>
+    );
+  };
 
-        {isLoading ? (
-          <div className="text-center py-8">Loading payments...</div>
-        ) : (payments ?? []).length === 0 ? (
-          <div className="text-center py-8 text-gray-500">No payments found for this student</div>
-        ) : (
-          <div className="grid gap-4">
-            {(payments ?? []).map((payment) => (
-              <PaymentCard key={payment.id} payment={payment} onMarkPaid={onMarkPaid} />
-            ))}
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+  return (
+    <AppSheet open={isOpen} onOpenChange={onClose} title={t('title', { studentName })}>
+      {renderContent()}
+    </AppSheet>
   );
 }
