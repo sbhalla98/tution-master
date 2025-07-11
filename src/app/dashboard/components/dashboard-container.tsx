@@ -1,5 +1,5 @@
 'use client';
-import AddStudentForm from '@/components/add-student-form';
+import AddStudentForm from '@/components/forms/add-student-form';
 import RecordPaymentForm from '@/components/record-payment-form';
 import SendRemindersForm from '@/components/send-reminder-form';
 import StatCard from '@/components/stat-card';

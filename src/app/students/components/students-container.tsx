@@ -1,6 +1,6 @@
 'use client';
-import AddStudentForm from '@/components/add-student-form';
-import EditStudentForm from '@/components/edit-student-form';
+import AddStudentForm from '@/components/forms/add-student-form';
+import EditStudentForm from '@/components/forms/edit-student-form';
 import StudentCard from '@/components/student-card';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';

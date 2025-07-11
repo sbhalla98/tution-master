@@ -1,29 +1,37 @@
 'use client';
 
+import { FormCheckboxGroup } from '@/components/form-checkbox-group';
+import FormInput from '@/components/form-input';
+import FormSelect from '@/components/form-select';
+import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
 import { AVAILABLE_GRADES, AVAILABLE_SUBJECTS, STUDENT_STATUS } from '@/constants';
 import { CreateStudentFormData, createStudentSchema } from '@/schemas/student.schema';
-import { StudentSubjectType } from '@/types';
-import { CreateStudentRequest } from '@/types/api';
+import { Student, StudentSubjectType } from '@/types';
+import { UpdateStudentRequest } from '@/types/api';
 
+import { AppSheet } from '@/components/app-sheet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { AppSheet } from './app-sheet';
-import { FormCheckboxGroup } from './form-checkbox-group';
-import FormInput from './form-input';
-import FormSelect from './form-select';
-import { Button } from './ui/button';
 
-interface AddStudentFormProps {
+type EditStudentFormProps = {
   isOpen: boolean;
   onClose: () => void;
-  onAddStudent: (student: CreateStudentRequest) => void;
-}
+  onUpdateStudent: (request: UpdateStudentRequest) => void;
+  student: Student | null;
+};
 
-export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStudentFormProps) {
-  const t = useTranslations('studentForm');
+export default function EditStudentForm({
+  isOpen,
+  onClose,
+  onUpdateStudent,
+  student,
+}: EditStudentFormProps) {
+  const t = useTranslations('editStudentForm');
+
   const form = useForm<CreateStudentFormData>({
     defaultValues: {
       status: STUDENT_STATUS.ACTIVE,
@@ -34,6 +42,20 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
 
   const subjects = form.watch('subjects');
 
+  useEffect(() => {
+    if (student) {
+      form.reset({
+        email: student.email,
+        grade: student.grade,
+        monthlyFee: student.monthlyFee,
+        name: student.name,
+        phone: student.phone,
+        status: student.status,
+        subjects: student.subjects,
+      });
+    }
+  }, [student, form.reset]);
+
   const handleSubjectChange = (subject: StudentSubjectType, checked: boolean) => {
     const current = subjects || [];
     const updated = checked ? [...current, subject] : current.filter((s) => s !== subject);
@@ -41,15 +63,18 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
   };
 
   const onSubmit = (data: CreateStudentFormData) => {
-    const newStudent: CreateStudentRequest = {
-      ...data,
-      joinDate: Date.now(),
-      monthlyFee: Number(data.monthlyFee),
-      name: data.name.trim(),
+    if (!student) return;
+
+    const updatedStudent: UpdateStudentRequest = {
+      id: student.id,
+      payload: {
+        ...data,
+        monthlyFee: Number(data.monthlyFee),
+        name: data.name.trim(),
+      },
     };
 
-    onAddStudent(newStudent);
-    form.reset();
+    onUpdateStudent(updatedStudent);
     onClose();
   };
 
@@ -64,7 +89,7 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
             {t('cancel')}
           </Button>
           <Button type="submit" onClick={form.handleSubmit(onSubmit)}>
-            {t('submit')}
+            {t('update')}
           </Button>
         </>
       }

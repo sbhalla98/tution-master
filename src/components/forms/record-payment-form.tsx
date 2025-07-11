@@ -3,19 +3,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
+import { AppSheet } from '@/components/app-sheet';
+import FormInput from '@/components/form-input';
+import FormSelect from '@/components/form-select';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
-import { PAYMENT_STATUS } from '@/constants';
+import { MONTHS, PAYMENT_STATUS } from '@/constants';
 import { RecordPaymentFormData, recordPaymentSchema } from '@/schemas/payment.schema';
 import { CreatePaymentRequest } from '@/types/api';
 
-import FormInput from './form-input';
-import FormSelect from './form-select';
-
 import { useTranslations } from 'next-intl';
 import { useEffect } from 'react';
-import { AppSheet } from './app-sheet';
 
 interface RecordPaymentFormProps {
   isOpen: boolean;
@@ -23,21 +22,6 @@ interface RecordPaymentFormProps {
   onRecordPayment: (payment: CreatePaymentRequest) => void;
   students: Array<{ id: string; name: string; monthlyFee: number }>;
 }
-
-const months = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
-];
 
 export default function RecordPaymentForm({
   isOpen,
@@ -110,7 +94,7 @@ export default function RecordPaymentForm({
             name="month"
             label={t('month')}
             placeholder={t('selectMonth')}
-            options={months.map((m) => ({ label: m, value: m }))}
+            options={Object.values(MONTHS)}
             control={form.control}
           />
           <FormInput

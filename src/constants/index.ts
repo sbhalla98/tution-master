@@ -27,3 +27,18 @@ export const AVAILABLE_GRADES = {
   TENTH: '10',
   TWELFTH: '12',
 } as const;
+
+export const MONTHS = {
+  JANUARY: 'JANUARY',
+  FEBRUARY: 'FEBRUARY',
+  MARCH: 'MARCH',
+  APRIL: 'APRIL',
+  MAY: 'MAY',
+  JUNE: 'JUNE',
+  JULY: 'JULY',
+  AUGUST: 'AUGUST',
+  SEPTEMBER: 'SEPTEMBER',
+  OCTOBER: 'OCTOBER',
+  NOVEMBER: 'NOVEMBER',
+  DECEMBER: 'DECEMBER',
+} as const;
