@@ -11,12 +11,10 @@ import {
 } from '@/components/ui/sidebar';
 import { NAVIGATION_ITEMS } from '@/constants/navigation';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default function AppSidebar() {
-  const t = useTranslations('sidebar');
   return (
     <Sidebar className="hidden sm:block">
       <SidebarHeader className="items-center">

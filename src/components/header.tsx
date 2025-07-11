@@ -8,8 +8,6 @@ export default function Header({ title, description, children }: Props) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div className="flex items-center gap-4">
-        {/* [TODO] wait and cleanup: Hide the sidebar trigger as we will show bottom bar in mobile */}
-        {/* <SidebarTrigger /> */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">{title}</h1>
           <p className="text-gray-600 mt-1">{description}</p>

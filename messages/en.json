@@ -64,5 +64,29 @@
 
     "cancel": "Cancel",
     "update": "Update Student"
+  },
+  "settings": {
+    "title": "Settings",
+    "logo": {
+      "edit": "Edit Logo"
+    },
+    "businessName": {
+      "label": "Business Name",
+      "placeholder": "Business Name"
+    },
+    "businessAddress": {
+      "label": "Business Address",
+      "placeholder": "Business Address"
+    },
+    "businessPhone": {
+      "label": "Business Phone",
+      "placeholder": "Business hone"
+    },
+    "businessEmail": {
+      "label": "Business Email",
+      "placeholder": "Business Email"
+    },
+    "save": "Save",
+    "saving": "Saving..."
   }
 }

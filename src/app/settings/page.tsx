@@ -18,5 +18,5 @@ export default function Settings() {
     return <div>Error loading settings</div>;
   }
 
-  return <SettingsContainer settings={data} />;
+  return <SettingsContainer settings={data} onSave={() => {}} />;
 }
