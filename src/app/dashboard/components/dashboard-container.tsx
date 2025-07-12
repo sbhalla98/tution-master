@@ -75,11 +75,6 @@ export default function DashboardContainer({ students, payments }: DashboardCont
     (p) => p.status === PAYMENT_STATUS.OVERDUE
   ).length;
 
-  const recentPayments = (payments ?? [])
-    .filter((p) => p.status === PAYMENT_STATUS.PAID)
-    .sort((a, b) => new Date(b.paymentDate!).getTime() - new Date(a.paymentDate!).getTime())
-    .slice(0, 5);
-
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
   const studentsForPayment = (students ?? []).map((student) => ({
