@@ -27,7 +27,6 @@ export async function GET(request: NextRequest, context: ContextType) {
 }
 
 // ----------------- PUT -----------------
-
 export async function PUT(request: NextRequest, context: ContextType) {
   const { id } = await context.params;
 
@@ -90,23 +89,49 @@ export async function PUT(request: NextRequest, context: ContextType) {
 // ----------------- DELETE -----------------
 export async function DELETE(request: NextRequest, context: ContextType) {
   const { id } = await context.params;
+
+  const client = await clientPromise;
+  const session = client.startSession();
+
   try {
     const { userId } = await requireUser();
     const collection = await getStudentCollection();
-    const student = await findStudentById(id, userId);
+    const activityCollection = await getStudentActivityLogCollection();
 
+    const student = await findStudentById(id, userId);
     if (!student) return studentNotFoundResponse(id, userId);
 
+    const currentTimestamp = Date.now();
     const updatedStudent = {
-      deletedAt: Date.now(),
+      deletedAt: currentTimestamp,
       isDeleted: true,
-      updatedAt: Date.now(),
+      updatedAt: currentTimestamp,
     };
 
-    const result = await collection.updateOne({ id, userId }, { $set: updatedStudent });
+    const activityLog = {
+      studentId: id,
+      userId,
+      type: 'student_deleted',
+      timestamp: currentTimestamp,
+      meta: {
+        field: 'deleted',
+        from: false,
+        to: true,
+      },
+    };
+
+    let result;
+
+    await session.withTransaction(async () => {
+      result = await collection.updateOne({ id, userId }, { $set: updatedStudent }, { session });
+
+      await activityCollection.insertOne(activityLog, { session });
+    });
 
     return NextResponse.json(result);
   } catch (error) {
     return errorResponse(`Error deleting student ${id}`, error);
+  } finally {
+    await session.endSession();
   }
 }
