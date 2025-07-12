@@ -1,15 +1,13 @@
 import { requireUser } from '@/lib/server/auth';
-import {
-  createActivityLog,
-  createFieldUpdateLogs,
-  withTransaction,
-} from '@/lib/server/db/db-helper';
+import { withTransaction } from '@/lib/server/db/db-helper';
 import {
   findStudentById,
   getStudentActivityLogCollection,
   getStudentCollection,
 } from '@/lib/server/db/students';
 import { errorResponse, studentNotFoundResponse } from '@/lib/server/utils/response';
+import { getChangedValues } from '@/lib/utils';
+import { Student } from '@/types';
 import { UpdateStudentRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -50,7 +48,15 @@ export async function PUT(request: NextRequest, context: ContextType) {
       updatedAt: currentTimestamp,
     };
 
-    const activityLogs = createFieldUpdateLogs(student, payload, id, userId, currentTimestamp);
+    const updatedFields = getChangedValues(student, payload);
+
+    const activityLogs = Object.entries(updatedFields).map(([key, value]) => ({
+      studentId: id,
+      userId,
+      type: `${key}_updated`,
+      timestamp: currentTimestamp,
+      meta: { key, from: student[key as keyof Student], to: value },
+    }));
 
     const result = await withTransaction(async (session) => {
       const res = await studentsCollection.updateOne(
@@ -91,7 +97,7 @@ export async function DELETE(request: NextRequest, context: ContextType) {
       updatedAt: currentTimestamp,
     };
 
-    const activityLog = createActivityLog({
+    const activityLog = {
       studentId: id,
       userId,
       type: 'student_deleted',
@@ -101,7 +107,7 @@ export async function DELETE(request: NextRequest, context: ContextType) {
         from: false,
         to: true,
       },
-    });
+    };
 
     const result = await withTransaction(async (session) => {
       const res = await collection.updateOne({ id, userId }, { $set: updatedStudent }, { session });

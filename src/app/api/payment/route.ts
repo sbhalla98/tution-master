@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 import { requireUser } from '@/lib/server/auth';
-import { createActivityLog, withTransaction } from '@/lib/server/db/db-helper';
+import { withTransaction } from '@/lib/server/db/db-helper';
 import { getPaymentActivityLogCollection, getPaymentCollection } from '@/lib/server/db/payments';
 import { errorResponse } from '@/lib/server/utils/response';
 import { CreatePaymentRequest } from '@/types/api';
@@ -28,13 +28,14 @@ export async function POST(req: NextRequest) {
       isDeleted: false,
     };
 
-    const paymentActivity = createActivityLog({
+    const paymentActivity = {
+      paymentId,
       studentId: payload.studentId,
       userId,
       type: 'payment_created',
       timestamp,
       meta: { ...newPayment },
-    });
+    };
 
     const result = await withTransaction(async (session) => {
       const res = await paymentCollection.insertOne(newPayment, { session });

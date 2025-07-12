@@ -1,5 +1,5 @@
 import { requireUser } from '@/lib/server/auth';
-import { createActivityLog, withTransaction } from '@/lib/server/db/db-helper';
+import { withTransaction } from '@/lib/server/db/db-helper';
 import { getStudentActivityLogCollection, getStudentCollection } from '@/lib/server/db/students';
 import { errorResponse } from '@/lib/server/utils/response';
 import { CreateStudentRequest } from '@/types/api';
@@ -7,7 +7,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 // ----------------- POST -----------------
-
 export async function POST(req: NextRequest) {
   try {
     const { userId } = await requireUser();
@@ -29,13 +28,13 @@ export async function POST(req: NextRequest) {
       isDeleted: false,
     };
 
-    const log = createActivityLog({
+    const log = {
       studentId: id,
       userId,
       type: 'student_created',
       timestamp,
       meta: { ...body },
-    });
+    };
 
     const result = await withTransaction(async (session) => {
       await collection.insertOne(student, { session });

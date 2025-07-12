@@ -1,6 +1,13 @@
 import { requireUser } from '@/lib/server/auth';
-import { findPaymentById, getPaymentCollection } from '@/lib/server/db/payments';
+import { withTransaction } from '@/lib/server/db/db-helper';
+import {
+  findPaymentById,
+  getPaymentActivityLogCollection,
+  getPaymentCollection,
+} from '@/lib/server/db/payments';
 import { errorResponse, paymentNotFoundResponse } from '@/lib/server/utils/response';
+import { getChangedValues } from '@/lib/utils';
+import { Payment } from '@/types';
 import { UpdatePaymentRequest } from '@/types/api';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -24,21 +31,43 @@ export async function GET(request: NextRequest, context: ContextType) {
 // ----------------- PUT -----------------
 export async function PUT(request: NextRequest, context: ContextType) {
   const { id } = await context.params;
+
   try {
     const { userId } = await requireUser();
     const collection = await getPaymentCollection();
-    const payment = await findPaymentById(id, userId);
+    const activityCollection = await getPaymentActivityLogCollection();
 
+    const payment = await findPaymentById(id, userId);
     if (!payment) return paymentNotFoundResponse(id, userId);
 
     const payload: UpdatePaymentRequest = await request.json();
+    const timestamp = Date.now();
 
     const updatedPayment = {
       ...payload,
-      updatedAt: Date.now(),
+      updatedAt: timestamp,
     };
 
-    const result = await collection.updateOne({ id, userId }, { $set: updatedPayment });
+    const updatedFields = getChangedValues(payment, payload);
+
+    const activityLogs = Object.entries(updatedFields).map(([key, value]) => ({
+      paymentId: id,
+      studentId: payment.studentId,
+      userId,
+      type: `${key}_updated`,
+      timestamp,
+      meta: { key, from: payment[key as keyof Payment], to: value },
+    }));
+
+    const result = await withTransaction(async (session) => {
+      const res = await collection.updateOne({ id, userId }, { $set: updatedPayment }, { session });
+
+      if (activityLogs.length > 0) {
+        await activityCollection.insertMany(activityLogs, { session });
+      }
+
+      return res;
+    });
 
     return NextResponse.json(result);
   } catch (error) {
