@@ -1,34 +1,57 @@
 'use client';
-import { Payment } from '@/types';
 
-type Props = {
-  recentPayments?: Payment[] | null;
-};
-export default function RecentPaymentsWidget({ recentPayments }: Props) {
+import RecentPaymentCard from '@/components/cards/recent-payment-card';
+import { EmptyState } from '@/components/illustration/empty-state';
+import { ErrorState } from '@/components/illustration/error-state';
+import RecentPaymentsSkeleton from '@/components/skeleton/recent-payment-widget-skeleton';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getPayments } from '@/lib/api';
+import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
+
+const RECENT_PAYMENTS_LIMIT = 5;
+
+export default function RecentPaymentsWidget() {
+  const t = useTranslations('recentPayementsWidget');
+
+  const { data, error, isLoading, refetch } = useQuery({
+    queryFn: () => getPayments(RECENT_PAYMENTS_LIMIT),
+    queryKey: ['payments', RECENT_PAYMENTS_LIMIT],
+  });
+
+  const title = t('title');
+
+  if (isLoading) {
+    return <RecentPaymentsSkeleton title={title} limit={RECENT_PAYMENTS_LIMIT} />;
+  }
+
+  if (error) {
+    return (
+      <ErrorState
+        className="h-full"
+        title={t('error.title')}
+        description={t('error.description')}
+        onReload={refetch}
+      />
+    );
+  }
+
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Payments</h2>
-      <div className="space-y-3">
-        {(recentPayments ?? []).map((payment) => (
-          <div
-            key={payment.id}
-            className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-          >
-            <div>
-              <p className="font-medium text-gray-900">{payment.studentName}</p>
-              <p className="text-sm text-gray-600">
-                {payment.month} {payment.year}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="font-semibold text-green-600">₹{payment.amount}</p>
-              <p className="text-xs text-gray-500">
-                {new Date(payment.paymentDate!).toLocaleDateString()}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        {data && data?.length > 0 ? (
+          data.map((payment) => <RecentPaymentCard key={payment.id} payment={payment} />)
+        ) : (
+          <EmptyState
+            className="h-full"
+            title={t('empty.title')}
+            description={t('empty.description')}
+          />
+        )}
+      </CardContent>
+    </Card>
   );
 }

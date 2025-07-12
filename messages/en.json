@@ -175,5 +175,16 @@
       "overdue": "Overdue",
       "unknown": "Unknown"
     }
+  },
+  "recentPaymentsWidget": {
+    "title": "Recent Payments",
+    "empty": {
+      "title": "No Recent Payments",
+      "description": "Add a few transactions to see them here."
+    },
+    "error": {
+      "title": "Something Went Wrong",
+      "description": "Unable to load recent payments. Please try again."
+    }
   }
 }

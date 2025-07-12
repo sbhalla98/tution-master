@@ -55,8 +55,8 @@ export async function deleteStudent(request: DeleteStudentRequest): Promise<Dele
 
 // ---------- Payment APIs ----------
 
-export async function getPayments(): Promise<GetPaymentsResponse> {
-  const res = await axios.get('/payments');
+export async function getPayments(limit?: number): Promise<GetPaymentsResponse> {
+  const res = await axios.get(`/payments${limit ? `?limit=${limit}` : ''}`);
   return res.data;
 }
 

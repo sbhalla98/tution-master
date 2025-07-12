@@ -19,7 +19,7 @@ export default function Reports() {
     error: paymentsError,
     isLoading: paymentsLoading,
   } = useQuery({
-    queryFn: getPayments,
+    queryFn: () => getPayments(),
     queryKey: ['payments'],
   });
 
