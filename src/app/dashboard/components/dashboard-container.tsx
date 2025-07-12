@@ -94,6 +94,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* [TODO] Need to fix the metrics in this stat card */}
         <StatCard
           title="Active Students"
           value={activeStudents}
