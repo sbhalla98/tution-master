@@ -1,17 +1,10 @@
 'use client';
 import StatCard from '@/components/cards/stat-card';
-import AddStudentForm from '@/components/forms/add-student-form';
-import RecordPaymentForm from '@/components/forms/record-payment-form';
-import SendRemindersForm from '@/components/forms/send-reminder-form';
 import Header from '@/components/header';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
-import { useToast } from '@/hooks/use-toast';
-import { createPayment, createStudent } from '@/lib/api';
 import { Payment, Student } from '@/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsWidget from './recent-payments-widget';
 import RecentStudentsWidget from './recent-students-widget';
@@ -23,47 +16,6 @@ type DashboardContainerProps = {
 
 export default function DashboardContainer({ students, payments }: DashboardContainerProps) {
   const t = useTranslations('dashboard');
-  const [isRemindersOpen, setIsRemindersOpen] = useState(false);
-  const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
-  const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
-  const { mutate: createStudentMutation } = useMutation({
-    mutationFn: createStudent,
-    onError: () => {
-      toast({
-        description: 'Failed to add student. Please try again.',
-        title: 'Error',
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      toast({
-        description: 'Student added successfully',
-        title: 'Added new student',
-      });
-    },
-  });
-
-  const { mutate: createPaymentMutation } = useMutation({
-    mutationFn: createPayment,
-    onError: () => {
-      toast({
-        description: 'Failed to record payment. Please try again.',
-        title: 'Error',
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment recorded successfully',
-        title: 'Payment Recorded',
-      });
-    },
-  });
 
   const activeStudents = (students ?? []).filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
   const totalRevenue = (payments ?? [])
@@ -75,14 +27,6 @@ export default function DashboardContainer({ students, payments }: DashboardCont
   const overduePayments = (payments ?? []).filter(
     (p) => p.status === PAYMENT_STATUS.OVERDUE
   ).length;
-
-  const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
-
-  const studentsForPayment = (students ?? []).map((student) => ({
-    id: student.id,
-    monthlyFee: student.monthlyFee,
-    name: student.name,
-  }));
 
   return (
     <div className="space-y-8">
@@ -124,32 +68,8 @@ export default function DashboardContainer({ students, payments }: DashboardCont
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentPaymentsWidget />
         <RecentStudentsWidget />
-        <QuickActionsWidget
-          onAddStudent={setIsAddStudentOpen}
-          onRecordPayment={setIsRecordPaymentOpen}
-          onSendReminders={setIsRemindersOpen}
-        />
+        <QuickActionsWidget />
       </div>
-
-      <SendRemindersForm
-        isOpen={isRemindersOpen}
-        onClose={() => setIsRemindersOpen(false)}
-        payments={overduePaymentsList}
-        allowSelection={true}
-      />
-
-      <AddStudentForm
-        isOpen={isAddStudentOpen}
-        onClose={() => setIsAddStudentOpen(false)}
-        onAddStudent={createStudentMutation}
-      />
-
-      <RecordPaymentForm
-        isOpen={isRecordPaymentOpen}
-        onClose={() => setIsRecordPaymentOpen(false)}
-        onRecordPayment={createPaymentMutation}
-        students={studentsForPayment}
-      />
     </div>
   );
 }

@@ -197,5 +197,28 @@
       "title": "Something Went Wrong",
       "description": "Unable to load recent students. Please try again."
     }
+  },
+  "quickActions": {
+    "title": "Quick Actions",
+    "addStudent": {
+      "title": "Add New Student",
+      "description": "Register a new student",
+      "successTitle": "Added new student",
+      "successDescription": "Student added successfully",
+      "errorTitle": "Error",
+      "errorDescription": "Failed to add student. Please try again."
+    },
+    "recordPayment": {
+      "title": "Record Payment",
+      "description": "Mark payment as received",
+      "successTitle": "Payment Recorded",
+      "successDescription": "Payment recorded successfully",
+      "errorTitle": "Error",
+      "errorDescription": "Failed to record payment. Please try again."
+    },
+    "sendReminders": {
+      "title": "Send Reminders",
+      "description": "Notify overdue payments"
+    }
   }
 }
