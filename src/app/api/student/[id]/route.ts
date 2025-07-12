@@ -51,11 +51,11 @@ export async function PUT(request: NextRequest, context: ContextType) {
     const updatedFields = getChangedValues(student, payload);
 
     const activityLogs = Object.entries(updatedFields).map(([key, value]) => ({
+      meta: { from: student[key as keyof Student], key, to: value },
       studentId: id,
-      userId,
-      type: `${key}_updated`,
       timestamp: currentTimestamp,
-      meta: { key, from: student[key as keyof Student], to: value },
+      type: `${key}_updated`,
+      userId,
     }));
 
     const result = await withTransaction(async (session) => {
@@ -98,15 +98,15 @@ export async function DELETE(request: NextRequest, context: ContextType) {
     };
 
     const activityLog = {
-      studentId: id,
-      userId,
-      type: 'student_deleted',
-      timestamp: currentTimestamp,
       meta: {
         field: 'deleted',
         from: false,
         to: true,
       },
+      studentId: id,
+      timestamp: currentTimestamp,
+      type: 'student_deleted',
+      userId,
     };
 
     const result = await withTransaction(async (session) => {

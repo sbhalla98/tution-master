@@ -51,12 +51,12 @@ export async function PUT(request: NextRequest, context: ContextType) {
     const updatedFields = getChangedValues(payment, payload);
 
     const activityLogs = Object.entries(updatedFields).map(([key, value]) => ({
+      meta: { from: payment[key as keyof Payment], key, to: value },
       paymentId: id,
       studentId: payment.studentId,
-      userId,
-      type: `${key}_updated`,
       timestamp,
-      meta: { key, from: payment[key as keyof Payment], to: value },
+      type: `${key}_updated`,
+      userId,
     }));
 
     const result = await withTransaction(async (session) => {

@@ -20,20 +20,20 @@ export async function POST(req: NextRequest) {
 
     const student = {
       ...body,
-      id,
-      userId,
       createdAt: timestamp,
-      updatedAt: timestamp,
       deletedAt: null,
+      id,
       isDeleted: false,
+      updatedAt: timestamp,
+      userId,
     };
 
     const log = {
-      studentId: id,
-      userId,
-      type: 'student_created',
-      timestamp,
       meta: { ...body },
+      studentId: id,
+      timestamp,
+      type: 'student_created',
+      userId,
     };
 
     const result = await withTransaction(async (session) => {

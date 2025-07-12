@@ -20,21 +20,21 @@ export async function POST(req: NextRequest) {
 
     const newPayment = {
       ...payload,
-      id: paymentId,
-      userId,
       createdAt: timestamp,
-      updatedAt: timestamp,
       deletedAt: null,
+      id: paymentId,
       isDeleted: false,
+      updatedAt: timestamp,
+      userId,
     };
 
     const paymentActivity = {
+      meta: { ...newPayment },
       paymentId,
       studentId: payload.studentId,
-      userId,
-      type: 'payment_created',
       timestamp,
-      meta: { ...newPayment },
+      type: 'payment_created',
+      userId,
     };
 
     const result = await withTransaction(async (session) => {
