@@ -1,5 +1,5 @@
 import { requireUser } from '@/lib/server/auth';
-import clientPromise from '@/lib/server/db/client';
+import { createActivityLog, withTransaction } from '@/lib/server/db/db-helper';
 import { getStudentActivityLogCollection, getStudentCollection } from '@/lib/server/db/students';
 import { errorResponse } from '@/lib/server/utils/response';
 import { CreateStudentRequest } from '@/types/api';
@@ -7,10 +7,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 
 // ----------------- POST -----------------
-export async function POST(req: NextRequest) {
-  const client = await clientPromise;
-  const session = client.startSession();
 
+export async function POST(req: NextRequest) {
   try {
     const { userId } = await requireUser();
 
@@ -19,11 +17,11 @@ export async function POST(req: NextRequest) {
     const body: CreateStudentRequest = await req.json();
 
     const timestamp = Date.now();
-    const newStudentId = uuidv4();
+    const id = uuidv4();
 
-    const newStudent = {
+    const student = {
       ...body,
-      id: newStudentId,
+      id,
       userId,
       createdAt: timestamp,
       updatedAt: timestamp,
@@ -31,27 +29,22 @@ export async function POST(req: NextRequest) {
       isDeleted: false,
     };
 
-    const activityLog = {
-      studentId: newStudentId,
+    const log = createActivityLog({
+      studentId: id,
       userId,
       type: 'student_created',
       timestamp,
-      meta: {
-        ...body,
-      },
-    };
+      meta: { ...body },
+    });
 
-    let result;
-
-    await session.withTransaction(async () => {
-      result = await collection.insertOne(newStudent, { session });
-      await activityCollection.insertOne(activityLog, { session });
+    const result = await withTransaction(async (session) => {
+      await collection.insertOne(student, { session });
+      await activityCollection.insertOne(log, { session });
+      return student;
     });
 
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     return errorResponse('Failed to create student', error, 400);
-  } finally {
-    await session.endSession();
   }
 }

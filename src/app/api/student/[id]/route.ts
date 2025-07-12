@@ -1,5 +1,9 @@
 import { requireUser } from '@/lib/server/auth';
-import clientPromise from '@/lib/server/db/client';
+import {
+  createActivityLog,
+  createFieldUpdateLogs,
+  withTransaction,
+} from '@/lib/server/db/db-helper';
 import {
   findStudentById,
   getStudentActivityLogCollection,
@@ -30,12 +34,8 @@ export async function GET(request: NextRequest, context: ContextType) {
 export async function PUT(request: NextRequest, context: ContextType) {
   const { id } = await context.params;
 
-  const client = await clientPromise;
-  const session = client.startSession();
-
   try {
     const { userId } = await requireUser();
-    const db = client.db();
     const studentsCollection = await getStudentCollection();
     const activityCollection = await getStudentActivityLogCollection();
 
@@ -45,29 +45,15 @@ export async function PUT(request: NextRequest, context: ContextType) {
     const payload: UpdateStudentRequest = await request.json();
     const currentTimestamp = Date.now();
 
-    const activityLogs = Object.entries(payload).flatMap(([key, newValue]) => {
-      const oldValue = (student as any)[key];
-      if (JSON.stringify(oldValue) === JSON.stringify(newValue)) return [];
-      return [
-        {
-          studentId: id,
-          userId,
-          type: `${key}_updated`,
-          timestamp: currentTimestamp,
-          meta: { field: key, from: oldValue, to: newValue },
-        },
-      ];
-    });
-
     const updatedStudent = {
       ...payload,
       updatedAt: currentTimestamp,
     };
 
-    let result;
+    const activityLogs = createFieldUpdateLogs(student, payload, id, userId, currentTimestamp);
 
-    await session.withTransaction(async () => {
-      result = await studentsCollection.updateOne(
+    const result = await withTransaction(async (session) => {
+      const res = await studentsCollection.updateOne(
         { id, userId },
         { $set: updatedStudent },
         { session }
@@ -76,22 +62,19 @@ export async function PUT(request: NextRequest, context: ContextType) {
       if (activityLogs.length > 0) {
         await activityCollection.insertMany(activityLogs, { session });
       }
+
+      return res;
     });
 
     return NextResponse.json(result);
   } catch (error) {
     return errorResponse(`Error updating student ${id}`, error);
-  } finally {
-    await session.endSession();
   }
 }
 
 // ----------------- DELETE -----------------
 export async function DELETE(request: NextRequest, context: ContextType) {
   const { id } = await context.params;
-
-  const client = await clientPromise;
-  const session = client.startSession();
 
   try {
     const { userId } = await requireUser();
@@ -108,7 +91,7 @@ export async function DELETE(request: NextRequest, context: ContextType) {
       updatedAt: currentTimestamp,
     };
 
-    const activityLog = {
+    const activityLog = createActivityLog({
       studentId: id,
       userId,
       type: 'student_deleted',
@@ -118,20 +101,16 @@ export async function DELETE(request: NextRequest, context: ContextType) {
         from: false,
         to: true,
       },
-    };
+    });
 
-    let result;
-
-    await session.withTransaction(async () => {
-      result = await collection.updateOne({ id, userId }, { $set: updatedStudent }, { session });
-
+    const result = await withTransaction(async (session) => {
+      const res = await collection.updateOne({ id, userId }, { $set: updatedStudent }, { session });
       await activityCollection.insertOne(activityLog, { session });
+      return res;
     });
 
     return NextResponse.json(result);
   } catch (error) {
     return errorResponse(`Error deleting student ${id}`, error);
-  } finally {
-    await session.endSession();
   }
 }
