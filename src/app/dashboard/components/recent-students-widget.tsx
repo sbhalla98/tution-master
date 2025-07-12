@@ -3,7 +3,7 @@
 import RecentStudentCard from '@/components/cards/recent-student-card';
 import { EmptyState } from '@/components/illustration/empty-state';
 import { ErrorState } from '@/components/illustration/error-state';
-import RecentPaymentsSkeleton from '@/components/skeleton/recent-payment-widget-skeleton';
+import RecentStudentsSkeleton from '@/components/skeleton/recent-students-widget-skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getStudents } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
@@ -15,14 +15,14 @@ export default function RecentStudentsWidget() {
   const t = useTranslations('recentStudentsWidget');
 
   const { data, error, isLoading, refetch } = useQuery({
-    queryFn: () => getStudents(),
-    queryKey: ['students'],
+    queryFn: () => getStudents(RECENT_STUDENTS_LIMIT),
+    queryKey: ['students', RECENT_STUDENTS_LIMIT],
   });
 
   const title = t('title');
 
   if (isLoading) {
-    return <RecentPaymentsSkeleton title={title} limit={RECENT_STUDENTS_LIMIT} />;
+    return <RecentStudentsSkeleton title={title} limit={RECENT_STUDENTS_LIMIT} />;
   }
 
   if (error) {
