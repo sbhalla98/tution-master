@@ -99,7 +99,7 @@ export async function DELETE(request: NextRequest, context: ContextType) {
 
     const activityLog = {
       meta: {
-        field: 'deleted',
+        field: 'isDeleted',
         from: false,
         to: true,
       },
