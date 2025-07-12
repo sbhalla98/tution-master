@@ -14,7 +14,7 @@ export default function RecentPaymentsSkeleton({ title, limit }: RecentPaymentsS
       </CardHeader>
       <CardContent className="space-y-3">
         {[...Array(limit)].map((_, index) => (
-          <Card key={index} className="bg-muted">
+          <Card key={index}>
             <CardContent className="p-3 flex items-center justify-between animate-pulse">
               <div className="space-y-1">
                 <div className="h-4 w-24 bg-gray-300 rounded" />

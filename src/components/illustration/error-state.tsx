@@ -31,7 +31,11 @@ export function ErrorState({
       <div className="mb-4">{icon}</div>
       <h3 className="text-lg font-semibold">{title}</h3>
       <p className="text-sm text-muted-foreground">{description}</p>
-      {onReload && <Button onClick={onReload}>{buttonText}</Button>}
+      {onReload && (
+        <Button onClick={onReload} className="mt-4">
+          {buttonText}
+        </Button>
+      )}
     </div>
   );
 }

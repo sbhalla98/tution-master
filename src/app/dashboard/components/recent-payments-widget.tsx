@@ -12,7 +12,7 @@ import { useTranslations } from 'next-intl';
 const RECENT_PAYMENTS_LIMIT = 5;
 
 export default function RecentPaymentsWidget() {
-  const t = useTranslations('recentPayementsWidget');
+  const t = useTranslations('recentPaymentsWidget');
 
   const { data, error, isLoading, refetch } = useQuery({
     queryFn: () => getPayments(RECENT_PAYMENTS_LIMIT),
