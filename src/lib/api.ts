@@ -25,8 +25,8 @@ import axios from './axios';
 
 // ---------- Student APIs ----------
 
-export async function getStudents(): Promise<GetStudentsResponse> {
-  const res = await axios.get('/students');
+export async function getStudents(limit?: number): Promise<GetStudentsResponse> {
+  const res = await axios.get(`/students${limit ? `?limit=${limit}` : ''}`);
   return res.data;
 }
 

@@ -10,7 +10,7 @@ export default function Dashboard() {
     error: studentsError,
     isLoading: studentsLoading,
   } = useQuery({
-    queryFn: getStudents,
+    queryFn: () => getStudents(),
     queryKey: ['students'],
   });
 

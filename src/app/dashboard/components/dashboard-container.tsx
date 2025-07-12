@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsWidget from './recent-payments-widget';
+import RecentStudentsWidget from './recent-students-widget';
 
 type DashboardContainerProps = {
   students?: Student[] | null;
@@ -122,6 +123,7 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RecentPaymentsWidget />
+        <RecentStudentsWidget />
         <QuickActionsWidget
           onAddStudent={setIsAddStudentOpen}
           onRecordPayment={setIsRecordPaymentOpen}

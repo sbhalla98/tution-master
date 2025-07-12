@@ -186,5 +186,16 @@
       "title": "Something Went Wrong",
       "description": "Unable to load recent payments. Please try again."
     }
+  },
+  "recentStudentsWidget": {
+    "title": "Recently Joined Students",
+    "empty": {
+      "title": "No Recent Students",
+      "description": "Add new students to see them listed here."
+    },
+    "error": {
+      "title": "Something Went Wrong",
+      "description": "Unable to load recent students. Please try again."
+    }
   }
 }

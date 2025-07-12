@@ -7,7 +7,7 @@ import StudentsContainer from './components/students-container';
 
 export default function Students() {
   const { data, error, isLoading } = useQuery({
-    queryFn: getStudents,
+    queryFn: () => getStudents(),
     queryKey: ['students'],
   });
 

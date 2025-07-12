@@ -10,7 +10,7 @@ export default function Payments() {
     error: studentsError,
     isLoading: studentsLoading,
   } = useQuery({
-    queryFn: getStudents,
+    queryFn: () => getStudents(),
     queryKey: ['students'],
   });
 
