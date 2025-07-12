@@ -98,6 +98,16 @@
     "logo": {
       "edit": "Edit Logo"
     },
+    "update": {
+      "success": {
+        "title": "Updated settings",
+        "description": "Settings updated successfully!"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to update settings. Please try after some time."
+      }
+    },
     "businessName": {
       "label": "Business Name",
       "placeholder": "Business Name"

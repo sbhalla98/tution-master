@@ -32,7 +32,7 @@ export async function PUT(req: NextRequest) {
         updatedAt: Date.now(),
       };
 
-      const response = await collection.updateOne({ id: userId }, { $set: updatedSettings });
+      const response = await collection.updateOne({ userId }, { $set: updatedSettings });
       return NextResponse.json(response, { status: 200 });
     } else {
       const newSettings = {

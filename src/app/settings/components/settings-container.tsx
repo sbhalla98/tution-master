@@ -11,13 +11,15 @@ import { Form } from '@/components/ui/form';
 
 import FormInput from '@/components/form-input';
 import Header from '@/components/header';
+import { useToast } from '@/hooks/use-toast';
+import { updateSettings } from '@/lib/api';
 import { SETTINGS } from '@/types';
 import { UpdateSettingsRequest } from '@/types/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
 type SettingsContainerProps = {
   settings?: SETTINGS | null;
-  onSave: (updatedSettings: UpdateSettingsRequest) => void;
 };
 
 const settingsSchema = z.object({
@@ -29,7 +31,7 @@ const settingsSchema = z.object({
 
 type SettingsFormValues = z.infer<typeof settingsSchema>;
 
-export default function SettingsContainer({ settings, onSave }: SettingsContainerProps) {
+export default function SettingsContainer({ settings }: SettingsContainerProps) {
   const t = useTranslations('settings');
   const form = useForm<SettingsFormValues>({
     defaultValues: {
@@ -43,6 +45,30 @@ export default function SettingsContainer({ settings, onSave }: SettingsContaine
 
   const [logoPreview, setLogoPreview] = useState(settings?.businessLogo ?? '');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  const { mutate: updateSettingsMutation } = useMutation({
+    mutationFn: updateSettings,
+    onError: () => {
+      toast({
+        description: t('update.error.description'),
+        title: t('update.error.title'),
+        variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+      toast({
+        description: t('update.success.description'),
+        title: t('update.success.title'),
+      });
+    },
+  });
+
+  const handleSave = (payload: UpdateSettingsRequest) => {
+    updateSettingsMutation(payload);
+  };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -52,7 +78,7 @@ export default function SettingsContainer({ settings, onSave }: SettingsContaine
     reader.onloadend = () => {
       const base64 = reader.result as string;
       setLogoPreview(base64);
-      onSave({ businessLogo: base64 });
+      handleSave({ businessLogo: base64 });
     };
     reader.readAsDataURL(file);
   };
@@ -81,7 +107,7 @@ export default function SettingsContainer({ settings, onSave }: SettingsContaine
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSave)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(handleSave)} className="space-y-4">
           <FormInput
             name="businessName"
             label={t('businessName.label')}
