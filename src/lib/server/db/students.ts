@@ -1,5 +1,5 @@
 import { Student } from '@/types';
-import { DB_NAME, STUDENT_COLLECTION } from '../constants';
+import { DB_NAME, STUDENT_ACTIVITY_LOG_COLLECTION, STUDENT_COLLECTION } from '../constants';
 import clientPromise from './client';
 
 export async function getStudentCollection() {
@@ -10,4 +10,9 @@ export async function getStudentCollection() {
 export async function findStudentById(id: string, userId: string) {
   const collection = await getStudentCollection();
   return (await collection.findOne({ id, userId })) as Student | null;
+}
+
+export async function getStudentActivityLogCollection() {
+  const client = await clientPromise;
+  return client.db(DB_NAME).collection(STUDENT_ACTIVITY_LOG_COLLECTION);
 }
