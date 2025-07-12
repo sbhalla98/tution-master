@@ -38,7 +38,10 @@ export function AppSheet({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>{trigger}</SheetTrigger>
-      <SheetContent className="flex flex-col h-full w-full sm:max-w-md sm:rounded-lg">
+      <SheetContent
+        className="flex flex-col h-full w-full sm:max-w-md sm:rounded-lg"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <SheetHeader className="text-left">
           <SheetTitle className="flex items-center gap-2">{title}</SheetTitle>
           {description && <DrawerDescription>{description}</DrawerDescription>}

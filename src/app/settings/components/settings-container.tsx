@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 
 import FormInput from '@/components/form-input';
+import Header from '@/components/header';
 import { SETTINGS } from '@/types';
 import { UpdateSettingsRequest } from '@/types/api';
 import { useTranslations } from 'next-intl';
@@ -57,10 +58,8 @@ export default function SettingsContainer({ settings, onSave }: SettingsContaine
   };
 
   return (
-    <div className="max-w-2xl mx-auto mt-6">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold">{t('title')}</h2>
-      </div>
+    <div className="space-y-8">
+      <Header title={t('title')} />
 
       <div className="flex items-center gap-4 mb-6">
         <Avatar className="w-16 h-16">

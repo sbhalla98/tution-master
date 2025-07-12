@@ -40,6 +40,7 @@ export default function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         {/* [TODO] Remove this component with your own user details component */}
+        {/* <NavUser user={{}} /> */}
         <SignedOut>
           <SignInButton />
           <SignUpButton>
