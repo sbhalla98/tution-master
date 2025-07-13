@@ -10,6 +10,7 @@ import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { STUDENT_STATUS_FILTER } from '../constants';
 import { StudentStatusFilterType } from '../types';
@@ -31,13 +32,14 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
   const [selectedStudentName, setSelectedStudentName] = useState('');
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const t = useTranslations('students');
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
     onError: () => {
       toast({
-        description: 'Failed to add student. Please try again.',
-        title: 'Error',
+        description: t('toast.add.failed.description'),
+        title: t('toast.add.failed.title'),
         variant: 'destructive',
       });
     },
@@ -45,8 +47,8 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
       queryClient.invalidateQueries({ queryKey: ['students'] });
       setIsAddStudentOpen(false);
       toast({
-        description: 'Student added successfully',
-        title: 'Added new student',
+        description: t('toast.add.success.description'),
+        title: t('toast.add.success.title'),
       });
     },
   });
@@ -55,8 +57,8 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     mutationFn: updateStudent,
     onError: () => {
       toast({
-        description: 'Failed to updated student. Please try again.',
-        title: 'Error',
+        description: t('toast.update.failed.description'),
+        title: t('toast.update.failed.title'),
         variant: 'destructive',
       });
     },
@@ -65,8 +67,8 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
       setIsEditStudentOpen(false);
       setEditingStudent(null);
       toast({
-        description: 'Student updated successfully',
-        title: 'Updated!!',
+        description: t('toast.update.success.description'),
+        title: t('toast.update.success.title'),
       });
     },
   });
@@ -75,16 +77,16 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     mutationFn: markPaymentStatus,
     onError: () => {
       toast({
-        description: 'Failed to mark payment as paid. Please try again.',
-        title: 'Error',
+        description: t('toast.payment.failed.description'),
+        title: t('toast.payment.failed.title'),
         variant: 'destructive',
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast({
-        description: 'Payment marked as paid successfully',
-        title: 'Payment Updated',
+        description: t('toast.payment.success.description'),
+        title: t('toast.payment.success.title'),
       });
     },
   });
@@ -146,7 +148,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
         <EmptyState
           className="h-full text-gray-400 border-none shadow-none"
           icon={<Users className="h-12 w-12" />}
-          title="No students found matching your criteria"
+          title={t('empty.title')}
           description=""
         />
       )}

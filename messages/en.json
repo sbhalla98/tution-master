@@ -198,6 +198,43 @@
       "description": "Unable to load recent students. Please try again."
     }
   },
+  "students": {
+    "empty": {
+      "title": "No students found matching your criteria"
+    },
+    "toast": {
+      "add": {
+        "failed": {
+          "title": "Error",
+          "description": "Failed to add student. Please try again."
+        },
+        "success": {
+          "title": "Added new student",
+          "description": "Student added successfully"
+        }
+      },
+      "update": {
+        "failed": {
+          "title": "Error",
+          "description": "Failed to update student. Please try again."
+        },
+        "success": {
+          "title": "Updated!!",
+          "description": "Student updated successfully"
+        }
+      },
+      "payment": {
+        "failed": {
+          "title": "Error",
+          "description": "Failed to mark payment as paid. Please try again."
+        },
+        "success": {
+          "title": "Payment Updated",
+          "description": "Payment marked as paid successfully"
+        }
+      }
+    }
+  },
   "quickActions": {
     "title": "Quick Actions",
     "addStudent": {
