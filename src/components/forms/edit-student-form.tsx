@@ -75,7 +75,6 @@ export default function EditStudentForm({
     };
 
     onUpdateStudent(updatedStudent);
-    onClose();
   };
 
   return (

@@ -6,12 +6,12 @@ import { useQuery } from '@tanstack/react-query';
 import StudentsContainer from './components/students-container';
 
 export default function Students() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isFetching } = useQuery({
     queryFn: () => getStudents(),
     queryKey: ['students'],
   });
 
-  if (isLoading) {
+  if (isFetching) {
     return <StudentsContainerSkeleton />;
   }
 

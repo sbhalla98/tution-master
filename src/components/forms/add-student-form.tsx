@@ -50,7 +50,6 @@ export default function AddStudentForm({ isOpen, onClose, onAddStudent }: AddStu
 
     onAddStudent(newStudent);
     form.reset();
-    onClose();
   };
 
   return (

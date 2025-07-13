@@ -2,6 +2,7 @@
 import StudentCard from '@/components/cards/student-card';
 import AddStudentForm from '@/components/forms/add-student-form';
 import EditStudentForm from '@/components/forms/edit-student-form';
+import { EmptyState } from '@/components/illustration/empty-state';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
@@ -42,6 +43,7 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
+      setIsAddStudentOpen(false);
       toast({
         description: 'Student added successfully',
         title: 'Added new student',
@@ -60,6 +62,8 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
+      setIsEditStudentOpen(false);
+      setEditingStudent(null);
       toast({
         description: 'Student updated successfully',
         title: 'Updated!!',
@@ -139,10 +143,12 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
       </div>
 
       {filteredStudents.length === 0 && (
-        <div className="text-center py-12">
-          <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">No students found matching your criteria</p>
-        </div>
+        <EmptyState
+          className="h-full text-gray-400 border-none shadow-none"
+          icon={<Users className="h-12 w-12" />}
+          title="No students found matching your criteria"
+          description=""
+        />
       )}
 
       <AddStudentForm
