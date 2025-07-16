@@ -249,6 +249,19 @@
     }
   },
   "students": {
+    "header": {
+      "title": "Students",
+      "subtitle": "Manage your student records",
+      "buttonText": "Add Student"
+    },
+    "filter": {
+      "search": { "placeholder": "Search students..." },
+      "options": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
+    },
     "empty": {
       "title": "No students found matching your criteria"
     },
