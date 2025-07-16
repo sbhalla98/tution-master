@@ -12,22 +12,22 @@ type PaymentCardContainerProps = {
 export default function PaymentCardContainer({ payment }: PaymentCardContainerProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const t = useTranslations('paymentCardContainer');
+  const t = useTranslations('payment.card.markAsPaid');
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
     onError: () => {
       toast({
-        description: t('markAsPaid.error.description'),
-        title: t('markAsPaid.error.title'),
+        description: t('error.description'),
+        title: t('error.title'),
         variant: 'destructive',
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast({
-        description: t('markAsPaid.success.description'),
-        title: t('markAsPaid.success.title'),
+        description: t('success.description'),
+        title: t('success.title'),
       });
     },
   });

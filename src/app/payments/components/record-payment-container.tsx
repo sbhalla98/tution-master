@@ -13,7 +13,7 @@ type RecordPaymentContainerProps = {
 export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaymentContainerProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const t = useTranslations('paymentFormContainer');
+  const t = useTranslations('payments.record');
 
   const { data, error, isFetching, refetch } = useQuery({
     queryFn: () => getStudents(),
@@ -24,8 +24,8 @@ export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaym
     mutationFn: createPayment,
     onError: () => {
       toast({
-        description: t('record.error.description'),
-        title: t('record.error.title'),
+        description: t('create.error.description'),
+        title: t('create.error.title'),
         variant: 'destructive',
       });
     },
@@ -33,8 +33,8 @@ export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaym
       setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast({
-        description: t('record.success.description'),
-        title: t('record.success.title'),
+        description: t('create.success.description'),
+        title: t('create.success.title'),
       });
     },
   });

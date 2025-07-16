@@ -3,6 +3,56 @@
     "title": "Dashboard",
     "subtitle": "Welcome back! Here is your tuition overview"
   },
+  "payments": {
+    "header": {
+      "title": "Payments",
+      "subtitle": "Manage your payment records",
+      "buttonText": "Record Payment"
+    },
+    "filter": {
+      "search": { "placeholder": "Search payments..." },
+      "options": {
+        "all": "All",
+        "paid": "Paid",
+        "pending": "Pending",
+        "overdue": "Overdue"
+      }
+    },
+    "card": {
+      "markAsPaid": {
+        "success": {
+          "title": "Payment Updated",
+          "description": "Payment marked as paid successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Failed to mark payment as paid. Please try again."
+        }
+      }
+    },
+    "record": {
+      "error": { "title": "Error fetching payment form" },
+      "create": {
+        "success": {
+          "title": "Payment Recorded",
+          "description": "Payment recorded successfully"
+        },
+        "error": {
+          "title": "Error",
+          "description": "Failed to record payment. Please try again."
+        }
+      }
+    },
+    "summary": {
+      "paid": "Total Paid",
+      "pending": "Pending",
+      "overdue": "Overdue"
+    },
+    "error": {
+      "title": "Something Went Wrong while fetching payments",
+      "description": ""
+    }
+  },
   "studentCard": {
     "status": {
       "active": "Active",
@@ -256,31 +306,6 @@
     "sendReminders": {
       "title": "Send Reminders",
       "description": "Notify overdue payments"
-    }
-  },
-  "paymentFormContainer": {
-    "error": { "title": "Error fetching payment form" },
-    "record": {
-      "success": {
-        "title": "Payment Recorded",
-        "description": "Payment recorded successfully"
-      },
-      "error": {
-        "title": "Error",
-        "description": "Failed to record payment. Please try again."
-      }
-    }
-  },
-  "paymentCardContainer": {
-    "markAsPaid": {
-      "success": {
-        "title": "Payment Updated",
-        "description": "Payment marked as paid successfully"
-      },
-      "error": {
-        "title": "Error",
-        "description": "Failed to mark payment as paid. Please try again."
-      }
     }
   }
 }
