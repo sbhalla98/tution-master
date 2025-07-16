@@ -1,8 +1,8 @@
 'use client';
 import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
 import Header from '@/components/header';
-import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
-import { Payment, Student } from '@/types';
+import { PAYMENT_STATUS } from '@/constants';
+import { Payment } from '@/types';
 import { AlertCircle, IndianRupee, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ActiveStudentsWidgetContainer from './active-students-widget-container';
@@ -11,14 +11,12 @@ import RecentPaymentsContainer from './recent-payments-container';
 import RecentStudentsContainer from './recent-students-container';
 
 type DashboardContainerProps = {
-  students?: Student[] | null;
   payments?: Payment[] | null;
 };
 
-export default function DashboardContainer({ students, payments }: DashboardContainerProps) {
+export default function DashboardContainer({ payments }: DashboardContainerProps) {
   const t = useTranslations('dashboard');
 
-  const activeStudents = (students ?? []).filter((s) => s.status === STUDENT_STATUS.ACTIVE).length;
   const totalRevenue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.PAID)
     .reduce((sum, p) => sum + p.amount, 0);

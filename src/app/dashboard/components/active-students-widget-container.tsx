@@ -5,8 +5,8 @@ import { Users } from 'lucide-react';
 
 export default function ActiveStudentsWidgetContainer() {
   const { data, error, isLoading } = useQuery({
-    queryKey: ['activeStudents'],
     queryFn: getActiveStudents,
+    queryKey: ['activeStudents'],
   });
 
   const { currentActiveCount = 0, activeAtEndOfLastMonth = 0 } = data ?? {};
@@ -16,21 +16,21 @@ export default function ActiveStudentsWidgetContainer() {
 
     if (diff === 0) {
       return {
-        changeType: CHANGE_TYPE.NEUTRAL,
         change: 'No change',
+        changeType: CHANGE_TYPE.NEUTRAL,
       };
     }
 
     if (diff > 0) {
       return {
-        changeType: CHANGE_TYPE.POSITIVE,
         change: `+${diff} this month`,
+        changeType: CHANGE_TYPE.POSITIVE,
       };
     }
 
     return {
-      changeType: CHANGE_TYPE.NEGATIVE,
-      change: `${diff} this month`, // already negative
+      change: `${diff} this month`,
+      changeType: CHANGE_TYPE.NEGATIVE, // already negative
     };
   };
 

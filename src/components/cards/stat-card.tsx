@@ -1,9 +1,9 @@
 import { LucideIcon } from 'lucide-react';
 
 export const CHANGE_TYPE = {
-  POSITIVE: 'POSITIVE',
   NEGATIVE: 'NEGATIVE',
   NEUTRAL: 'NEUTRAL',
+  POSITIVE: 'POSITIVE',
 } as const;
 
 type StatCardProps = {

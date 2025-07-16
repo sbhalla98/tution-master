@@ -15,7 +15,7 @@ interface StudentCardProps {
 
 export default function StudentCard({ student, onEdit, onViewPayments }: StudentCardProps) {
   const t = useTranslations('studentCard');
-  const { id, name, monthlyFee, email, phone, subjects, grade, status, joinDate } = student;
+  const { name, monthlyFee, email, phone, subjects, grade, status, joinDate } = student;
 
   const statusColor =
     status === STUDENT_STATUS.ACTIVE

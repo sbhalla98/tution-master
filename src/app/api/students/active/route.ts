@@ -2,9 +2,9 @@ import { requireUser } from '@/lib/server/auth';
 import { getStudentActivityLogCollection, getStudentCollection } from '@/lib/server/db/students';
 import { errorResponse } from '@/lib/server/utils/response';
 import dayjs from 'dayjs';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const { userId } = await requireUser();
     const studentCollection = await getStudentCollection();
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
 
     // Step 1: Get all students for the user (only id and deletedAt)
     const students = await studentCollection
-      .find({ userId }, { projection: { id: 1, deletedAt: 1 } })
+      .find({ userId }, { projection: { deletedAt: 1, id: 1 } })
       .toArray();
 
     const studentMap = new Map<string, EpochTimeStamp | null>(
@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
 
     if (studentIds.length === 0) {
       return NextResponse.json({
-        currentActiveCount: 0,
         activeAtEndOfLastMonth: 0,
+        currentActiveCount: 0,
       });
     }
 
@@ -36,17 +36,17 @@ export async function GET(request: NextRequest) {
         {
           $match: {
             studentId: { $in: studentIds },
-            userId,
-            type: 'status_changed',
             timestamp: { $lte: endOfLastMonth },
+            type: 'status_changed',
+            userId,
           },
         },
         { $sort: { timestamp: -1 } },
         {
           $group: {
             _id: '$studentId',
-            lastStatus: { $first: '$meta.to' },
             lastChangeTime: { $first: '$timestamp' },
+            lastStatus: { $first: '$meta.to' },
           },
         },
       ])
@@ -61,14 +61,14 @@ export async function GET(request: NextRequest) {
 
     // Step 4: Count current active students
     const currentActiveCount = await studentCollection.countDocuments({
-      userId,
-      status: 'active',
       isDeleted: false,
+      status: 'active',
+      userId,
     });
 
     return NextResponse.json({
-      currentActiveCount,
       activeAtEndOfLastMonth,
+      currentActiveCount,
     });
   } catch (error) {
     return errorResponse('Failed to fetch student activity stats', error);

@@ -1,19 +1,10 @@
 'use client';
 
-import { getPayments, getStudents } from '@/lib/api';
+import { getPayments } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import DashboardContainer from './components/dashboard-container';
 
 export default function Dashboard() {
-  const {
-    data: studentsData,
-    error: studentsError,
-    isLoading: studentsLoading,
-  } = useQuery({
-    queryFn: () => getStudents(),
-    queryKey: ['students'],
-  });
-
   const {
     data: paymentsData,
     error: paymentsError,
@@ -23,17 +14,13 @@ export default function Dashboard() {
     queryKey: ['payments'],
   });
 
-  if (studentsLoading || paymentsLoading) {
+  if (paymentsLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (studentsError) {
-    return <div>Error loading students: {studentsError.message}</div>;
   }
 
   if (paymentsError) {
     return <div>Error loading payments: {paymentsError.message}</div>;
   }
 
-  return <DashboardContainer students={studentsData} payments={paymentsData} />;
+  return <DashboardContainer payments={paymentsData} />;
 }
