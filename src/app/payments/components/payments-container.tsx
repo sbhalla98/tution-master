@@ -2,9 +2,7 @@
 
 import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
-import { useToast } from '@/hooks/use-toast';
 import { Payment } from '@/types';
-import { useQueryClient } from '@tanstack/react-query';
 import { Filter } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -25,8 +23,6 @@ export default function PaymentsContainer({ payments }: PaymentsContainerProps) 
     PAYMENT_STATUS_FILTER.ALL
   );
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
   const t = useTranslations('payments');
 
   const filteredPayments = (payments ?? []).filter((payment) => {

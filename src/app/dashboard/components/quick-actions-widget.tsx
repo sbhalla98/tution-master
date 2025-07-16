@@ -62,49 +62,49 @@ export default function QuickActionsWidget() {
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
 
   const { data: students = [] } = useQuery({
-    queryKey: ['students'],
     queryFn: () => getStudents(),
+    queryKey: ['students'],
   });
 
   const { data: payments = [] } = useQuery({
-    queryKey: ['payments'],
     queryFn: () => getPayments(),
+    queryKey: ['payments'],
   });
 
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
 
   const { mutate: createStudentMutation } = useMutation({
     mutationFn: createStudent,
+    onError: () => {
+      toast.toast({
+        description: t('addStudent.errorDescription'),
+        title: t('addStudent.errorTitle'),
+        variant: 'destructive',
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['students'] });
       toast.toast({
-        title: t('addStudent.successTitle'),
         description: t('addStudent.successDescription'),
-      });
-    },
-    onError: () => {
-      toast.toast({
-        title: t('addStudent.errorTitle'),
-        description: t('addStudent.errorDescription'),
-        variant: 'destructive',
+        title: t('addStudent.successTitle'),
       });
     },
   });
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
+    onError: () => {
+      toast.toast({
+        description: t('recordPayment.errorDescription'),
+        title: t('recordPayment.errorTitle'),
+        variant: 'destructive',
+      });
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast.toast({
-        title: t('recordPayment.successTitle'),
         description: t('recordPayment.successDescription'),
-      });
-    },
-    onError: () => {
-      toast.toast({
-        title: t('recordPayment.errorTitle'),
-        description: t('recordPayment.errorDescription'),
-        variant: 'destructive',
+        title: t('recordPayment.successTitle'),
       });
     },
   });

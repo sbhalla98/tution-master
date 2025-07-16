@@ -2,9 +2,9 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 export const VARIANTS = {
-  SUCCESS: 'SUCCESS',
-  ERROR: 'ERROR',
   DEFAULT: 'DEFAULT',
+  ERROR: 'ERROR',
+  SUCCESS: 'SUCCESS',
 } as const;
 
 type SummaryCardProps = {
@@ -21,18 +21,18 @@ export default function SummaryCard({
   const config = {
     [VARIANTS.DEFAULT]: {
       cardClassName: 'bg-yellow-50 border-yellow-200',
-      cardHeaderClassName: 'text-yellow-700',
       cardContentClassName: 'text-yellow-900',
+      cardHeaderClassName: 'text-yellow-700',
     },
     [VARIANTS.ERROR]: {
       cardClassName: 'bg-red-50 border-red-200',
-      cardHeaderClassName: 'text-red-700',
       cardContentClassName: 'text-red-900',
+      cardHeaderClassName: 'text-red-700',
     },
     [VARIANTS.SUCCESS]: {
       cardClassName: 'bg-green-50 border-green-200',
-      cardHeaderClassName: 'text-green-700',
       cardContentClassName: 'text-green-900',
+      cardHeaderClassName: 'text-green-700',
     },
   };
 
