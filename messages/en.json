@@ -257,5 +257,18 @@
       "title": "Send Reminders",
       "description": "Notify overdue payments"
     }
+  },
+  "paymentFormContainer": {
+    "error": { "title": "Error fetching payment form" },
+    "record": {
+      "success": {
+        "title": "Payment Recorded",
+        "description": "Payment recorded successfully"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to record payment. Please try again."
+      }
+    }
   }
 }

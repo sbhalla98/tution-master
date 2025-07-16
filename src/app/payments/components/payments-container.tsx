@@ -1,12 +1,11 @@
 'use client';
 
 import PaymentCard from '@/components/cards/payment-card';
-import RecordPaymentForm from '@/components/forms/record-payment-form';
 import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
-import { createPayment, markPaymentStatus } from '@/lib/api';
-import { Payment, Student } from '@/types';
+import { markPaymentStatus } from '@/lib/api';
+import { Payment } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Filter } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -15,13 +14,13 @@ import { PAYMENT_STATUS_FILTER } from '../constants';
 import { PaymentStatusFilterType } from '../types';
 import PaymentsHeader from './payments-header';
 import PaymentSearchFilter from './payments-search-filter';
+import RecordPaymentContainer from './record-payment-container';
 import SummaryCard, { VARIANTS } from './summary-card';
 
 type PaymentsContainerProps = {
   payments?: Payment[] | null;
-  students?: Student[] | null;
 };
-export default function PaymentsContainer({ payments, students }: PaymentsContainerProps) {
+export default function PaymentsContainer({ payments }: PaymentsContainerProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<PaymentStatusFilterType>(
     PAYMENT_STATUS_FILTER.ALL
@@ -30,25 +29,6 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTranslations('payments');
-
-  const { mutate: createPaymentMutation } = useMutation({
-    mutationFn: createPayment,
-    onError: () => {
-      toast({
-        description: 'Failed to record payment. Please try again.',
-        title: 'Error',
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      setIsRecordPaymentOpen(false);
-      toast({
-        description: 'Payment recorded successfully',
-        title: 'Payment Recorded',
-      });
-    },
-  });
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
@@ -88,12 +68,6 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
   const totalOverdue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.OVERDUE)
     .reduce((sum, p) => sum + p.amount, 0);
-
-  const studentsForPayment = (students ?? []).map((student) => ({
-    id: student.id,
-    monthlyFee: student.monthlyFee,
-    name: student.name,
-  }));
 
   const handleMarkPaid = (paymentId: string) => {
     markPaymentStatusMutation({
@@ -142,12 +116,7 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
           description=""
         />
       )}
-      <RecordPaymentForm
-        isOpen={isRecordPaymentOpen}
-        onClose={() => setIsRecordPaymentOpen(false)}
-        onRecordPayment={createPaymentMutation}
-        students={studentsForPayment}
-      />
+      <RecordPaymentContainer isOpen={isRecordPaymentOpen} setIsOpen={setIsRecordPaymentOpen} />
     </div>
   );
 }
