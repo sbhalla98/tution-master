@@ -10,7 +10,7 @@ import { useTranslations } from 'next-intl';
 interface StudentCardProps {
   student: Student;
   onEdit: (student: Student) => void;
-  onViewPayments: (studentId: string, studentName: string) => void;
+  onViewPayments: (student: Student) => void;
 }
 
 export default function StudentCard({ student, onEdit, onViewPayments }: StudentCardProps) {
@@ -62,7 +62,7 @@ export default function StudentCard({ student, onEdit, onViewPayments }: Student
         <Button variant="outline" size="sm" onClick={() => onEdit(student)} className="flex-1">
           {t('edit')}
         </Button>
-        <Button size="sm" onClick={() => onViewPayments(id, name)} className="flex-1">
+        <Button size="sm" onClick={() => onViewPayments(student)} className="flex-1">
           {t('viewPayments')}
         </Button>
       </CardFooter>

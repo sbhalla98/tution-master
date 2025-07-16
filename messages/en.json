@@ -282,20 +282,18 @@
         "description": "Student updated successfully"
       }
     },
+    "viewPayments": {
+      "error": {
+        "title": "Error",
+        "description": "Failed to mark payment as paid. Please try again."
+      },
+      "success": {
+        "title": "Payment Updated",
+        "description": "Payment marked as paid successfully"
+      }
+    },
     "empty": {
       "title": "No students found matching your criteria"
-    },
-    "toast": {
-      "payment": {
-        "failed": {
-          "title": "Error",
-          "description": "Failed to mark payment as paid. Please try again."
-        },
-        "success": {
-          "title": "Payment Updated",
-          "description": "Payment marked as paid successfully"
-        }
-      }
     }
   },
   "quickActions": {
