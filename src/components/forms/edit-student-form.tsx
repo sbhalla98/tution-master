@@ -21,7 +21,7 @@ type EditStudentFormProps = {
   isOpen: boolean;
   onClose: () => void;
   onUpdateStudent: (request: UpdateStudentRequest) => void;
-  student: Student | null;
+  student?: Student | null;
 };
 
 export default function EditStudentForm({

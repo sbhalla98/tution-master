@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function StudentsHeader({ onAdd }: Props) {
-  const t = useTranslations('payments.header');
+  const t = useTranslations('students.header');
 
   return (
     <Header title={t('title')} description={t('description')}>

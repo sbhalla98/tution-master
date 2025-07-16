@@ -6,7 +6,7 @@
   "payments": {
     "header": {
       "title": "Payments",
-      "subtitle": "Manage your payment records",
+      "description": "Manage your payment records",
       "buttonText": "Record Payment"
     },
     "filter": {
@@ -251,7 +251,7 @@
   "students": {
     "header": {
       "title": "Students",
-      "subtitle": "Manage your student records",
+      "description": "Manage your student records",
       "buttonText": "Add Student"
     },
     "filter": {
@@ -262,30 +262,30 @@
         "inactive": "Inactive"
       }
     },
+    "add": {
+      "error": {
+        "title": "Error",
+        "description": "Failed to add student. Please try again."
+      },
+      "success": {
+        "title": "Added new student",
+        "description": "Student added successfully"
+      }
+    },
+    "edit": {
+      "error": {
+        "title": "Error",
+        "description": "Failed to update student. Please try again."
+      },
+      "success": {
+        "title": "Updated!!",
+        "description": "Student updated successfully"
+      }
+    },
     "empty": {
       "title": "No students found matching your criteria"
     },
     "toast": {
-      "add": {
-        "failed": {
-          "title": "Error",
-          "description": "Failed to add student. Please try again."
-        },
-        "success": {
-          "title": "Added new student",
-          "description": "Student added successfully"
-        }
-      },
-      "update": {
-        "failed": {
-          "title": "Error",
-          "description": "Failed to update student. Please try again."
-        },
-        "success": {
-          "title": "Updated!!",
-          "description": "Student updated successfully"
-        }
-      },
       "payment": {
         "failed": {
           "title": "Error",

@@ -1,19 +1,19 @@
 'use client';
 import StudentCard from '@/components/cards/student-card';
-import AddStudentForm from '@/components/forms/add-student-form';
-import EditStudentForm from '@/components/forms/edit-student-form';
 import { EmptyState } from '@/components/illustration/empty-state';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
 import { STUDENT_STATUS_FILTER } from '@/constants/students';
 import { useToast } from '@/hooks/use-toast';
-import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
+import { markPaymentStatus } from '@/lib/api';
 import { Student } from '@/types';
 import { StudentStatusFilterType } from '@/types/students';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import AddStudentContainer from './add-student-container';
+import EditStudentContainer from './edit-student-container';
 import StudentsHeader from './students-header';
 import StudentsSearchFilter from './students-search-filter';
 
@@ -33,45 +33,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTranslations('students');
-
-  const { mutate: createStudentMutation } = useMutation({
-    mutationFn: createStudent,
-    onError: () => {
-      toast({
-        description: t('toast.add.failed.description'),
-        title: t('toast.add.failed.title'),
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      setIsAddStudentOpen(false);
-      toast({
-        description: t('toast.add.success.description'),
-        title: t('toast.add.success.title'),
-      });
-    },
-  });
-
-  const { mutate: updateStudentMutation } = useMutation({
-    mutationFn: updateStudent,
-    onError: () => {
-      toast({
-        description: t('toast.update.failed.description'),
-        title: t('toast.update.failed.title'),
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      setIsEditStudentOpen(false);
-      setEditingStudent(null);
-      toast({
-        description: t('toast.update.success.description'),
-        title: t('toast.update.success.title'),
-      });
-    },
-  });
 
   const { mutate: markPaymentStatusMutation } = useMutation({
     mutationFn: markPaymentStatus,
@@ -149,19 +110,14 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
           description=""
         />
       )}
-      <AddStudentForm
-        isOpen={isAddStudentOpen}
-        onClose={() => setIsAddStudentOpen(false)}
-        onAddStudent={createStudentMutation}
-      />
 
-      <EditStudentForm
+      <AddStudentContainer isOpen={isAddStudentOpen} onClose={() => setIsAddStudentOpen(false)} />
+      <EditStudentContainer
         isOpen={isEditStudentOpen}
         onClose={() => {
           setIsEditStudentOpen(false);
           setEditingStudent(null);
         }}
-        onUpdateStudent={updateStudentMutation}
         student={editingStudent}
       />
 
