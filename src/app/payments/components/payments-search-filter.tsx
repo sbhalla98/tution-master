@@ -2,9 +2,9 @@
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { PAYMENT_STATUS_FILTER } from '@/constants/payments';
+import { PaymentStatusFilterType } from '@/types/payments';
 import { Search } from 'lucide-react';
-import { PAYMENT_STATUS_FILTER } from '../constants';
-import { PaymentStatusFilterType } from '../types';
 type Props = {
   searchTerm: string;
   onSearchChange: (val: string) => void;

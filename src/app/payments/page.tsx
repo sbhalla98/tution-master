@@ -1,26 +1,25 @@
 'use client';
 
+import { ErrorState } from '@/components/illustration/error-state';
+import StudentsContainerSkeleton from '@/components/skeleton/students-container-skeleton';
 import { getPayments } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import PaymentsContainer from './components/payments-container';
 
 export default function Payments() {
-  const {
-    data: paymentsData,
-    error: paymentsError,
-    isLoading: paymentsLoading,
-  } = useQuery({
+  const { data, error, isFetching, refetch } = useQuery({
     queryFn: () => getPayments(),
     queryKey: ['payments'],
   });
 
-  if (paymentsLoading) {
-    return <div>Loading...</div>;
+  if (isFetching) {
+    // [TODO] Add the payment skeleton
+    return <StudentsContainerSkeleton />;
   }
 
-  if (paymentsError) {
-    return <div>Error loading payments: {paymentsError.message}</div>;
+  if (error) {
+    return <ErrorState className="h-full" onReload={refetch} />;
   }
 
-  return <PaymentsContainer payments={paymentsData} />;
+  return <PaymentsContainer payments={data} />;
 }

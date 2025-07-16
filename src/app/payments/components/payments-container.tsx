@@ -2,12 +2,12 @@
 
 import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
+import { PAYMENT_STATUS_FILTER } from '@/constants/payments';
 import { Payment } from '@/types';
+import { PaymentStatusFilterType } from '@/types/payments';
 import { Filter } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { PAYMENT_STATUS_FILTER } from '../constants';
-import { PaymentStatusFilterType } from '../types';
 import PaymentCardContainer from './payment-card-container';
 import PaymentsHeader from './payments-header';
 import PaymentSearchFilter from './payments-search-filter';
