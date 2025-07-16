@@ -1,12 +1,13 @@
 'use client';
 
+import { ErrorState } from '@/components/illustration/error-state';
 import StudentsContainerSkeleton from '@/components/skeleton/students-container-skeleton';
 import { getStudents } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import StudentsContainer from './components/students-container';
 
 export default function Students() {
-  const { data, error, isFetching } = useQuery({
+  const { data, error, isFetching, refetch } = useQuery({
     queryFn: () => getStudents(),
     queryKey: ['students'],
   });
@@ -16,7 +17,7 @@ export default function Students() {
   }
 
   if (error) {
-    return <div>Error loading students: {error.message}</div>;
+    return <ErrorState className="h-full" onReload={refetch} />;
   }
 
   return <StudentsContainer students={data} />;
