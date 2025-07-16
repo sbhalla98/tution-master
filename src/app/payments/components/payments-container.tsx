@@ -1,17 +1,16 @@
 'use client';
 
-import PaymentCard from '@/components/cards/payment-card';
 import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
-import { markPaymentStatus } from '@/lib/api';
 import { Payment } from '@/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Filter } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { PAYMENT_STATUS_FILTER } from '../constants';
 import { PaymentStatusFilterType } from '../types';
+import PaymentCardContainer from './payment-card-container';
 import PaymentsHeader from './payments-header';
 import PaymentSearchFilter from './payments-search-filter';
 import RecordPaymentContainer from './record-payment-container';
@@ -29,24 +28,6 @@ export default function PaymentsContainer({ payments }: PaymentsContainerProps) 
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTranslations('payments');
-
-  const { mutate: markPaymentStatusMutation } = useMutation({
-    mutationFn: markPaymentStatus,
-    onError: () => {
-      toast({
-        description: 'Failed to mark payment as paid. Please try again.',
-        title: 'Error',
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast({
-        description: 'Payment marked as paid successfully',
-        title: 'Payment Updated',
-      });
-    },
-  });
 
   const filteredPayments = (payments ?? []).filter((payment) => {
     const matchesSearch =
@@ -68,13 +49,6 @@ export default function PaymentsContainer({ payments }: PaymentsContainerProps) 
   const totalOverdue = (payments ?? [])
     .filter((p) => p.status === PAYMENT_STATUS.OVERDUE)
     .reduce((sum, p) => sum + p.amount, 0);
-
-  const handleMarkPaid = (paymentId: string) => {
-    markPaymentStatusMutation({
-      id: paymentId,
-      status: PAYMENT_STATUS.PAID,
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -104,7 +78,7 @@ export default function PaymentsContainer({ payments }: PaymentsContainerProps) 
       />
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredPayments.map((payment) => (
-          <PaymentCard key={payment.id} payment={payment} onMarkPaid={handleMarkPaid} />
+          <PaymentCardContainer key={payment.id} payment={payment} />
         ))}
       </div>
 

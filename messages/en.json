@@ -270,5 +270,17 @@
         "description": "Failed to record payment. Please try again."
       }
     }
+  },
+  "paymentCardContainer": {
+    "markAsPaid": {
+      "success": {
+        "title": "Payment Updated",
+        "description": "Payment marked as paid successfully"
+      },
+      "error": {
+        "title": "Error",
+        "description": "Failed to mark payment as paid. Please try again."
+      }
+    }
   }
 }
