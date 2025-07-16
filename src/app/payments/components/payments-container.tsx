@@ -2,17 +2,20 @@
 
 import PaymentCard from '@/components/cards/payment-card';
 import RecordPaymentForm from '@/components/forms/record-payment-form';
+import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
 import { useToast } from '@/hooks/use-toast';
 import { createPayment, markPaymentStatus } from '@/lib/api';
 import { Payment, Student } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Filter } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { PAYMENT_STATUS_FILTER } from '../constants';
 import { PaymentStatusFilterType } from '../types';
 import PaymentsHeader from './payments-header';
 import PaymentSearchFilter from './payments-search-filter';
+import SummaryCard, { VARIANTS } from './summary-card';
 
 type PaymentsContainerProps = {
   payments?: Payment[] | null;
@@ -26,6 +29,7 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const t = useTranslations('payments');
 
   const { mutate: createPaymentMutation } = useMutation({
     mutationFn: createPayment,
@@ -38,6 +42,7 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['payments'] });
+      setIsRecordPaymentOpen(false);
       toast({
         description: 'Payment recorded successfully',
         title: 'Payment Recorded',
@@ -100,31 +105,29 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
   return (
     <div className="space-y-6">
       <PaymentsHeader onRecordPayment={() => setIsRecordPaymentOpen(true)} />
-
-      {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-          <h3 className="text-sm font-medium text-green-700">Total Paid</h3>
-          <p className="text-2xl font-bold text-green-900">₹{totalPaid.toLocaleString()}</p>
-        </div>
-        <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-          <h3 className="text-sm font-medium text-yellow-700">Pending</h3>
-          <p className="text-2xl font-bold text-yellow-900">₹{totalPending.toLocaleString()}</p>
-        </div>
-        <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-          <h3 className="text-sm font-medium text-red-700">Overdue</h3>
-          <p className="text-2xl font-bold text-red-900">₹{totalOverdue.toLocaleString()}</p>
-        </div>
+        <SummaryCard
+          title="Total Paid"
+          content={`₹${totalPaid.toLocaleString()}`}
+          variant={VARIANTS.SUCCESS}
+        />
+        <SummaryCard
+          title="Pending"
+          content={`₹${totalPending.toLocaleString()}`}
+          variant={VARIANTS.DEFAULT}
+        />
+        <SummaryCard
+          title="Overdue"
+          content={`₹${totalOverdue.toLocaleString()}`}
+          variant={VARIANTS.ERROR}
+        />
       </div>
-
       <PaymentSearchFilter
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         filter={statusFilter}
         onFilterChange={setStatusFilter}
       />
-
-      {/* Payments Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredPayments.map((payment) => (
           <PaymentCard key={payment.id} payment={payment} onMarkPaid={handleMarkPaid} />
@@ -132,12 +135,13 @@ export default function PaymentsContainer({ payments, students }: PaymentsContai
       </div>
 
       {filteredPayments.length === 0 && (
-        <div className="text-center py-12">
-          <Filter className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500">No payments found matching your criteria</p>
-        </div>
+        <EmptyState
+          className="h-full text-gray-400 border-none shadow-none"
+          icon={<Filter className="h-12 w-12" />}
+          title={t('empty.title')}
+          description=""
+        />
       )}
-
       <RecordPaymentForm
         isOpen={isRecordPaymentOpen}
         onClose={() => setIsRecordPaymentOpen(false)}

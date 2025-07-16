@@ -131,8 +131,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
         filter={filter}
         onFilterChange={setFilter}
       />
-
-      {/* Students Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {filteredStudents.map((student) => (
           <StudentCard
@@ -143,7 +141,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
           />
         ))}
       </div>
-
       {filteredStudents.length === 0 && (
         <EmptyState
           className="h-full text-gray-400 border-none shadow-none"
@@ -152,7 +149,6 @@ export default function StudentsContainer({ students }: StudentsContainerProps) 
           description=""
         />
       )}
-
       <AddStudentForm
         isOpen={isAddStudentOpen}
         onClose={() => setIsAddStudentOpen(false)}
