@@ -8,9 +8,9 @@ import { useTranslations } from 'next-intl';
 
 type RecordPaymentContainerProps = {
   isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
+  onClose: () => void;
 };
-export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaymentContainerProps) {
+export default function RecordPaymentContainer({ isOpen, onClose }: RecordPaymentContainerProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const t = useTranslations('payments.record');
@@ -30,12 +30,12 @@ export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaym
       });
     },
     onSuccess: () => {
-      setIsOpen(false);
       queryClient.invalidateQueries({ queryKey: ['payments'] });
       toast({
         description: t('create.success.description'),
         title: t('create.success.title'),
       });
+      onClose();
     },
   });
 
@@ -46,7 +46,7 @@ export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaym
 
   if (error) {
     return (
-      <AppSheet open={isOpen} onOpenChange={() => setIsOpen(false)} title={t('error.title')}>
+      <AppSheet open={isOpen} onOpenChange={onClose} title={t('error.title')}>
         <ErrorState className="h-full" onReload={refetch} />
       </AppSheet>
     );
@@ -55,7 +55,7 @@ export default function RecordPaymentContainer({ isOpen, setIsOpen }: RecordPaym
   return (
     <RecordPaymentForm
       isOpen={isOpen}
-      onClose={() => setIsOpen(false)}
+      onClose={onClose}
       onRecordPayment={createPaymentMutation}
       students={data || []}
     />

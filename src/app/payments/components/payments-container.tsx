@@ -1,5 +1,6 @@
 'use client';
 
+import RecordPaymentContainer from '@/components/containers/record-payment-container';
 import { EmptyState } from '@/components/illustration/empty-state';
 import { PAYMENT_STATUS } from '@/constants';
 import { PAYMENT_STATUS_FILTER } from '@/constants/payments';
@@ -11,7 +12,6 @@ import { useState } from 'react';
 import PaymentCardContainer from './payment-card-container';
 import PaymentsHeader from './payments-header';
 import PaymentSearchFilter from './payments-search-filter';
-import RecordPaymentContainer from './record-payment-container';
 import SummaryCard, { VARIANTS } from './summary-card';
 
 type PaymentsContainerProps = {
@@ -94,7 +94,10 @@ export default function PaymentsContainer({ payments }: PaymentsContainerProps) 
         />
       )}
 
-      <RecordPaymentContainer isOpen={isRecordPaymentOpen} setIsOpen={setIsRecordPaymentOpen} />
+      <RecordPaymentContainer
+        isOpen={isRecordPaymentOpen}
+        onClose={() => setIsRecordPaymentOpen(false)}
+      />
     </div>
   );
 }

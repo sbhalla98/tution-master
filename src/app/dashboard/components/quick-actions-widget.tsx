@@ -2,18 +2,17 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { AlertCircle, DollarSign, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import AddStudentForm from '@/components/forms/add-student-form';
-import RecordPaymentForm from '@/components/forms/record-payment-form';
 import SendRemindersForm from '@/components/forms/send-reminder-form';
 
+import AddStudentContainer from '@/components/containers/add-student-container';
+import RecordPaymentContainer from '@/components/containers/record-payment-container';
 import { PAYMENT_STATUS } from '@/constants';
-import { useToast } from '@/hooks/use-toast';
-import { createPayment, createStudent, getPayments, getStudents } from '@/lib/api';
+import { getPayments } from '@/lib/api';
 
 type ActionButtonProps = {
   icon: React.ReactNode;
@@ -54,17 +53,10 @@ function ActionButton({
 
 export default function QuickActionsWidget() {
   const t = useTranslations('quickActions');
-  const toast = useToast();
-  const queryClient = useQueryClient();
 
   const [isAddStudentOpen, setIsAddStudentOpen] = useState(false);
   const [isRecordPaymentOpen, setIsRecordPaymentOpen] = useState(false);
   const [isRemindersOpen, setIsRemindersOpen] = useState(false);
-
-  const { data: students = [] } = useQuery({
-    queryFn: () => getStudents(),
-    queryKey: ['students'],
-  });
 
   const { data: payments = [] } = useQuery({
     queryFn: () => getPayments(),
@@ -72,42 +64,6 @@ export default function QuickActionsWidget() {
   });
 
   const overduePaymentsList = (payments ?? []).filter((p) => p.status === PAYMENT_STATUS.OVERDUE);
-
-  const { mutate: createStudentMutation } = useMutation({
-    mutationFn: createStudent,
-    onError: () => {
-      toast.toast({
-        description: t('addStudent.errorDescription'),
-        title: t('addStudent.errorTitle'),
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['students'] });
-      toast.toast({
-        description: t('addStudent.successDescription'),
-        title: t('addStudent.successTitle'),
-      });
-    },
-  });
-
-  const { mutate: createPaymentMutation } = useMutation({
-    mutationFn: createPayment,
-    onError: () => {
-      toast.toast({
-        description: t('recordPayment.errorDescription'),
-        title: t('recordPayment.errorTitle'),
-        variant: 'destructive',
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['payments'] });
-      toast.toast({
-        description: t('recordPayment.successDescription'),
-        title: t('recordPayment.successTitle'),
-      });
-    },
-  });
 
   return (
     <>
@@ -146,16 +102,10 @@ export default function QuickActionsWidget() {
         </CardContent>
       </Card>
 
-      <AddStudentForm
-        isOpen={isAddStudentOpen}
-        onClose={() => setIsAddStudentOpen(false)}
-        onAddStudent={createStudentMutation}
-      />
-      <RecordPaymentForm
+      <AddStudentContainer isOpen={isAddStudentOpen} onClose={() => setIsAddStudentOpen(false)} />
+      <RecordPaymentContainer
         isOpen={isRecordPaymentOpen}
         onClose={() => setIsRecordPaymentOpen(false)}
-        onRecordPayment={createPaymentMutation}
-        students={students ?? []}
       />
       <SendRemindersForm
         isOpen={isRemindersOpen}

@@ -1,5 +1,6 @@
 'use client';
 import StudentCard from '@/components/cards/student-card';
+import AddStudentContainer from '@/components/containers/add-student-container';
 import { EmptyState } from '@/components/illustration/empty-state';
 import { STUDENT_STATUS_FILTER } from '@/constants/students';
 import { Student } from '@/types';
@@ -7,7 +8,6 @@ import { StudentStatusFilterType } from '@/types/students';
 import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import AddStudentContainer from './add-student-container';
 import EditStudentContainer from './edit-student-container';
 import StudentsHeader from './students-header';
 import StudentsSearchFilter from './students-search-filter';
