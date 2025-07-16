@@ -6,8 +6,8 @@ import { Payment, Student } from '@/types';
 import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import QuickActionsWidget from './quick-actions-widget';
-import RecentPaymentsWidget from './recent-payments-widget';
-import RecentStudentsWidget from './recent-students-widget';
+import RecentPaymentsContainer from './recent-payments-container';
+import RecentStudentsContainer from './recent-students-container';
 
 type DashboardContainerProps = {
   students?: Student[] | null;
@@ -66,8 +66,8 @@ export default function DashboardContainer({ students, payments }: DashboardCont
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <RecentPaymentsWidget />
-        <RecentStudentsWidget />
+        <RecentPaymentsContainer />
+        <RecentStudentsContainer />
         <QuickActionsWidget />
       </div>
     </div>

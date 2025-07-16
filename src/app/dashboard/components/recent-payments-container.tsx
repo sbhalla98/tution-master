@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 
 const RECENT_PAYMENTS_LIMIT = 5;
 
-export default function RecentPaymentsWidget() {
+export default function RecentPaymentsContainer() {
   const t = useTranslations('recentPaymentsWidget');
 
   const { data, error, isLoading, refetch } = useQuery({

@@ -11,7 +11,7 @@ import { useTranslations } from 'next-intl';
 
 const RECENT_STUDENTS_LIMIT = 5;
 
-export default function RecentStudentsWidget() {
+export default function RecentStudentsContainer() {
   const t = useTranslations('recentStudentsWidget');
 
   const { data, error, isLoading, refetch } = useQuery({
