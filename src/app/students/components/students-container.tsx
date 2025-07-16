@@ -5,15 +5,15 @@ import EditStudentForm from '@/components/forms/edit-student-form';
 import { EmptyState } from '@/components/illustration/empty-state';
 import ViewPaymentsModal from '@/components/view-payment-modal';
 import { PAYMENT_STATUS } from '@/constants';
+import { STUDENT_STATUS_FILTER } from '@/constants/students';
 import { useToast } from '@/hooks/use-toast';
 import { createStudent, markPaymentStatus, updateStudent } from '@/lib/api';
 import { Student } from '@/types';
+import { StudentStatusFilterType } from '@/types/students';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { STUDENT_STATUS_FILTER } from '../constants';
-import { StudentStatusFilterType } from '../types';
 import StudentsHeader from './students-header';
 import StudentsSearchFilter from './students-search-filter';
 

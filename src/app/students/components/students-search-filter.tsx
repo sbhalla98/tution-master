@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { STUDENT_STATUS_FILTER } from '@/constants/students';
+import { StudentStatusFilterType } from '@/types/students';
 import { Search } from 'lucide-react';
-import { STUDENT_STATUS_FILTER } from '../constants';
-import { StudentStatusFilterType } from '../types';
 
 type Props = {
   searchTerm: string;
