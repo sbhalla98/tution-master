@@ -300,19 +300,11 @@
     "title": "Quick Actions",
     "addStudent": {
       "title": "Add New Student",
-      "description": "Register a new student",
-      "successTitle": "Added new student",
-      "successDescription": "Student added successfully",
-      "errorTitle": "Error",
-      "errorDescription": "Failed to add student. Please try again."
+      "description": "Register a new student"
     },
     "recordPayment": {
       "title": "Record Payment",
-      "description": "Mark payment as received",
-      "successTitle": "Payment Recorded",
-      "successDescription": "Payment recorded successfully",
-      "errorTitle": "Error",
-      "errorDescription": "Failed to record payment. Please try again."
+      "description": "Mark payment as received"
     },
     "sendReminders": {
       "title": "Send Reminders",

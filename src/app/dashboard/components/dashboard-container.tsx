@@ -1,10 +1,11 @@
 'use client';
-import StatCard from '@/components/cards/stat-card';
+import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
 import Header from '@/components/header';
 import { PAYMENT_STATUS, STUDENT_STATUS } from '@/constants';
 import { Payment, Student } from '@/types';
-import { AlertCircle, IndianRupee, TrendingUp, Users } from 'lucide-react';
+import { AlertCircle, IndianRupee, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import ActiveStudentsWidgetContainer from './active-students-widget-container';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsContainer from './recent-payments-container';
 import RecentStudentsContainer from './recent-students-container';
@@ -34,34 +35,28 @@ export default function DashboardContainer({ students, payments }: DashboardCont
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ActiveStudentsWidgetContainer />
         {/* [TODO] Need to fix the metrics in this stat card */}
-        <StatCard
-          title="Active Students"
-          value={activeStudents}
-          icon={Users}
-          change="+2 this month"
-          changeType="positive"
-        />
         <StatCard
           title="Total Revenue"
           value={`₹${totalRevenue.toLocaleString()}`}
           icon={IndianRupee}
           change="+12% from last month"
-          changeType="positive"
+          changeType={CHANGE_TYPE.POSITIVE}
         />
         <StatCard
           title="Pending Payments"
           value={pendingPayments}
           icon={TrendingUp}
           change="Due this month"
-          changeType="neutral"
+          changeType={CHANGE_TYPE.NEUTRAL}
         />
         <StatCard
           title="Overdue Payments"
           value={overduePayments}
           icon={AlertCircle}
           change="Needs attention"
-          changeType="negative"
+          changeType={CHANGE_TYPE.NEGATIVE}
         />
       </div>
 

@@ -7,6 +7,15 @@ import { Payment, PaymentStatusType, SETTINGS, Student, User } from './index';
 // Request to get all students
 export type GetStudentsResponse = Student[] | null | undefined;
 
+// Request to get active students
+export type GetActiveStudentsResponse =
+  | {
+      currentActiveCount: number;
+      activeAtEndOfLastMonth: number;
+    }
+  | null
+  | undefined;
+
 // Request to get a specific student by ID
 export type GetStudentRequest = {
   id: string;

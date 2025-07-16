@@ -5,6 +5,7 @@ import {
   CreateStudentResponse,
   DeleteStudentRequest,
   DeleteStudentResponse,
+  GetActiveStudentsResponse,
   GetPaymentsResponse,
   GetSettingsResponse,
   GetStudentPaymentsRequest,
@@ -27,6 +28,11 @@ import axios from './axios';
 
 export async function getStudents(limit?: number): Promise<GetStudentsResponse> {
   const res = await axios.get(`/students${limit ? `?limit=${limit}` : ''}`);
+  return res.data;
+}
+
+export async function getActiveStudents(): Promise<GetActiveStudentsResponse> {
+  const res = await axios.get('/students/active');
   return res.data;
 }
 

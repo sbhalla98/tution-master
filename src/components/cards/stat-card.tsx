@@ -1,19 +1,25 @@
 import { LucideIcon } from 'lucide-react';
 
-interface StatCardProps {
+export const CHANGE_TYPE = {
+  POSITIVE: 'POSITIVE',
+  NEGATIVE: 'NEGATIVE',
+  NEUTRAL: 'NEUTRAL',
+} as const;
+
+type StatCardProps = {
   title: string;
   value: string | number;
   icon: LucideIcon;
   change?: string;
-  changeType?: 'positive' | 'negative' | 'neutral';
-}
+  changeType?: (typeof CHANGE_TYPE)[keyof typeof CHANGE_TYPE];
+};
 
 export default function StatCard({
   title,
   value,
   icon: Icon,
   change,
-  changeType = 'neutral',
+  changeType = CHANGE_TYPE.NEUTRAL,
 }: StatCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
@@ -24,9 +30,9 @@ export default function StatCard({
           {change && (
             <p
               className={`text-sm mt-1 ${
-                changeType === 'positive'
+                changeType === CHANGE_TYPE.POSITIVE
                   ? 'text-green-600'
-                  : changeType === 'negative'
+                  : changeType === CHANGE_TYPE.NEGATIVE
                     ? 'text-red-600'
                     : 'text-gray-600'
               }`}
