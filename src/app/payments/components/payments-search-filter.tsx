@@ -23,10 +23,10 @@ export default function PaymentSearchFilter({
   const t = useTranslations('payments.filter');
 
   const FILTER_OPTIONS: { label: string; value: PaymentStatusFilterType }[] = [
-    { label: t('option.all'), value: PAYMENT_STATUS_FILTER.ALL },
-    { label: t('option.paid'), value: PAYMENT_STATUS_FILTER.PAID },
-    { label: t('option.pending'), value: PAYMENT_STATUS_FILTER.PENDING },
-    { label: t('option.overdue'), value: PAYMENT_STATUS_FILTER.OVERDUE },
+    { label: t('options.all'), value: PAYMENT_STATUS_FILTER.ALL },
+    { label: t('options.paid'), value: PAYMENT_STATUS_FILTER.PAID },
+    { label: t('options.pending'), value: PAYMENT_STATUS_FILTER.PENDING },
+    { label: t('options.overdue'), value: PAYMENT_STATUS_FILTER.OVERDUE },
   ];
 
   return (
