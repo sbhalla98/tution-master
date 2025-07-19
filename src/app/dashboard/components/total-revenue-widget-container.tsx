@@ -1,10 +1,12 @@
 import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
+import { ErrorState } from '@/components/illustration/error-state';
+import StatCardSkeleton from '@/components/skeleton/stat-card-skeleton';
 import { getRevenueDetails } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { IndianRupee } from 'lucide-react';
 
 export default function TotalRevenueWidgetContainer() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isFetching, refetch } = useQuery({
     queryFn: getRevenueDetails,
     queryKey: ['revenueDetails'],
   });
@@ -50,14 +52,12 @@ export default function TotalRevenueWidgetContainer() {
 
   const changeConfig = getChangeConfig();
 
-  if (isLoading) {
-    // [TODO] add skeleton
-    return <div>Loading ...</div>;
+  if (isFetching) {
+    return <StatCardSkeleton />;
   }
 
   if (error) {
-    // [TODO] add error handler
-    return <div>error ...</div>;
+    return <ErrorState title="" description="Failed to fetch revenue details" onReload={refetch} />;
   }
 
   return (

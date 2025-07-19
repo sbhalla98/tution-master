@@ -1,10 +1,12 @@
 import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
+import { ErrorState } from '@/components/illustration/error-state';
+import StatCardSkeleton from '@/components/skeleton/stat-card-skeleton';
 import { getActiveStudents } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { Users } from 'lucide-react';
 
 export default function ActiveStudentsWidgetContainer() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isFetching, refetch } = useQuery({
     queryFn: getActiveStudents,
     queryKey: ['activeStudents'],
   });
@@ -36,14 +38,12 @@ export default function ActiveStudentsWidgetContainer() {
 
   const changeConfig = getChangeConfig();
 
-  if (isLoading) {
-    // [TODO] add skeleton
-    return <div>Loading ...</div>;
+  if (isFetching) {
+    return <StatCardSkeleton />;
   }
 
   if (error) {
-    // [TODO] add error handler
-    return <div>error ...</div>;
+    return <ErrorState title="" description="Failed to fetch active students" onReload={refetch} />;
   }
 
   return (
