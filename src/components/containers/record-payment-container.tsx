@@ -15,7 +15,7 @@ export default function RecordPaymentContainer({ isOpen, onClose }: RecordPaymen
   const { toast } = useToast();
   const t = useTranslations('payments.record');
 
-  const { data, error, isFetching, refetch } = useQuery({
+  const { data, error, refetch } = useQuery({
     queryFn: () => getStudents(),
     queryKey: ['students'],
   });
@@ -38,11 +38,6 @@ export default function RecordPaymentContainer({ isOpen, onClose }: RecordPaymen
       onClose();
     },
   });
-
-  if (isFetching) {
-    // [TODO] add skeleton loader
-    return <div>Loading...</div>;
-  }
 
   if (error) {
     return (
