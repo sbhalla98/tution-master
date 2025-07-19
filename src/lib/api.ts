@@ -68,6 +68,8 @@ export async function getPayments(
   search: {
     limit?: number;
     status?: PaymentStatusType;
+    startTimestamp?: EpochTimeStamp;
+    endTimestamp?: EpochTimeStamp;
   } = {}
 ): Promise<GetPaymentsResponse> {
   const searchParam = buildQueryParams(search);

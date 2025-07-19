@@ -11,6 +11,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get('limit') ?? '0');
     const status = searchParams.get('status');
+    const startTimestamp = searchParams.get('startTimestamp');
+    const endTimestamp = searchParams.get('endTimestamp');
 
     // Start building dynamic filter
     const filter: Record<string, any> = {
@@ -20,6 +22,11 @@ export async function GET(request: NextRequest) {
 
     if (status) {
       filter.status = status;
+    }
+    if (startTimestamp || endTimestamp) {
+      filter.createdAt = {};
+      if (startTimestamp) filter.createdAt.$gte = parseInt(startTimestamp);
+      if (endTimestamp) filter.createdAt.$lt = parseInt(endTimestamp);
     }
 
     const cursor = collection.find(filter).sort({ createdAt: -1 });

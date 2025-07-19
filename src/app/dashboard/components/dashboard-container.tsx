@@ -3,9 +3,10 @@ import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
 import Header from '@/components/header';
 import { PAYMENT_STATUS } from '@/constants';
 import { Payment } from '@/types';
-import { AlertCircle, TrendingUp } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ActiveStudentsWidgetContainer from './active-students-widget-container';
+import PendingPaymentsWidgetContainer from './pending-payments-widget-container';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsContainer from './recent-payments-container';
 import RecentStudentsContainer from './recent-students-container';
@@ -18,9 +19,6 @@ type DashboardContainerProps = {
 export default function DashboardContainer({ payments }: DashboardContainerProps) {
   const t = useTranslations('dashboard');
 
-  const pendingPayments = (payments ?? []).filter(
-    (p) => p.status === PAYMENT_STATUS.PENDING
-  ).length;
   const overduePayments = (payments ?? []).filter(
     (p) => p.status === PAYMENT_STATUS.OVERDUE
   ).length;
@@ -33,14 +31,9 @@ export default function DashboardContainer({ payments }: DashboardContainerProps
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <ActiveStudentsWidgetContainer />
         <TotalRevenueWidgetContainer />
+        <PendingPaymentsWidgetContainer />
         {/* [TODO] Need to fix the metrics in this stat card */}
-        <StatCard
-          title="Pending Payments"
-          value={pendingPayments}
-          icon={TrendingUp}
-          change="Due this month"
-          changeType={CHANGE_TYPE.NEUTRAL}
-        />
+
         <StatCard
           title="Overdue Payments"
           value={overduePayments}
