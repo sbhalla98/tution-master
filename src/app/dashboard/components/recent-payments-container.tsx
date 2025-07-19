@@ -15,7 +15,7 @@ export default function RecentPaymentsContainer() {
   const t = useTranslations('recentPaymentsWidget');
 
   const { data, error, isLoading, refetch } = useQuery({
-    queryFn: () => getPayments(RECENT_PAYMENTS_LIMIT),
+    queryFn: () => getPayments({ limit: RECENT_PAYMENTS_LIMIT }),
     queryKey: ['payments', RECENT_PAYMENTS_LIMIT],
   });
 

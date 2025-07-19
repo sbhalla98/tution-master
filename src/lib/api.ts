@@ -1,3 +1,4 @@
+import { PaymentStatusType } from '@/types';
 import {
   CreatePaymentRequest,
   CreatePaymentResponse,
@@ -24,6 +25,7 @@ import {
   UpdateStudentResponse,
 } from '@/types/api';
 import axios from './axios';
+import { buildQueryParams } from './utils';
 
 // ---------- Student APIs ----------
 
@@ -62,8 +64,14 @@ export async function deleteStudent(request: DeleteStudentRequest): Promise<Dele
 
 // ---------- Payment APIs ----------
 
-export async function getPayments(limit?: number): Promise<GetPaymentsResponse> {
-  const res = await axios.get(`/payments${limit ? `?limit=${limit}` : ''}`);
+export async function getPayments(
+  search: {
+    limit?: number;
+    status?: PaymentStatusType;
+  } = {}
+): Promise<GetPaymentsResponse> {
+  const searchParam = buildQueryParams(search);
+  const res = await axios.get(`/payments${searchParam}`);
   return res.data;
 }
 
