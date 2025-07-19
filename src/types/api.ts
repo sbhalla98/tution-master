@@ -49,6 +49,15 @@ export type DeleteStudentResponse = Student | null | undefined;
 // Request to get all payments
 export type GetPaymentsResponse = Payment[] | null | undefined;
 
+// Request to get payment revenue details of the current month and last month
+export type GetRevenueDetailsResponse =
+  | {
+      thisMonthRevenue: number;
+      lastMonthRevenue: number;
+    }
+  | null
+  | undefined;
+
 // Request to get payments for a specific student
 export type GetStudentPaymentsRequest = {
   studentId: string;

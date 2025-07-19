@@ -3,12 +3,13 @@ import StatCard, { CHANGE_TYPE } from '@/components/cards/stat-card';
 import Header from '@/components/header';
 import { PAYMENT_STATUS } from '@/constants';
 import { Payment } from '@/types';
-import { AlertCircle, IndianRupee, TrendingUp } from 'lucide-react';
+import { AlertCircle, TrendingUp } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import ActiveStudentsWidgetContainer from './active-students-widget-container';
 import QuickActionsWidget from './quick-actions-widget';
 import RecentPaymentsContainer from './recent-payments-container';
 import RecentStudentsContainer from './recent-students-container';
+import TotalRevenueWidgetContainer from './total-revenue-widget-container';
 
 type DashboardContainerProps = {
   payments?: Payment[] | null;
@@ -17,9 +18,6 @@ type DashboardContainerProps = {
 export default function DashboardContainer({ payments }: DashboardContainerProps) {
   const t = useTranslations('dashboard');
 
-  const totalRevenue = (payments ?? [])
-    .filter((p) => p.status === PAYMENT_STATUS.PAID)
-    .reduce((sum, p) => sum + p.amount, 0);
   const pendingPayments = (payments ?? []).filter(
     (p) => p.status === PAYMENT_STATUS.PENDING
   ).length;
@@ -34,14 +32,8 @@ export default function DashboardContainer({ payments }: DashboardContainerProps
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <ActiveStudentsWidgetContainer />
+        <TotalRevenueWidgetContainer />
         {/* [TODO] Need to fix the metrics in this stat card */}
-        <StatCard
-          title="Total Revenue"
-          value={`₹${totalRevenue.toLocaleString()}`}
-          icon={IndianRupee}
-          change="+12% from last month"
-          changeType={CHANGE_TYPE.POSITIVE}
-        />
         <StatCard
           title="Pending Payments"
           value={pendingPayments}

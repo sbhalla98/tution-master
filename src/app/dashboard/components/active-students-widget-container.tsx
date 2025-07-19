@@ -30,7 +30,7 @@ export default function ActiveStudentsWidgetContainer() {
 
     return {
       change: `${diff} this month`,
-      changeType: CHANGE_TYPE.NEGATIVE, // already negative
+      changeType: CHANGE_TYPE.NEGATIVE,
     };
   };
 

@@ -7,6 +7,7 @@ import {
   DeleteStudentResponse,
   GetActiveStudentsResponse,
   GetPaymentsResponse,
+  GetRevenueDetailsResponse,
   GetSettingsResponse,
   GetStudentPaymentsRequest,
   GetStudentPaymentsResponse,
@@ -63,6 +64,11 @@ export async function deleteStudent(request: DeleteStudentRequest): Promise<Dele
 
 export async function getPayments(limit?: number): Promise<GetPaymentsResponse> {
   const res = await axios.get(`/payments${limit ? `?limit=${limit}` : ''}`);
+  return res.data;
+}
+
+export async function getRevenueDetails(): Promise<GetRevenueDetailsResponse> {
+  const res = await axios.get('/payments/revenue');
   return res.data;
 }
 
